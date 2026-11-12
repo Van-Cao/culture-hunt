@@ -1,6 +1,7 @@
 import { Check, Flag, LockKeyhole } from "lucide-react";
 import { useLanguage } from "@/components/UI/LanguageProvider";
 import type { AtlasDestination, AtlasStop } from "@/lib/atlas/model";
+import LandmarkModel from "./LandmarkModels";
 
 export default function CampusMap({ destination, onSelect }: { destination: AtlasDestination; onSelect: (stop: AtlasStop) => void }) {
   const { t } = useLanguage();
@@ -11,9 +12,7 @@ export default function CampusMap({ destination, onSelect }: { destination: Atla
         <ellipse cx="400" cy="350" rx="325" ry="83" fill="#183c3222" /><path d="M78 210L376 88 722 208V325L424 429 78 313Z" fill="#819970" /><path d="M78 210L376 88 722 208 424 335Z" fill="url(#atlas-campus-ground)" stroke="#e8e8c8" strokeWidth="3" />
         <path d="M160 314Q205 171 399 233T645 280" stroke="#f5efd8" strokeWidth="22" fill="none" /><path d="M160 314Q205 171 399 233T645 280" stroke="#a9b894" strokeWidth="3" strokeDasharray="2 12" strokeLinecap="round" fill="none" />
         {[115, 235, 545, 675].map((x, i) => <g key={x} transform={`translate(${x} ${i % 2 ? 160 : 300})`}><ellipse cy="25" rx="20" ry="8" fill="#6a865c44" /><path d="M0-17V24" stroke="#8b8056" strokeWidth="5" /><ellipse cy="-22" rx="23" ry="36" fill="#709566" /><ellipse cx="-7" cy="-28" rx="13" ry="26" fill="#91ac7c" /></g>)}
-        <path d="M344 118L400 96 460 117 403 140Z" fill="#f6eed4" /><path d="M344 118V173L403 197V140Z" fill="#e5ddbf" /><path d="M403 140L460 117V173L403 197Z" fill="#b4c29e" />
-        {[355, 370, 385].map(x => <path key={x} d={`M${x} 128v40`} stroke="#759476" strokeWidth="6" />)}
-        <path d="M338 174L403 199 470 175" stroke="#f9f0d7" strokeWidth="5" fill="none" />
+        <svg x="225" y="0" width="350" height="270" viewBox="0 0 280 216"><LandmarkModel destination="hcmus" landscape={false} /></svg>
       </svg>
       {destination.stops.map((stop, i) => <button key={stop.id} style={{ left: `${[22, 50, 79][i]}%`, top: `${[63, 39, 65][i]}%` }} onClick={() => onSelect(stop)} className={`atlas-campus-node ${stop.done ? "is-complete" : ""}`} aria-label={`${stop.title} · ${stop.done ? t("Đã khai mở", "Completed") : t("Chưa mở", "Not completed")}`}><span>{stop.done ? <Check size={22} /> : <>{i + 1}<LockKeyhole size={12} /></>}</span><strong>{stop.title}</strong></button>)}
     </div>

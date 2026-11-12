@@ -10,6 +10,8 @@ import {
   readState,
   startRun,
   GameError,
+  startChallenge,
+  moveChallenge,
 } from "@/lib/palace/store";
 
 export async function GET() {
@@ -31,6 +33,11 @@ export async function POST(request: Request) {
     const owner = await playerId();
     if (body.action === "start")
       return gameResponse({ state: startRun(owner, body.replay === true) });
+    if (typeof body.runId === "string" && body.runId.length <= 100 && isCheckpointId(body.checkpointId)) {
+      if (body.action === "challenge-start") return gameResponse(startChallenge(owner, body.runId, body.checkpointId));
+      if (body.action === "challenge-move" && typeof body.version === "string" && body.version.length <= 100)
+        return gameResponse(moveChallenge(owner, body.runId, body.checkpointId, body.version, body.move));
+    }
     if (
       body.action === "answer" &&
       typeof body.runId === "string" &&

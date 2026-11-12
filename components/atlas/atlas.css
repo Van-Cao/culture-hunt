@@ -15,7 +15,7 @@
 .culture-app .atlas-passport-header h2 { font-family: var(--atlas-serif); font-size: clamp(32px, 3.8vw, 46px); font-weight: 400; line-height: 1.3; letter-spacing: -1.3px; margin-top: 12px; }
 .atlas-passport-header h2 em { color: #6d7e52; }
 .atlas-passport-header p { font-size: 12px; color: var(--atlas-muted); margin-top: 13px; line-height: 1.8; }
-.atlas-passport-stamp { width: 108px; height: 108px; border: 1px solid #b5c19f; outline: 1px solid #d5dbc8; outline-offset: -7px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #77865c; rotate: -13deg; flex-shrink: 0; }
+.atlas-passport-stamp { width: 108px; height: 108px; border: 1px solid #b5c19f; outline: 1px solid #d5dbc8; outline-offset: -7px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #52663e; rotate: -13deg; flex-shrink: 0; }
 .atlas-passport-stamp strong { font-size: 11px; letter-spacing: 2px; margin-top: 6px; }
 .atlas-passport-stamp small { font-size: 7px; letter-spacing: .8px; margin-top: 4px; }
 .atlas-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 25px; border-block: 1px solid var(--atlas-line); padding: 19px 0; margin-top: 28px; }
@@ -42,13 +42,17 @@
 .atlas-city-caption { position: absolute; top: 25px; left: 23px; z-index: 1; pointer-events: none; color: #456346; text-shadow: 0 1px 5px #f8f5e5; }
 .atlas-city-caption > span { font-family: var(--atlas-serif); font-size: 31px; letter-spacing: 7px; opacity: .75; }
 .atlas-city-caption > small { display: block; font-size: 7px; letter-spacing: 1.2px; margin-top: 7px; }
-.atlas-experience .atlas-map-marker { position: absolute; z-index: 2; width: 152px; min-height: 128px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; transform: translate(-50%, -65%); padding: 0; background: none; color: #294d38; }
-.atlas-map-marker .atlas-landmark-art { position: relative; width: 112px; height: 96px; transition: translate .2s; z-index: 1; }
-.atlas-map-marker:hover .atlas-landmark-art { translate: 0 -5px; }
-.atlas-map-halo { width: 99px; height: 46px; position: absolute; top: 47px; left: 27px; border-radius: 50%; background: #78936e35; border: 1px solid #557b4f40; box-shadow: 0 8px 18px #2c523923; }
+.atlas-experience .atlas-map-marker { --landmark-width: 184px; --landmark-height: 142px; position: absolute; z-index: 2; width: 44px; height: 44px; min-height: 44px; transform: translate(-50%, -50%); padding: 0; background: none; color: #294d38; }
+.atlas-landmark-scene { position: absolute; left: 50%; top: 50%; width: var(--landmark-width); height: var(--landmark-height); transform: translate(-50%, -85%) scale(var(--landmark-scale, 1)); transform-origin: 50% 85%; }
+.atlas-map-marker .atlas-landmark-art { position: relative; display: block; width: 100%; height: 100%; transition: translate .2s; z-index: 1; filter: drop-shadow(0 5px 4px #21402f20); }
+.atlas-map-marker:is(:hover,:focus-visible) .atlas-landmark-art { translate: 0 -5px; }
+.atlas-map-halo { width: 133px; height: 48px; position: absolute; top: 88px; left: 26px; border-radius: 50%; background: #78936e35; border: 1px solid #557b4f40; box-shadow: 0 8px 18px #2c523923; }
 .is-progress .atlas-map-halo { background: #557f4a50; border: 2px solid #547645; box-shadow: 0 0 0 6px #b2c39488; }
 .is-complete .atlas-map-halo { background: #dcc17966; border-color: #caa85b; box-shadow: 0 0 0 6px #e7d49855, 0 0 25px #e9ce83; }
-.atlas-marker-label { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.atlas-marker-label { position: absolute; left: 50%; top: calc(50% + var(--landmark-height) * .15 * var(--landmark-scale, 1) + 3px); transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; gap: 4px; align-items: center; width: max-content; max-width: var(--landmark-width); }
+.atlas-map-marker.is-distant .atlas-marker-label { visibility: hidden; pointer-events: none; }
+.atlas-map-marker.is-distant:is(:hover,:focus-visible) { z-index: 4; }
+.atlas-map-marker.is-distant:is(:hover,:focus-visible) .atlas-marker-label { visibility: visible; pointer-events: auto; }
 .atlas-marker-label strong { background: #fbf7e9f5; border: 1px solid #b6c0a4; padding: 6px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; box-shadow: 0 3px 7px #34523818; }
 .atlas-marker-label small { background: #315841; color: #fff3d3; border-radius: 3px; font-size: 9px; padding: 3px 6px; }
 .is-complete .atlas-marker-label small { background: #806631; }
@@ -153,8 +157,8 @@
   .atlas-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 7px; padding-block: 17px; margin-top: 20px; }.atlas-summary > span { font-size: 9px; gap: 6px; }.atlas-summary strong { font-size: 16px; }
   .atlas-top-actions { padding-block: 15px 18px; gap: 12px; }.atlas-tabs { width: 100%; justify-content: space-between; gap: 1px; }.atlas-experience .atlas-tabs button { padding: 9px 10px; font-size: 10px; gap: 5px; flex: 1; justify-content: center; }.atlas-tabs svg { width: 14px; }.atlas-tabs small { width: 13px; height: 13px; font-size: 7px; }.atlas-experience .atlas-share-passport { margin-left: auto; font-size: 10px; min-height: 34px; }
   .atlas-city-map-heading { padding: 13px 11px; gap: 7px; }.atlas-city-map-heading > span:first-child { font-size: 7px; letter-spacing: .6px; gap: 5px; }.atlas-city-map-heading > span:last-child { font-size: 6px; }
-  .atlas-map-stage { min-height: 460px; }.atlas-city-caption { top: 23px; left: 16px; }.atlas-city-caption > span { font-size: 25px; letter-spacing: 5px; }.atlas-city-caption > small { font-size: 6px; letter-spacing: .5px; }.atlas-map-tools { right: 9px; top: 15px; }.atlas-city-map-footer { padding: 10px; font-size: 7px; }
-  .atlas-experience .atlas-map-marker { width: 136px; }.atlas-map-marker .atlas-landmark-art { width: 102px; height: 89px; }.atlas-marker-label strong { font-size: 10px; padding-inline: 8px; }.atlas-marker-label small { font-size: 8px; }.atlas-map-halo { left: 21px; }
+  .atlas-map-stage { min-height: 460px; }.atlas-city-caption { top: 23px; left: 16px; }.atlas-city-caption > span { font-size: 25px; letter-spacing: 5px; }.atlas-city-caption > small { font-size: 6px; letter-spacing: .5px; }.atlas-map-tools { right: 9px; top: auto; bottom: 18px; }.atlas-city-map-footer { padding: 10px; font-size: 7px; }
+  .atlas-experience .atlas-map-marker { --landmark-width: 156px; --landmark-height: 120px; }.atlas-marker-label strong { font-size: 10px; padding-inline: 8px; }.atlas-marker-label small { font-size: 8px; }.atlas-map-halo { width: 113px; height: 41px; top: 73px; left: 22px; }
   .atlas-destination-rail { grid-template-columns: 1fr; gap: 12px; }.atlas-rail-heading, .atlas-filter-label { grid-column: 1; }.atlas-rail-heading { margin-top: 8px; }.atlas-rail-heading h3 { font-size: 23px; }.atlas-destination-card { display: grid; grid-template-columns: 110px minmax(0, 1fr); }.atlas-destination-photo { height: 100%; min-height: 175px; }.atlas-destination-photo > span { font-size: 6px; left: 7px; padding: 4px; }.atlas-destination-copy { padding: 14px; }.culture-app .atlas-destination-copy h3 { font-size: 21px; }.atlas-destination-copy > small { font-size: 8px; line-height: 1.7; }.atlas-destination-progress { font-size: 9px; }.atlas-experience .atlas-destination-copy > button { font-size: 9px; }
   .atlas-map-legend { gap: 10px; }.atlas-map-legend > span { font-size: 8px; }.atlas-map-legend > small { margin-left: 0; width: 100%; }
   .atlas-experience .atlas-next-chapter { padding: 18px 14px; gap: 11px; }.atlas-next-chapter > span { width: 36px; height: 36px; }.atlas-next-chapter strong { font-size: 19px; }.atlas-next-chapter small { font-size: 6px; }.atlas-next-chapter p { font-size: 9px; }.atlas-next-chapter > svg { width: 17px; }
@@ -169,4 +173,5 @@
   .atlas-share-editor { grid-template-columns: 1fr; padding: 20px 0 0; gap: 22px; }.atlas-share-preview { max-width: 285px; width: 100%; margin-inline: auto; padding: 10px; }.atlas-share-options > h2 { font-size: 26px; }.atlas-share-options > p { font-size: 11px; }.atlas-share-options fieldset { margin-top: 18px; }
 }
 @media (max-width: 350px) { .atlas-experience .atlas-tabs button { padding-inline: 5px; font-size: 9px; }.atlas-passport-stamp { display: none; }.atlas-destination-card { grid-template-columns: 90px minmax(0, 1fr); }.atlas-summary > span { font-size: 8px; }.atlas-city-map-heading > span:last-child { font-size: 5px; } }
+@media (max-width: 350px) { .atlas-experience .atlas-map-marker { --landmark-width: 140px; --landmark-height: 108px; }.atlas-map-halo { width: 101px; top: 65px; left: 20px; } }
 @media (prefers-reduced-motion: reduce) { .atlas-experience *, .atlas-share-editor * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }

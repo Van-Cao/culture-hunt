@@ -1,5 +1,6 @@
 import type { CheckpointId } from "./checkpoints";
 import type { PalaceQuestion } from "./questions";
+import type { ChallengeSession } from "./challenges";
 
 export type RecognitionMode = "sample" | "reference" | "openai";
 export type Attempt = { at: string; answer: number; correct: boolean; questionId: string };
@@ -10,6 +11,7 @@ export type Visit = {
   completedAt: string | null;
   attempts: Attempt[];
   quiz: PalaceQuestion[];
+  challenge?: ChallengeSession;
 };
 export type JourneyRun = {
   id: string;

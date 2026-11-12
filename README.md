@@ -126,3 +126,15 @@ Photographs remain the property of their respective rights holders. No affiliati
 The four additional Palace photographs are downloaded from the official photo article above: reception (`9976-7.jpg`), cabinet (`9976-16.jpg`), rooftop (`9976-19.jpg`), and bunker (`9976-22.jpg`), and optimized as local WebP assets. The historical information and visual observation prompts are curated for this educational demo.
 
 Development skills used: `frontend-design`, the installed OpenAI `playwright` skill, and the custom `culture-hunt-gameplay` skill (installed in the developer's Codex skills directory).
+
+## Palace mini games and narration
+
+The Palace demo now follows **identify a photo → complete a mini game → unlock a written/audio story**. Its five stops use photo-detail discovery, two six-piece photo puzzles, object matching, and a rotating-tile signal circuit. Every move is validated and saved on the server. The supplied quiz bank remains optional after the story unlocks. Existing maps, checkpoint IDs, history and unique lifetime XP are retained.
+
+- [Game definitions and rules](lib/palace/challenges.ts)
+- [Mini game interface](components/palace/PalaceMiniGame.tsx)
+- [Bilingual story scripts](content/palace/stories.json)
+- [Ten generated narration files and voice provenance](public/audio/palace/README.md)
+- [Generation script](scripts/generate-palace-audio.py)
+
+The saved audio preview uses HoaiMy/Jenny through Microsoft Edge online TTS and clearly labeled Google demo fallbacks for two Vietnamese tracks. It is not an Azure Speech API subscription integration. Visitors play local MP3 assets; API credentials are not required for narration playback. `npm test` covers mini game validation, legacy migration, replay/XP and script/audio consistency.

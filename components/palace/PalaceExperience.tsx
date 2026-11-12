@@ -28,9 +28,10 @@ import {
 } from "@/lib/palace/checkpoints";
 import type { JourneyRun, RecognitionResult } from "@/lib/palace/types";
 import { useLanguage } from "@/components/UI/LanguageProvider";
-import { getPlaces } from "@/components/UI/game-data";
 import GameDialog from "@/components/UI/GameDialog";
-import StoryCard from "@/components/UI/StoryCard";
+import CheckpointStory from "./CheckpointStory";
+import PalaceMiniGame from "./PalaceMiniGame";
+import type { ChallengeMove } from "@/lib/palace/challenges";
 import Fireworks from "@/components/UI/Fireworks";
 import PalaceMap from "./PalaceMap";
 import PalaceRoomStudy from "./PalaceRoomStudy";
@@ -41,6 +42,7 @@ import "./palace.css";
 type Stage =
   | "brief"
   | "capture"
+  | "minigame"
   | "story"
   | "quiz"
   | "success"
@@ -77,6 +79,7 @@ export default function PalaceExperience({
   const [hint, setHint] = useState(false);
   const [quizQuestionId, setQuizQuestionId] = useState<string | null>(null);
   const [journalRunId, setJournalRunId] = useState("all");
+  const [storyReward, setStoryReward] = useState<number | null>(null);
   const checkpoints = getCheckpoints(locale);
   const state = game.state;
   const currentRun =
@@ -132,6 +135,7 @@ export default function PalaceExperience({
       return;
     }
     setPicked(id);
+    setStoryReward(null);
     setRecognition(null);
     setNotice("");
     setChoice(null);
@@ -147,19 +151,41 @@ export default function PalaceExperience({
   async function begin() {
     if (!unlocked || game.busy) return;
     setPicked(selectedId);
+    setStoryReward(null);
+    let activeRun = currentRun;
     if (!state?.activeRunId) {
       const response = await game.start();
       if (!response) return;
+      activeRun = response.state.runs.find(run => run.id === response.state.activeRunId);
     }
     setRecognition(null);
-    setStage(visit?.recognizedAt && !visit.completedAt ? "story" : "capture");
+    const activeVisit = activeRun?.visits[selectedId];
+    if (activeVisit?.recognizedAt && !activeVisit.completedAt) {
+      if (!activeVisit.challenge) {
+        const response = await game.startChallenge(activeRun!.id, selectedId);
+        if (!response) return;
+      }
+      setStage("minigame");
+    } else setStage("capture");
   }
   async function analyze(photo: File | CheckpointId) {
     if (!currentRun) return;
     const response = await game.recognize(currentRun.id, selectedId, photo);
     if (!response) return;
     setRecognition(response.recognition);
-    if (response.recognition.status === "matched") setStage("story");
+    if (response.recognition.status === "matched") setStage("minigame");
+  }
+  async function moveChallenge(move: ChallengeMove) {
+    if (!currentRun || !visit?.challenge) return null;
+    const response = await game.moveChallenge(currentRun.id, selectedId, visit.challenge.definition.version, move);
+    if (response?.solved) { setStoryReward(state?.discovered.includes(selectedId) ? 0 : PALACE_XP); setStage("story"); }
+    return response;
+  }
+  function finishStory() {
+    setStage(null);
+    setStoryReward(null);
+    if (mode !== "journal" && completed.length === 5) onJournal();
+    else if (mode !== "journal") { setPicked(nextId || selectedId); setFeedback(null); setChoice(null); }
   }
   async function submit() {
     if (!currentRun || choice === null || game.busy) return;
@@ -187,6 +213,7 @@ export default function PalaceExperience({
     if (!game.busy) {
       setStage(null);
       setRecognition(null);
+      setStoryReward(null);
     }
   }
 
@@ -380,7 +407,7 @@ export default function PalaceExperience({
                 </span>
                 <span>
                   <Clock3 size={13} />
-                  {quiz.length} {t("câu hỏi", "questions")} · {t("2–3 phút", "2–3 min")}
+                  {t("Mini game · 30–60 giây", "Mini game · 30–60 sec")}
                 </span>
               </div>
               <button
@@ -657,7 +684,7 @@ export default function PalaceExperience({
               ? t("Bắt đầu lượt mới", "Start a new run")
               : checkpoint.name
           }
-          wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit"}
+          wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit" || stage === "minigame"}
         >
           <div className="palace-modal">
             {game.error && (
@@ -681,13 +708,13 @@ export default function PalaceExperience({
                   </span>
                   <ArrowRight size={13} />
                   <span>
-                    <BookOpen size={17} />
-                    {t("Tìm hiểu", "Discover")}
+                    <Trophy size={17} />
+                    {t("Mini game", "Mini game")}
                   </span>
                   <ArrowRight size={13} />
                   <span>
-                    <Trophy size={17} />
-                    {t("Giải mã", "Decode")}
+                    <BookOpen size={17} />
+                    {t("Mở câu chuyện", "Unlock story")}
                   </span>
                 </div>
                 <button
@@ -743,54 +770,25 @@ export default function PalaceExperience({
                 )}
               </>
             )}
-            {stage === "story" && (
-              <>
-                {mode !== "journal" && (
-                  <p className="palace-recognition-success">
-                    <Check size={16} />
-                    {t("Đã ghi nhận địa điểm", "Location recorded")}
-                    <span>
-                      {visit?.mode === "openai"
-                        ? "AI"
-                        : visit?.mode === "sample"
-                          ? t("Ảnh mẫu", "Sample photo")
-                          : t("Khớp ảnh tham chiếu", "Reference match")}
-                    </span>
-                  </p>
-                )}
-                <StoryCard
-                  key={`${selectedId}-${locale}`}
-                  mission={checkpoint.mission}
-                  place={{
-                    ...getPlaces(locale)[0],
-                    image: checkpoint.photo,
-                    name: checkpoint.name,
-                    shortName: checkpoint.name,
-                    source: checkpoint.source,
-                  }}
-                  sound={sound}
-                  completed={isDone || mode === "journal"}
-                  onQuiz={() => {
-                    if (isDone || mode === "journal") close();
-                    else {
-                      setPicked(selectedId);
-                      setStage("quiz");
-                      setChoice(null);
-                      setFeedback(null);
-                      setHint(false);
-                      setQuizQuestionId(pendingQuestion?.id || null);
-                    }
-                  }}
-                />
-              </>
-            )}
+            {stage === "minigame" && visit?.challenge && <>
+              <p className="palace-recognition-success"><Check size={16} />{t("Đã nhận diện địa điểm", "Location identified")}<span>{visit.mode === "openai" ? "AI" : visit.mode === "sample" ? t("Ảnh mẫu", "Sample photo") : t("Ảnh tham chiếu", "Reference match")}</span></p>
+              <PalaceMiniGame key={`${currentRun?.id}-${selectedId}`} session={visit.challenge} busy={game.busy} onMove={moveChallenge} />
+            </>}
+            {stage === "story" && <CheckpointStory
+              key={`${selectedId}-${locale}`} checkpointId={selectedId}
+              unlocked={isDone || state.discovered.includes(selectedId)} sound={sound}
+              reviewing={mode === "journal"} onContinue={finishStory}
+              reward={storyReward}
+              bonusComplete={!pendingQuestion}
+              onBonus={visit?.completedAt ? () => { setStage("quiz"); setChoice(null); setFeedback(null); setHint(false); setQuizQuestionId(pendingQuestion?.id || null); } : undefined}
+            />}
             {stage === "quiz" && (
               <div className="palace-quiz">
                 <span className="palace-medal">
                   <Sparkles size={28} />
                 </span>
                 <span className="palace-overline">
-                  {t("THỬ THÁCH TRI THỨC", "KNOWLEDGE CHALLENGE")} · {t("CÂU", "QUESTION")} {questionIndex + 1}/{quiz.length}
+                  {isDone ? t("KHÁM PHÁ THÊM", "EXPLORE MORE") : t("THỬ THÁCH TRI THỨC", "KNOWLEDGE CHALLENGE")} · {t("CÂU", "QUESTION")} {questionIndex + 1}/{quiz.length}
                 </span>
                 <div className="palace-question-progress" aria-label={`${questionIndex + 1} / ${quiz.length}`}>
                   {quiz.map((q, i) => <span key={q.id} className={visit?.attempts.some(a => a.correct && a.questionId === q.id) ? "is-passed" : q.id === question.id ? "is-current" : ""}>{i + 1}</span>)}
@@ -798,8 +796,8 @@ export default function PalaceExperience({
                 <h2>{question.question[locale]}</h2>
                 <p>
                   {t(
-                    "Giải đúng các câu hỏi của trạm để khai mở dấu ấn.",
-                    "Solve every question at this stop to unlock its discovery.",
+                    "Một chút kiến thức mở rộng từ ngân hàng câu hỏi. Dấu ấn của bạn đã được lưu sau mini game.",
+                    "Optional questions from the question bank. Your discovery was saved after the mini game.",
                   )}
                 </p>
                 <div
@@ -831,8 +829,8 @@ export default function PalaceExperience({
                       <strong>
                         {feedback
                           ? t(
-                              isDone ? "Chính xác! Điểm mới đã được khai mở." : "Chính xác! Tiếp tục giải mã câu tiếp theo.",
-                              isDone ? "Correct! A new discovery is illuminated." : "Correct! Continue to the next question.",
+                              !pendingQuestion ? "Chính xác! Bạn đã giải trọn bộ câu hỏi." : "Chính xác! Tiếp tục giải mã câu tiếp theo.",
+                              !pendingQuestion ? "Correct! All questions are complete." : "Correct! Continue to the next question.",
                             )
                           : t(
                               "Chưa đúng. Thử thêm một lần nhé!",
@@ -853,14 +851,14 @@ export default function PalaceExperience({
                   <button
                     className="palace-button"
                     onClick={() => {
-                      if (isDone) setStage("success");
+                      if (!pendingQuestion) setStage("story");
                       else {
                         setQuizQuestionId(pendingQuestion?.id || null);
                         setChoice(null); setFeedback(null); setHint(false);
                       }
                     }}
                   >
-                    {isDone ? t("Nhận dấu ấn", "Claim your discovery") : t("Câu tiếp theo", "Next question")}
+                    {!pendingQuestion ? t("Trở lại câu chuyện", "Back to story") : t("Câu tiếp theo", "Next question")}
                     <ArrowRight size={17} />
                   </button>
                 ) : feedback === false ? (
@@ -978,9 +976,9 @@ export default function PalaceExperience({
                         <small>
                           {t("Nhận diện: ", "Identified: ")}
                           {formatDate(entry.recognizedAt)} ·{" "}
-                          {entry.attempts.length} {t("lần trả lời", "answers")}
+                          {entry.challenge ? `${entry.challenge.progress.moves} ${t("thao tác mini game", "mini game moves")} · ` : ""}{entry.attempts.length} {t("lần trả lời", "answers")}
                         </small>
-                        <small>{new Set(entry.attempts.filter(a => a.correct).map(a => a.questionId)).size}/{entry.quiz.length} {t("câu đã giải", "questions solved")}</small>
+                        <small>{new Set(entry.attempts.filter(a => a.correct).map(a => a.questionId)).size}/{entry.quiz.length} {entry.challenge ? t("câu mở rộng · tùy chọn", "bonus questions · optional") : t("câu đã giải", "questions solved")}</small>
                         <small>
                           {entry.mode === "openai"
                             ? t("Nhận diện bằng AI", "AI recognition")

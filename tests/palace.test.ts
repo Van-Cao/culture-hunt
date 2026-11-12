@@ -19,6 +19,37 @@ import {
 } from "../lib/palace/store";
 import { checkpointIds, getCheckpoints } from "../lib/palace/checkpoints";
 import { identifyPhoto } from "../lib/palace/recognition";
+import { moveChallenge, startChallenge } from "../lib/palace/store";
+import { CHALLENGE_VERSION, type ChallengeMove } from "../lib/palace/challenges";
+
+function legacyVisit(runId: string, checkpointId: string) {
+  // A pre-minigame saved visit, with its original question snapshot intact.
+  const fixtureDb = new DatabaseSync(join(process.env.CULTURE_HUNT_DATA_DIR!, "palace.sqlite"));
+  fixtureDb.prepare("UPDATE visits SET challenge_json = NULL WHERE run_id = ? AND checkpoint_id = ?").run(runId, checkpointId);
+  fixtureDb.close();
+}
+function solveMiniGame(owner: string, runId: string, checkpointId: typeof checkpointIds[number]) {
+  const session = () => readState(owner).runs.find(r => r.id === runId)!.visits[checkpointId]!.challenge!;
+  let last: ChallengeMove;
+  const move = (input: ChallengeMove) => { last = input; return moveChallenge(owner, runId, checkpointId, CHALLENGE_VERSION, input); };
+  const definition = session().definition;
+  if (definition.kind === "spot") for (const target of definition.targets!) move({ type: "tap", x: target.region.x + target.region.w / 2, y: target.region.y + target.region.h / 2 });
+  if (definition.kind === "match") for (const [i, target] of [...definition.targets!].reverse().entries()) move({ type: "match", itemId: target.id, targetId: i });
+  if (definition.kind === "puzzle") while (!session().progress.solved) {
+    const board = session().progress.board;
+    const a = board.findIndex((piece, i) => piece !== i);
+    move({ type: "swap", a, b: board.indexOf(a) });
+  }
+  if (definition.kind === "circuit") {
+    const route = [1, 2, 0, 0, 3, 0, 2, 1, 0, 0, 0, 3];
+    for (let i = 0; i < route.length && !session().progress.solved; i++)
+      while (session().progress.turns[i] !== route[i] && !session().progress.solved) move({ type: "rotate", index: i });
+  }
+  assert.ok(session().progress.solved);
+  const before = session().progress.moves;
+  move(last!);
+  assert.equal(session().progress.moves, before, "Completed game resubmission is idempotent");
+}
 
 process.env.CULTURE_HUNT_DATA_DIR = mkdtempSync(
   join(tmpdir(), "culture-hunt-test-"),
@@ -100,10 +131,11 @@ test("a mismatched reference never opens the selected checkpoint", () => {
   assert.throws(() => answerCheckpoint(owner, runId, "facade", 0), GameError);
 });
 
-test("wrong answers retain attempts, correct answers unlock once, duplicate submissions are idempotent", () => {
+test("legacy quiz visits retain retries, completion and idempotent rewards", () => {
   const owner = randomUUID(),
     runId = startRun(owner).activeRunId!;
   recordRecognition(owner, runId, "facade", "sample", "matched", "facade");
+  legacyVisit(runId, "facade");
   const [first, second] = getCheckpointQuestions("facade");
   const wrong = answerCheckpoint(owner, runId, "facade", 1, first.id);
   assert.equal(wrong.correct, false);
@@ -141,6 +173,7 @@ test("all five checkpoints complete the run; replay retains visits and cannot fa
         "matched",
         checkpoint.id,
       );
+      solveMiniGame(owner, runId, checkpoint.id);
       for (const q of getCheckpointQuestions(checkpoint.id)) answerCheckpoint(owner, runId, checkpoint.id, q.correct, q.id);
     }
     const state = readState(owner);
@@ -164,6 +197,7 @@ test("all five checkpoints complete the run; replay retains visits and cannot fa
 test("new quizzes reject missing, forged and future question IDs, and resume after a partial answer", () => {
   const owner = randomUUID(), runId = startRun(owner).activeRunId!;
   recordRecognition(owner, runId, "facade", "sample", "matched", "facade");
+  solveMiniGame(owner, runId, "facade");
   const [first, second] = getCheckpointQuestions("facade");
   assert.throws(() => answerCheckpoint(owner, runId, "facade", 0), GameError);
   assert.throws(() => answerCheckpoint(owner, runId, "facade", 0, "forged"), GameError);
@@ -176,6 +210,35 @@ test("new quizzes reject missing, forged and future question IDs, and resume aft
   recordRecognition(owner, runId, "facade", "reference", "matched", "facade");
   assert.deepEqual(readState(owner).runs[0].visits.facade!.quiz, resumed.quiz);
   assert.equal(answerCheckpoint(owner, runId, "facade", second.correct, second.id).state.xp, 150);
+});
+
+test("mini games require recognition and ownership, reject forged moves and cannot be bypassed by quiz answers", () => {
+  const owner = randomUUID(), runId = startRun(owner).activeRunId!;
+  assert.throws(() => startChallenge(owner, runId, "facade"), GameError);
+  assert.throws(() => moveChallenge(owner, runId, "facade", CHALLENGE_VERSION, { type: "tap", x: 50, y: 50 }), GameError);
+  recordRecognition(owner, runId, "facade", "sample", "matched", "facade");
+  assert.throws(() => moveChallenge(randomUUID(), runId, "facade", CHALLENGE_VERSION, { type: "tap", x: 50, y: 50 }), GameError);
+  assert.throws(() => answerCheckpoint(owner, runId, "facade", 0, "facade-bamboo"), GameError);
+  assert.throws(() => moveChallenge(owner, runId, "facade", "forged", { type: "tap", x: 50, y: 50 }), GameError);
+  for (const move of [{ type: "tap", x: NaN, y: 1 }, { type: "tap", x: 101, y: 1 }, { type: "swap", a: 0, b: 1 }, { type: "win", solved: true }])
+    assert.throws(() => moveChallenge(owner, runId, "facade", CHALLENGE_VERSION, move), GameError);
+  const wrong = moveChallenge(owner, runId, "facade", CHALLENGE_VERSION, { type: "tap", x: 0, y: 0 });
+  assert.equal(wrong.accepted, false); assert.equal(wrong.solved, false); assert.equal(wrong.state.xp, 0);
+  const resumed = readState(owner).runs[0].visits.facade!.challenge!;
+  assert.equal(resumed.progress.moves, 1);
+  assert.equal(startChallenge(owner, runId, "facade").state.runs[0].visits.facade!.challenge!.progress.moves, 1);
+  solveMiniGame(owner, runId, "facade");
+  assert.equal(readState(owner).xp, 150);
+});
+
+test("an unfinished legacy visit can adopt mini games without losing its recognition or quiz history", () => {
+  const owner = randomUUID(), runId = startRun(owner).activeRunId!;
+  recordRecognition(owner, runId, "facade", "sample", "matched", "facade"); legacyVisit(runId, "facade");
+  answerCheckpoint(owner, runId, "facade", 1, "facade-bamboo");
+  const before = readState(owner).runs[0].visits.facade!;
+  const after = startChallenge(owner, runId, "facade").state.runs[0].visits.facade!;
+  assert.equal(after.recognizedAt, before.recognizedAt); assert.deepEqual(after.attempts, before.attempts);
+  assert.equal(after.challenge!.definition.version, CHALLENGE_VERSION);
 });
 
 test("starting over preserves an unfinished run", () => {

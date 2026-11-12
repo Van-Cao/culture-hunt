@@ -33,3 +33,13 @@ The perspective, number of simplified furniture items, dimensions and positions 
 ## Saved-game compatibility
 
 New recognized visits store a versioned question snapshot in SQLite. Attempts record the question ID. Every question must be passed in order before the stage completes and its unique XP is awarded. A replay creates new visits and preserves previous records. Additive schema migration retains old runs and maps pre-bank attempts to their original single legacy question; already recognized legacy visits keep that quiz rather than silently receiving a different answer key.
+
+## Mini game journey (v2)
+
+New recognition now also stores a versioned mini game snapshot. The player identifies a checkpoint, completes its mini game, then unlocks the written story and prerecorded narration. The question bank remains an optional extension after completion and does not award extra XP.
+
+The facade uses authored photo hotspots; Reception and Rooftop use six-piece swap puzzles; Cabinet uses object-to-photo matching; Bunker uses a rotating-tile circuit. Each action is validated and persisted by the server. The circuit is a fictional learning interaction, not an operating diagram of historical communications equipment. Games use curated reference photographs; hotspot coordinates do not claim to work on arbitrary uploaded photographs.
+
+`visits.challenge_json` stores the game definition, version and progress. `game_attempts` records submitted actions and outcomes. Original visits, quiz snapshots and attempts are retained. An unfinished legacy visit can explicitly adopt the new game when the player continues it. The legacy quiz completion path remains compatible with pre-game saved records, while a new mini game visit cannot be completed through quiz answers. Lifetime rewards remain unique per checkpoint, including after replay or duplicate submissions.
+
+The map components and landmark models are unchanged by this gameplay update. They continue consuming the same completed checkpoint IDs and lifetime discoveries. [Narration scripts](./stories.json) and [audio provenance](../../public/audio/palace/README.md) document the VI/EN story assets.

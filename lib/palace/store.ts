@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { getCheckpointQuestions, publicQuestion, type ScoredQuestion } from "./questions";
+import { applyChallengeMove, createChallenge, CHALLENGE_VERSION, type ChallengeSession } from "./challenges";
 import {
   checkpointIds,
   getCheckpoints,
@@ -50,11 +51,17 @@ function db() {
       id INTEGER PRIMARY KEY, run_id TEXT NOT NULL REFERENCES runs(id), checkpoint_id TEXT NOT NULL,
       at TEXT NOT NULL, mode TEXT NOT NULL, result TEXT NOT NULL, candidate TEXT
     );
+    CREATE TABLE IF NOT EXISTS game_attempts (
+      id INTEGER PRIMARY KEY, run_id TEXT NOT NULL REFERENCES runs(id), checkpoint_id TEXT NOT NULL,
+      at TEXT NOT NULL, move_json TEXT NOT NULL, accepted INTEGER NOT NULL, solved INTEGER NOT NULL
+    );
   `);
   // Additive migrations keep existing profiles and their one-question visits.
   const visitColumns = database.prepare("PRAGMA table_info(visits)").all();
   if (!visitColumns.some(column => column.name === "quiz_json"))
     database.exec("ALTER TABLE visits ADD COLUMN quiz_json TEXT");
+  if (!visitColumns.some(column => column.name === "challenge_json"))
+    database.exec("ALTER TABLE visits ADD COLUMN challenge_json TEXT");
   const attemptColumns = database.prepare("PRAGMA table_info(attempts)").all();
   if (!attemptColumns.some(column => column.name === "question_id"))
     database.exec("ALTER TABLE attempts ADD COLUMN question_id TEXT");
@@ -135,6 +142,7 @@ export function readState(owner: string): PalaceState {
           completedAt: v.completed_at ? String(v.completed_at) : null,
           attempts,
           quiz: quiz.map(publicQuestion),
+          ...(typeof v.challenge_json === "string" ? { challenge: JSON.parse(v.challenge_json) as ChallengeSession } : {}),
         } satisfies Visit;
       }
       return {
@@ -224,9 +232,9 @@ export function recordRecognition(
     if (result === "matched" && candidate === checkpointId) {
       db()
         .prepare(
-          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode, quiz_json) VALUES(?, ?, ?, ?, ?)",
+          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode, quiz_json, challenge_json) VALUES(?, ?, ?, ?, ?, ?)",
         )
-        .run(runId, checkpointId, at, mode, JSON.stringify(getCheckpointQuestions(checkpointId)));
+        .run(runId, checkpointId, at, mode, JSON.stringify(getCheckpointQuestions(checkpointId)), JSON.stringify(createChallenge(checkpointId)));
     }
   });
   return readState(owner);
@@ -249,6 +257,10 @@ export function answerCheckpoint(
         "Nhận diện địa điểm trước khi trả lời. / Identify the checkpoint first.",
         409,
       );
+    // New journeys unlock stories through mini games. Their question bank is
+    // optional afterwards; the legacy answer endpoint cannot bypass the game.
+    if (visit.challenge_json && !visit.completed_at)
+      throw new GameError("Hoàn thành mini game trước để mở câu chuyện. / Complete the mini game to unlock the story.", 409);
     const quiz = visitQuestions(checkpointId, visit.quiz_json);
     const submittedId = questionId || (visit.quiz_json ? undefined : quiz[0].id);
     const question = quiz.find(q => q.id === submittedId);
@@ -257,9 +269,9 @@ export function answerCheckpoint(
     const passed = new Set(db().prepare("SELECT question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? AND correct = 1").all(runId, checkpointId).map(a => a.question_id ? String(a.question_id) : quiz[0].id));
     // A duplicate passed question is idempotent, even after completing a run.
     if (passed.has(question.id)) return true;
-    if (run.status !== "active")
+    if (run.status !== "active" && !visit.challenge_json)
       throw new GameError("Lượt chơi đã kết thúc. / This run has ended.", 409);
-    requireAvailable(owner, runId, checkpointId);
+    if (!visit.challenge_json) requireAvailable(owner, runId, checkpointId);
     if (quiz.find(q => !passed.has(q.id))?.id !== question.id)
       throw new GameError("Hoàn thành câu trước để tiếp tục. / Complete the previous question first.", 409);
     const success = answer === question.correct;
@@ -270,7 +282,7 @@ export function answerCheckpoint(
       )
       .run(runId, checkpointId, at, answer, success ? 1 : 0, question.id);
     if (success) passed.add(question.id);
-    if (quiz.every(q => passed.has(q.id))) {
+    if (!visit.challenge_json && quiz.every(q => passed.has(q.id))) {
       db()
         .prepare(
           "UPDATE visits SET completed_at = ? WHERE run_id = ? AND checkpoint_id = ?",
@@ -296,4 +308,47 @@ export function answerCheckpoint(
     return success;
   });
   return { correct, state: readState(owner) };
+}
+
+export function startChallenge(owner: string, runId: string, checkpointId: CheckpointId) {
+  transaction(() => {
+    requireAvailable(owner, runId, checkpointId);
+    const visit = db().prepare("SELECT * FROM visits WHERE run_id = ? AND checkpoint_id = ?").get(runId, checkpointId);
+    if (!visit) throw new GameError("Nhận diện địa điểm trước. / Identify the checkpoint first.", 409);
+    if (!visit.challenge_json && !visit.completed_at)
+      db().prepare("UPDATE visits SET challenge_json = ? WHERE run_id = ? AND checkpoint_id = ?")
+        .run(JSON.stringify(createChallenge(checkpointId)), runId, checkpointId);
+  });
+  return { state: readState(owner) };
+}
+
+export function moveChallenge(owner: string, runId: string, checkpointId: CheckpointId, version: string, move: unknown) {
+  const result = transaction(() => {
+    ownedRun(owner, runId);
+    const visit = db().prepare("SELECT * FROM visits WHERE run_id = ? AND checkpoint_id = ?").get(runId, checkpointId);
+    if (!visit || typeof visit.challenge_json !== "string")
+      throw new GameError("Nhận diện địa điểm và bắt đầu mini game trước. / Identify the checkpoint and start its mini game first.", 409);
+    const challenge = JSON.parse(visit.challenge_json) as ChallengeSession;
+    if (version !== challenge.definition.version || version !== CHALLENGE_VERSION)
+      throw new GameError("Phiên bản thử thách đã thay đổi. Tải lại trang. / Challenge version changed. Reload the page.", 409);
+    if (visit.completed_at) return { accepted: true, solved: true };
+    requireAvailable(owner, runId, checkpointId);
+    let next: ReturnType<typeof applyChallengeMove>;
+    try { next = applyChallengeMove(challenge, move); }
+    catch { throw new GameError("Thao tác mini game không hợp lệ. / Invalid mini game move."); }
+    const at = new Date().toISOString();
+    db().prepare("UPDATE visits SET challenge_json = ? WHERE run_id = ? AND checkpoint_id = ?")
+      .run(JSON.stringify(next.session), runId, checkpointId);
+    db().prepare("INSERT INTO game_attempts(run_id, checkpoint_id, at, move_json, accepted, solved) VALUES(?, ?, ?, ?, ?, ?)")
+      .run(runId, checkpointId, at, JSON.stringify(move), Number(next.accepted), Number(next.session.progress.solved));
+    if (next.session.progress.solved) {
+      db().prepare("UPDATE visits SET completed_at = ? WHERE run_id = ? AND checkpoint_id = ?").run(at, runId, checkpointId);
+      db().prepare("INSERT OR IGNORE INTO awards(owner, checkpoint_id, awarded_at) VALUES(?, ?, ?)").run(owner, checkpointId, at);
+      const count = db().prepare("SELECT COUNT(*) AS n FROM visits WHERE run_id = ? AND completed_at IS NOT NULL").get(runId)!;
+      if (Number(count.n) === checkpointIds.length)
+        db().prepare("UPDATE runs SET status = 'completed', completed_at = ? WHERE id = ?").run(at, runId);
+    }
+    return { accepted: next.accepted, solved: next.session.progress.solved };
+  });
+  return { ...result, state: readState(owner) };
 }
