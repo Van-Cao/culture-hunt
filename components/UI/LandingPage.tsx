@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { motion, useReducedMotion, useSpring } from "framer-motion";
 import {
   ArrowDown,
   ArrowRight,
@@ -12,7 +13,8 @@ import {
   MapPin,
   ScanLine,
   Sparkles,
-  Ticket,
+  Pause,
+  Play,
   Trophy,
   Zap,
 } from "lucide-react";
@@ -20,13 +22,16 @@ import { getPlaces } from "./game-data";
 import { useLanguage } from "./LanguageProvider";
 import { GameBrand, LanguageSwitch } from "./GameElements";
 import "./landing.css";
+import "./landing-hero.css";
 
 function StartAction({
   onStart,
   signIn = false,
+  hero = false,
 }: {
   onStart: () => void;
   signIn?: boolean;
+  hero?: boolean;
 }) {
   const { locale, t } = useLanguage();
   return (
@@ -44,7 +49,9 @@ function StartAction({
       <button type="submit" className={signIn ? "intro-signin" : "intro-start"}>
         {signIn
           ? t("Đăng nhập", "Sign in")
-          : t("Bắt đầu khám phá", "Start exploring")}
+          : hero
+            ? t("Bắt đầu hành trình", "Get started")
+            : t("Bắt đầu khám phá", "Start exploring")}
         {signIn ? (
           <ArrowUpRight size={16} aria-hidden="true" />
         ) : (
@@ -63,6 +70,36 @@ export default function LandingPage({
   const { locale, t } = useLanguage();
   const places = getPlaces(locale);
   const reduced = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const [activePhoto, setActivePhoto] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const photoCount = places.length;
+  const featuredPlace = places[activePhoto];
+  const originX = useSpring(0.5, { stiffness: 90, damping: 25 });
+  const originY = useSpring(0.5, { stiffness: 90, damping: 25 });
+  const photoScale = useSpring(1, { stiffness: 120, damping: 25 });
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setInterval(() => {
+      const bounds = heroRef.current?.getBoundingClientRect();
+      if (document.hidden || !bounds || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+      setActivePhoto(current => (current + 1) % photoCount);
+    }, 10_000);
+    return () => window.clearInterval(timer);
+  }, [paused, photoCount]);
+
+  function followPointer(event: PointerEvent<HTMLDivElement>) {
+    if (reduced || event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const bounds = heroRef.current?.getBoundingClientRect();
+    if (!bounds || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+      photoScale.set(1);
+      return;
+    }
+    originX.set(Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)));
+    originY.set(Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)));
+    photoScale.set(1.2);
+  }
   const backToTop = () =>
     window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
   const steps = [
@@ -96,11 +133,11 @@ export default function LandingPage({
   ];
 
   return (
-    <div className="intro-page">
+    <div className="intro-page" onPointerMove={followPointer} onPointerLeave={() => photoScale.set(1)}>
       <a className="skip-link" href="#landing-main">
         {t("Đến nội dung chính", "Skip to content")}
       </a>
-      <header className="intro-header intro-container">
+      <header className="intro-header intro-container intro-overlay-header">
         <GameBrand onClick={backToTop} />
         <nav aria-label={t("Điều hướng giới thiệu", "Introduction navigation")}>
           <a href="#destinations">{t("Điểm đến", "Destinations")}</a>
@@ -113,120 +150,58 @@ export default function LandingPage({
       </header>
 
       <main id="landing-main" tabIndex={-1}>
-        <section
-          className="intro-hero intro-container"
-          aria-labelledby="intro-title"
-        >
-          <div className="intro-copy">
-            <span className="intro-kicker">
-              <span />
-              {t("DÀNH CHO NHỮNG TÂM HỒN TÒ MÒ", "FOR THE ENDLESSLY CURIOUS")}
-            </span>
-            <h1 id="intro-title">
-              {t("Đi để thấy.", "Go beyond.")}
-              <br />
-              <em>{t("Chạm để hiểu.", "Get curious.")}</em>
-            </h1>
-            <p className="intro-description">
-              {t(
-                "Có những câu chuyện chỉ hiện ra khi bạn dừng lại. Khám phá di sản, giải mã dấu vết và nhìn thành phố qua một góc nhìn mới.",
-                "Some stories only appear when you slow down. Explore heritage, follow the clues, and see a familiar city in a whole new light.",
-              )}
-            </p>
-            <div className="intro-hero-actions">
-              <StartAction onStart={onStart} />
-              <a className="intro-how-link" href="#how-it-works">
-                {t("Mình chơi thế nào?", "How does it work?")}
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </a>
-            </div>
-            <span className="intro-guest-note">
-              <Compass size={14} aria-hidden="true" />
-              {t(
-                "Khám phá ngay với tư cách khách",
-                "Jump straight in as a guest",
-              )}
-            </span>
-            <div className="intro-hero-footnote">
-              <span className="intro-small-compass" aria-hidden="true">
-                <Compass size={27} strokeWidth={1.1} />
-              </span>
-              <p>
-                {t("Một thành phố quen.", "A familiar city.")}
-                <br />
-                <strong>
-                  {t("Ngàn điều chưa kể.", "A thousand untold stories.")}
-                </strong>
-              </p>
-              <a
-                href="#destinations"
-                aria-label={t("Cuộn đến điểm đến", "Scroll to destinations")}
+        <section className="travel-hero" ref={heroRef} aria-labelledby="intro-title">
+          <motion.div
+            className="travel-hero-scene"
+            style={{ scale: reduced ? 1 : photoScale, originX, originY }}
+          >
+            {places.map((place, index) => (
+              <div
+                key={place.id}
+                className={`travel-hero-photo${index === activePhoto ? " is-active" : ""}`}
+                aria-hidden={index !== activePhoto}
               >
-                <ArrowDown size={19} />
-              </a>
+                <Image
+                  src={place.coverImage}
+                  alt={place.name}
+                  fill
+                  preload={index === 0}
+                  loading={index === 0 ? undefined : "eager"}
+                  sizes="100vw"
+                />
+              </div>
+            ))}
+          </motion.div>
+          <div className="travel-hero-shade" aria-hidden="true" />
+          <div className="travel-hero-content intro-container">
+            <span className="travel-eyebrow"><span />{t("MỖI ĐIỂM ĐẾN, MỘT CÂU CHUYỆN", "EVERY PLACE HAS A STORY")}</span>
+            <h1 id="intro-title">{t("ĐI ĐỂ THẤY.", "GO BEYOND.")}<br /><span>{t("CHẠM ĐỂ HIỂU.", "GET CURIOUS.")}</span></h1>
+            <p>{t("Khám phá di sản. Giải mã dấu vết. Viết nên hành trình của riêng bạn.", "Explore heritage. Follow the clues. Make the journey your own.")}</p>
+            <StartAction onStart={onStart} hero />
+            <span className="travel-guest-note">{t("Đăng nhập hoặc khám phá ngay với tư cách khách", "Sign in or jump straight in as a guest")}</span>
+          </div>
+          <div className="travel-hero-bottom intro-container">
+            <a className="travel-location" href="#destinations">
+              <MapPin size={18} aria-hidden="true" />
+              <span>
+                <small>{t("VIỆT NAM", "VIETNAM")} · {String(activePhoto + 1).padStart(2, "0")} / {String(photoCount).padStart(2, "0")}</small>
+                <strong>{featuredPlace.shortName}</strong>
+              </span>
+            </a>
+            <a className="travel-scroll" href="#destinations"><span>{t("CUỘN ĐỂ KHÁM PHÁ", "SCROLL TO EXPLORE")}</span><ArrowDown size={18} aria-hidden="true" /></a>
+            <div className="travel-slideshow">
+              <span className="travel-slide-dots" aria-hidden="true">
+                {places.map((place, index) => <span key={place.id} className={index === activePhoto ? "is-active" : ""} />)}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPaused(value => !value)}
+                aria-label={paused ? t("Tiếp tục đổi ảnh nền", "Resume background slideshow") : t("Tạm dừng đổi ảnh nền", "Pause background slideshow")}
+              >
+                {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}
+              </button>
             </div>
           </div>
-          <figure className="intro-visual">
-            <div className="intro-photo">
-              <Image
-                src="/images/palace-exterior.webp"
-                alt={t(
-                  "Dinh Độc Lập giữa những tán cây xanh tại TP. Hồ Chí Minh",
-                  "Independence Palace among the green trees of Ho Chi Minh City",
-                )}
-                fill
-                preload
-                sizes="(max-width: 760px) 100vw, 55vw"
-              />
-              <span className="intro-photo-label">
-                <span />
-                {t("HÀNH TRÌNH NỔI BẬT", "THE FEATURED JOURNEY")}
-              </span>
-              <div className="intro-photo-title">
-                <span>01 — 02</span>
-                <strong>{t("Dinh Độc Lập", "Independence Palace")}</strong>
-                <span>
-                  <MapPin size={13} aria-hidden="true" />
-                  {t("Thành phố Hồ Chí Minh", "Ho Chi Minh City")}
-                </span>
-              </div>
-              <span className="intro-photo-stamp" aria-hidden="true">
-                <Compass size={34} strokeWidth={1.2} />
-                <span>
-                  GO. SEEK.
-                  <br />
-                  DISCOVER.
-                </span>
-              </span>
-            </div>
-            <figcaption className="intro-photo-caption">
-              <span>
-                {t(
-                  "GÓC NHÌN MỚI, CÂU CHUYỆN MỚI",
-                  "A NEW PERSPECTIVE. A NEW STORY.",
-                )}
-              </span>
-              <span>10.7770° N · 106.6953° E</span>
-            </figcaption>
-            <div className="intro-ticket">
-              <span className="intro-ticket-icon">
-                <Ticket size={25} strokeWidth={1.5} aria-hidden="true" />
-              </span>
-              <div>
-                <span>{t("TẤM VÉ CỦA SỰ TÒ MÒ", "YOUR CURIOSITY PASS")}</span>
-                <strong>
-                  {t(
-                    "Chạm vào một hành trình mới",
-                    "Your next chapter starts here",
-                  )}
-                </strong>
-              </div>
-              <span className="intro-ticket-xp">
-                <Zap size={14} fill="currentColor" aria-hidden="true" />
-                750 XP<small>{t("/ hành trình", "/ journey")}</small>
-              </span>
-            </div>
-          </figure>
         </section>
         <div className="intro-facts-wrap">
           <div className="intro-facts intro-container">
