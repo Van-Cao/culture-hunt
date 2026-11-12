@@ -2,6 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { getCheckpointQuestions, publicQuestion, type ScoredQuestion } from "./questions";
 import {
   checkpointIds,
   getCheckpoints,
@@ -50,7 +51,25 @@ function db() {
       at TEXT NOT NULL, mode TEXT NOT NULL, result TEXT NOT NULL, candidate TEXT
     );
   `);
+  // Additive migrations keep existing profiles and their one-question visits.
+  const visitColumns = database.prepare("PRAGMA table_info(visits)").all();
+  if (!visitColumns.some(column => column.name === "quiz_json"))
+    database.exec("ALTER TABLE visits ADD COLUMN quiz_json TEXT");
+  const attemptColumns = database.prepare("PRAGMA table_info(attempts)").all();
+  if (!attemptColumns.some(column => column.name === "question_id"))
+    database.exec("ALTER TABLE attempts ADD COLUMN question_id TEXT");
   return database;
+}
+
+function visitQuestions(checkpointId: CheckpointId, snapshot: unknown): ScoredQuestion[] {
+  if (typeof snapshot === "string") return JSON.parse(snapshot) as ScoredQuestion[];
+  // Legacy visits retain the old question and answer ordering, including retries.
+  const vi = getCheckpoints("vi").find(c => c.id === checkpointId)!.mission;
+  const en = getCheckpoints("en").find(c => c.id === checkpointId)!.mission;
+  return [{ id: `${checkpointId}-legacy-1`, bankVersion: "legacy-v1", sourceId: "legacy-demo",
+    question: { vi: vi.question, en: en.question }, answers: { vi: vi.answers, en: en.answers },
+    correct: vi.correct, hint: { vi: vi.hint, en: en.hint }, explanation: { vi: vi.explanation, en: en.explanation },
+  }];
 }
 
 export class GameError extends Error {
@@ -93,9 +112,11 @@ export function readState(owner: string): PalaceState {
       for (const v of db()
         .prepare("SELECT * FROM visits WHERE run_id = ?")
         .all(row.id)) {
+        const checkpointId = v.checkpoint_id as CheckpointId;
+        const quiz = visitQuestions(checkpointId, v.quiz_json);
         const attempts = db()
           .prepare(
-            "SELECT at, answer, correct FROM attempts WHERE run_id = ? AND checkpoint_id = ? ORDER BY id",
+            "SELECT at, answer, correct, question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? ORDER BY id",
           )
           .all(row.id, v.checkpoint_id)
           .map(
@@ -104,15 +125,16 @@ export function readState(owner: string): PalaceState {
                 at: String(a.at),
                 answer: Number(a.answer),
                 correct: Boolean(a.correct),
+                questionId: a.question_id ? String(a.question_id) : quiz[0].id,
               }) satisfies Attempt,
           );
-        const checkpointId = v.checkpoint_id as CheckpointId;
         visits[checkpointId] = {
           checkpointId,
           recognizedAt: String(v.recognized_at),
           mode: v.mode as RecognitionMode,
           completedAt: v.completed_at ? String(v.completed_at) : null,
           attempts,
+          quiz: quiz.map(publicQuestion),
         } satisfies Visit;
       }
       return {
@@ -202,9 +224,9 @@ export function recordRecognition(
     if (result === "matched" && candidate === checkpointId) {
       db()
         .prepare(
-          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode) VALUES(?, ?, ?, ?)",
+          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode, quiz_json) VALUES(?, ?, ?, ?, ?)",
         )
-        .run(runId, checkpointId, at, mode);
+        .run(runId, checkpointId, at, mode, JSON.stringify(getCheckpointQuestions(checkpointId)));
     }
   });
   return readState(owner);
@@ -215,31 +237,40 @@ export function answerCheckpoint(
   runId: string,
   checkpointId: CheckpointId,
   answer: number,
+  questionId?: string,
 ) {
   const correct = transaction(() => {
     const run = ownedRun(owner, runId);
     const visit = db()
       .prepare("SELECT * FROM visits WHERE run_id = ? AND checkpoint_id = ?")
       .get(runId, checkpointId);
-    // A repeated successful submission is idempotent, including after the final checkpoint.
-    if (visit?.completed_at) return true;
-    if (run.status !== "active")
-      throw new GameError("Lượt chơi đã kết thúc. / This run has ended.", 409);
-    requireAvailable(owner, runId, checkpointId);
     if (!visit)
       throw new GameError(
         "Nhận diện địa điểm trước khi trả lời. / Identify the checkpoint first.",
         409,
       );
-    const checkpoint = getCheckpoints().find((c) => c.id === checkpointId)!;
-    const success = answer === checkpoint.mission.correct;
+    const quiz = visitQuestions(checkpointId, visit.quiz_json);
+    const submittedId = questionId || (visit.quiz_json ? undefined : quiz[0].id);
+    const question = quiz.find(q => q.id === submittedId);
+    if (!question || !Number.isInteger(answer) || answer < 0 || answer > 3)
+      throw new GameError("Câu hỏi không hợp lệ. / Invalid question.", 409);
+    const passed = new Set(db().prepare("SELECT question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? AND correct = 1").all(runId, checkpointId).map(a => a.question_id ? String(a.question_id) : quiz[0].id));
+    // A duplicate passed question is idempotent, even after completing a run.
+    if (passed.has(question.id)) return true;
+    if (run.status !== "active")
+      throw new GameError("Lượt chơi đã kết thúc. / This run has ended.", 409);
+    requireAvailable(owner, runId, checkpointId);
+    if (quiz.find(q => !passed.has(q.id))?.id !== question.id)
+      throw new GameError("Hoàn thành câu trước để tiếp tục. / Complete the previous question first.", 409);
+    const success = answer === question.correct;
     const at = new Date().toISOString();
     db()
       .prepare(
-        "INSERT INTO attempts(run_id, checkpoint_id, at, answer, correct) VALUES(?, ?, ?, ?, ?)",
+        "INSERT INTO attempts(run_id, checkpoint_id, at, answer, correct, question_id) VALUES(?, ?, ?, ?, ?, ?)",
       )
-      .run(runId, checkpointId, at, answer, success ? 1 : 0);
-    if (success) {
+      .run(runId, checkpointId, at, answer, success ? 1 : 0, question.id);
+    if (success) passed.add(question.id);
+    if (quiz.every(q => passed.has(q.id))) {
       db()
         .prepare(
           "UPDATE visits SET completed_at = ? WHERE run_id = ? AND checkpoint_id = ?",

@@ -38,9 +38,10 @@ export async function POST(request: Request) {
       Number.isInteger(body.answer) &&
       body.answer >= 0 &&
       body.answer <= 3
+      && (body.questionId === undefined || (typeof body.questionId === "string" && body.questionId.length <= 100))
     ) {
       return gameResponse(
-        answerCheckpoint(owner, body.runId, body.checkpointId, body.answer),
+        answerCheckpoint(owner, body.runId, body.checkpointId, body.answer, body.questionId),
       );
     }
     throw new GameError("Hành động không hợp lệ. / Invalid action.");

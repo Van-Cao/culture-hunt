@@ -77,12 +77,12 @@ export function usePalaceJourney() {
       ),
     );
   }
-  function answer(runId: string, checkpointId: CheckpointId, answer: number) {
+  function answer(runId: string, checkpointId: CheckpointId, answer: number, questionId: string) {
     return run(() =>
       json<{ state: PalaceState; correct: boolean }>("/api/palace", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "answer", runId, checkpointId, answer }),
+        body: JSON.stringify({ action: "answer", runId, checkpointId, answer, questionId }),
       }),
     );
   }

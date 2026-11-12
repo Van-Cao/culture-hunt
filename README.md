@@ -17,7 +17,7 @@ Open [the Palace journey](http://localhost:3000/?play=1&place=palace&view=journe
 
 1. Start at **Mặt tiền Dinh**, the only available checkpoint. The map can be dragged and zoomed; the explorer represents game progress.
 2. Select **Khám phá điểm này**, then **Dùng ảnh mẫu của điểm này** and **Nhận diện địa điểm**. No AI key is needed for the sample kit.
-3. Read or listen to the curated story, then answer the quiz. Recognition alone does not complete a checkpoint. A wrong answer records an attempt and offers a retry.
+3. Read or listen to the curated story, then solve every question at that checkpoint. New visits use the supplied question bank: 2 / 2 / 1 / 2 / 2 questions across the five stops. Recognition or passing just the first of two questions does not complete a checkpoint. A wrong answer records an attempt and offers a retry; reload resumes the remaining questions.
 4. Claim the discovery. The checkpoint and route illuminate, the explorer moves, and the next checkpoint opens. Continue through **Phòng Khánh tiết**, **Phòng Nội các**, **Trực thăng trên mái**, and **Thông tin dưới hầm**.
 5. After all five, open **Dấu ấn** to see the complete discovery atlas, Palace Explorer badge, dated visits, recognition method, and answer attempts. Filter the map by run or view all lifetime discoveries.
 6. **Chơi lượt mới** retains earlier visits and starts a fresh route. Each checkpoint awards 150 lifetime XP once; replay cannot farm XP. Reloading resumes the current run.
@@ -26,7 +26,31 @@ The photo kit also lets you download any reference photo, upload it through the 
 
 The map is an authored illustrative atlas, not a measured floor plan or physical-navigation service. Sample play and uploaded-photo recognition do not prove attendance at the Palace.
 
+### Map design checkpoint
+
+The original architectural atlas and the complete working demo are preserved in Git commit `3d078bd`, tagged `palace-atlas-v1`. The current map uses five 2.5D stage dioramas, a winding route, an explorer that walks after reward dialogs close, and illuminated completion tokens. Both designs share the same checkpoint IDs, recognition, quizzes, and saved history.
+
+Room dioramas now follow the visible features of the official photographs: patterned red carpet and ceremonial seating; an open-centred oval conference table, microphones and dark leather chairs; the camouflaged rooftop UH-1; and desk-mounted teletypes beside a concrete corridor. Selecting an available stage opens a side-by-side diorama/photo study. These are cutaway illustrations rather than measured architectural reconstructions.
+
+### Supplied question bank
+
+[Original extracted text](content/palace/question-bank.source.json) preserves all 10 questions, options, answers and stories from `CultureHunt_NganHangCauHoi_DinhDocLap.docx`. Nine questions are adapted in Vietnamese and English for play. One question about a screen/bronze drum behind the Cabinet Room chair is retained for verification and excluded from grading because it could not be corroborated against the official room photo. [Editorial notes and sources](content/palace/README.md) explain the adaptations.
+
+The server snapshots each visit's question set on recognition, validates question order and awards checkpoint XP only after every question is solved. Passed questions and duplicate submissions do not add attempts or XP. Existing pre-bank visits retain their original single-question quiz and earlier attempts; new visits use the new bank. Start a new run to experience the entire new bank without replacing old history.
+
 ## Persistence and image recognition
+
+### Collection / Explorer passport demo
+
+Open `/?play=1&view=collection&lang=vi`. The Collection starts with a MapLibre geographic map of central Ho Chi Minh City, styled with OpenFreeMap/OSM data, with Palace and University of Science landmark markers. Selecting a landmark opens its local discovery atlas. Browser back/forward and the `atlas` / `atlasTab` query parameters preserve the city/destination/tab context.
+
+- Palace discovery maps, visit timestamps and runs use the existing server history. The university Collection view adapts existing browser-local progress into three clearly labeled demo story chapters; it does not invent physical room locations, timestamps or earlier runs. This demo does not migrate gameplay or alter XP rules.
+- Four badges derive from saved completion: first checkpoint, Palace journey, university journey, and both destinations. Replay does not inflate the totals. Where legacy progress has no date, the passport does not invent an earned date.
+- Save destination cards using the existing favorites, or bookmark individual checkpoint stories in `culture-hunt-atlas-favorites-v1`. Saved stories survive reload in the same browser.
+- Share the whole passport, a destination, an unlocked checkpoint, or an earned badge. The preview is the same PNG offered for download or native file sharing: 1080×1350 for posts, 1080×1920 for stories. Name and card-creation date are hidden by default. Generated cards are labeled as in-game demo achievements. The native share sheet depends on browser/device support; download and copy-text actions remain available. No public share-page hosting or automatic posting is involved.
+- The geographic map loads external map resources only when the city Collection map is mounted. A labeled schematic with usable destination buttons remains available if WebGL or the network is unavailable. [Map sources and attribution](public/maps/README.md).
+
+This implementation changes the Collection experience; the existing landing page, journeys, scanner, quizzes, and persistence services retain their behavior.
 
 - Palace runs, recognition events, answer attempts, and unique XP awards live in a SQLite database at `.culture-hunt/palace.sqlite`. Database files are ignored by Git. Set `CULTURE_HUNT_DATA_DIR` to a persistent writable directory when hosting.
 - An HTTP-only, same-site cookie identifies the demo browser profile. History survives reloads and server restarts with the same database and cookie. This profile is currently separate from Google account sign-in; cross-device/account synchronization is not implemented.
@@ -52,7 +76,7 @@ npm run check:vision  # Optional live AI smoke check; requires valid credentials
 - `?lang=vi` / `?lang=en` also render the language on the server. Language selection, Start exploring and guest entry use native GET forms as a fallback while hydration scripts are loading. The existing streamed app shell still requires JavaScript to reveal its resolved content. The landing text stays visible without waiting for an animation; mobile text enlargement can grow the layout instead of covering the header.
 - Camera permission flow, photo upload, and a credited reference-photo kit. The Palace supports uploads up to 5 MB; the secondary sample scanner accepts up to 10 MB locally.
 - Animated scanner, spring-animated story cards, device text-to-speech in Vietnamese / English.
-- Five server-validated Palace checkpoint quizzes and three secondary sample quizzes, hints, retries, fireworks, XP, and badges.
+- Five server-validated Palace checkpoint challenges with nine question-bank questions for new visits, plus three secondary sample quizzes, hints, retries, fireworks, XP, and badges.
 - SQLite Palace history, localStorage secondary sample progress, native share / clipboard, and an exported PNG achievement card.
 - Responsive layouts, keyboard-accessible dialogs and reduced-motion support.
 

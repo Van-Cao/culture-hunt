@@ -5,6 +5,9 @@ import { readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { DatabaseSync } from "node:sqlite";
+import source from "../content/palace/question-bank.source.json";
+import { getCheckpointQuestions, questionReview } from "../lib/palace/questions";
 import sharp from "sharp";
 import {
   answerCheckpoint,
@@ -22,6 +25,44 @@ process.env.CULTURE_HUNT_DATA_DIR = mkdtempSync(
 );
 // Unit tests are deterministic and never make paid model requests.
 delete process.env.OPENAI_API_KEY;
+
+// Start from the old database shape to exercise the additive migration.
+const legacyOwner = randomUUID(), legacyRun = randomUUID();
+const oldDatabase = new DatabaseSync(join(process.env.CULTURE_HUNT_DATA_DIR, "palace.sqlite"));
+oldDatabase.exec(`
+  CREATE TABLE runs (id TEXT PRIMARY KEY, owner TEXT NOT NULL, started_at TEXT NOT NULL, completed_at TEXT, status TEXT NOT NULL);
+  CREATE TABLE visits (run_id TEXT NOT NULL REFERENCES runs(id), checkpoint_id TEXT NOT NULL, recognized_at TEXT NOT NULL, mode TEXT NOT NULL, completed_at TEXT, PRIMARY KEY(run_id, checkpoint_id));
+  CREATE TABLE attempts (id INTEGER PRIMARY KEY, run_id TEXT NOT NULL REFERENCES runs(id), checkpoint_id TEXT NOT NULL, at TEXT NOT NULL, answer INTEGER NOT NULL, correct INTEGER NOT NULL);
+`);
+oldDatabase.prepare("INSERT INTO runs VALUES(?, ?, ?, NULL, 'active')").run(legacyRun, legacyOwner, new Date().toISOString());
+oldDatabase.prepare("INSERT INTO visits VALUES(?, 'facade', ?, 'sample', NULL)").run(legacyRun, new Date().toISOString());
+oldDatabase.prepare("INSERT INTO attempts(run_id, checkpoint_id, at, answer, correct) VALUES(?, 'facade', ?, 1, 0)").run(legacyRun, new Date().toISOString());
+oldDatabase.close();
+
+test("the supplied ten-question bank is preserved and nine reviewed questions are bilingual and playable", () => {
+  assert.equal(source.questions.length, 10);
+  const active = checkpointIds.flatMap(id => getCheckpointQuestions(id));
+  assert.equal(active.length, 9);
+  assert.deepEqual(checkpointIds.map(id => getCheckpointQuestions(id).length), [2, 2, 1, 2, 2]);
+  assert.deepEqual([...active.map(q => q.sourceId), ...questionReview.map(q => q.sourceId)].sort(), source.questions.map(q => q.id).sort());
+  for (const q of active) {
+    assert.equal(q.answers.vi.length, 4); assert.equal(q.answers.en.length, 4);
+    assert.ok(q.question.vi && q.question.en && q.hint.vi && q.hint.en);
+    assert.ok(q.correct >= 0 && q.correct <= 3);
+  }
+});
+
+test("migration preserves an unfinished legacy quiz and its old attempts", () => {
+  const visit = readState(legacyOwner).runs[0].visits.facade!;
+  assert.equal(visit.quiz.length, 1);
+  assert.equal(visit.quiz[0].bankVersion, "legacy-v1");
+  assert.equal(visit.attempts[0].questionId, "facade-legacy-1");
+  const completed = answerCheckpoint(legacyOwner, legacyRun, "facade", 0);
+  assert.equal(completed.state.xp, 150);
+  assert.equal(completed.state.runs[0].visits.facade!.attempts.length, 2);
+  const next = recordRecognition(legacyOwner, legacyRun, "reception", "sample", "matched", "reception");
+  assert.equal(next.runs[0].visits.reception!.quiz.length, 2);
+});
 
 test("new profiles are isolated and starting an active run is idempotent", () => {
   const owner = randomUUID();
@@ -63,18 +104,24 @@ test("wrong answers retain attempts, correct answers unlock once, duplicate subm
   const owner = randomUUID(),
     runId = startRun(owner).activeRunId!;
   recordRecognition(owner, runId, "facade", "sample", "matched", "facade");
-  const wrong = answerCheckpoint(owner, runId, "facade", 1);
+  const [first, second] = getCheckpointQuestions("facade");
+  const wrong = answerCheckpoint(owner, runId, "facade", 1, first.id);
   assert.equal(wrong.correct, false);
   assert.equal(wrong.state.xp, 0);
   assert.equal(wrong.state.runs[0].visits.facade!.attempts.length, 1);
   assert.equal(wrong.state.runs[0].visits.facade!.completedAt, null);
   assert.throws(() => requireAvailable(owner, runId, "reception"), GameError);
-  const correct = answerCheckpoint(owner, runId, "facade", 0);
+  const partial = answerCheckpoint(owner, runId, "facade", first.correct, first.id);
+  assert.equal(partial.state.xp, 0);
+  assert.equal(partial.state.runs[0].visits.facade!.completedAt, null);
+  assert.throws(() => requireAvailable(owner, runId, "reception"), GameError);
+  assert.equal(answerCheckpoint(owner, runId, "facade", 0, first.id).state.runs[0].visits.facade!.attempts.length, 2);
+  const correct = answerCheckpoint(owner, runId, "facade", second.correct, second.id);
   assert.equal(correct.state.xp, 150);
-  assert.equal(correct.state.runs[0].visits.facade!.attempts.length, 2);
-  const duplicate = answerCheckpoint(owner, runId, "facade", 0);
+  assert.equal(correct.state.runs[0].visits.facade!.attempts.length, 3);
+  const duplicate = answerCheckpoint(owner, runId, "facade", second.correct, second.id);
   assert.equal(duplicate.state.xp, 150);
-  assert.equal(duplicate.state.runs[0].visits.facade!.attempts.length, 2);
+  assert.equal(duplicate.state.runs[0].visits.facade!.attempts.length, 3);
   requireAvailable(owner, runId, "reception");
 });
 
@@ -94,7 +141,7 @@ test("all five checkpoints complete the run; replay retains visits and cannot fa
         "matched",
         checkpoint.id,
       );
-      answerCheckpoint(owner, runId, checkpoint.id, checkpoint.mission.correct);
+      for (const q of getCheckpointQuestions(checkpoint.id)) answerCheckpoint(owner, runId, checkpoint.id, q.correct, q.id);
     }
     const state = readState(owner);
     assert.equal(state.activeRunId, null);
@@ -110,8 +157,25 @@ test("all five checkpoints complete the run; replay retains visits and cannot fa
     for (const id of checkpointIds) {
       assert.ok(run.visits[id]?.recognizedAt);
       assert.ok(run.visits[id]?.completedAt);
-      assert.equal(run.visits[id]?.attempts.length, 1);
+      assert.equal(run.visits[id]?.attempts.length, getCheckpointQuestions(id).length);
     }
+});
+
+test("new quizzes reject missing, forged and future question IDs, and resume after a partial answer", () => {
+  const owner = randomUUID(), runId = startRun(owner).activeRunId!;
+  recordRecognition(owner, runId, "facade", "sample", "matched", "facade");
+  const [first, second] = getCheckpointQuestions("facade");
+  assert.throws(() => answerCheckpoint(owner, runId, "facade", 0), GameError);
+  assert.throws(() => answerCheckpoint(owner, runId, "facade", 0, "forged"), GameError);
+  assert.throws(() => answerCheckpoint(owner, runId, "facade", second.correct, second.id), GameError);
+  answerCheckpoint(owner, runId, "facade", first.correct, first.id);
+  const resumed = readState(owner).runs[0].visits.facade!;
+  assert.equal(resumed.attempts.filter(a => a.correct).length, 1);
+  assert.equal(resumed.quiz[1].id, second.id);
+  assert.equal("correct" in resumed.quiz[0], false);
+  recordRecognition(owner, runId, "facade", "reference", "matched", "facade");
+  assert.deepEqual(readState(owner).runs[0].visits.facade!.quiz, resumed.quiz);
+  assert.equal(answerCheckpoint(owner, runId, "facade", second.correct, second.id).state.xp, 150);
 });
 
 test("starting over preserves an unfinished run", () => {

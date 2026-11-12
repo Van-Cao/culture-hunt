@@ -1,0 +1,143 @@
+/* Adventure board: the rest of the Palace experience keeps its paper palette. */
+.palace-experience .palace-game-atlas {
+  background: #204c40;
+  border: 1px solid #3b604d;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px #1e49341a, 0 2px 0 #183d31;
+}
+.palace-game-atlas .palace-atlas-bar {
+  background: #193e34;
+  color: #f6eccf;
+  border-bottom: 1px solid #ffffff16;
+  padding: 16px 20px;
+}
+.palace-game-atlas .palace-atlas-bar > span:first-child {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+}
+.palace-game-atlas .palace-atlas-bar > span:last-child {
+  color: #cbd5bf;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 8px;
+}
+.palace-game-atlas .palace-atlas-bar i { width: 3px; height: 3px; background: #cfb775; border-radius: 50%; }
+.palace-game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 19px 20px;
+  background: #264f40;
+  border-bottom: 1px solid #d6dfb72b;
+  color: #f7efd5;
+}
+.palace-game-hud-title { display: flex; gap: 11px; align-items: center; min-width: 0; }
+.palace-game-hud-title > span { display: grid; place-items: center; width: 37px; height: 40px; flex-shrink: 0; border: 1px solid #c5ab666b; border-radius: 11px 11px 15px 15px; background: #b79c4217; color: #e5cb88; }
+.palace-game-hud-title small { display: block; font-size: 8px; letter-spacing: 1.2px; color: #c1cfb5; margin-bottom: 5px; }
+.palace-game-hud-title strong { display: block; font: 400 18px/1.45 var(--palace-serif); }
+.palace-game-gems { text-align: right; flex-shrink: 0; }
+.palace-game-gems > span { display: flex; gap: 4px; color: #acbba0; }
+.palace-game-gems .gem-earned { fill: #dec27c; color: #fae4a2; filter: drop-shadow(0 0 4px #ffdc7960); }
+.palace-game-gems > strong { display: block; margin-top: 6px; color: #f4dfaa; font-size: 15px; line-height: 1; }
+.palace-game-gems small { font-size: 10px; font-weight: 400; color: #c1cfb5; }
+.palace-game-atlas .palace-map-viewport { aspect-ratio: 1000 / 970; max-height: none; background: #2d5b49; scrollbar-color: #adbc8b #264f40; }
+.palace-game-atlas .palace-map-svg { overflow: hidden; }
+.palace-stage-scenery { transition: filter 1s, opacity 1s; pointer-events: none; }
+.palace-game-atlas .palace-node-hit-area { pointer-events: none; }
+.stage-locked .palace-stage-scenery { filter: saturate(.25) brightness(.64); opacity: .86; }
+.stage-open .palace-stage-scenery { filter: drop-shadow(0 9px 7px #2e54352b); }
+.palace-experience .palace-game-atlas .palace-map-node { gap: 8px; color: #223d2e; }
+.palace-experience .palace-game-atlas .palace-map-node button {
+  pointer-events: auto;
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border: 3px solid #fff0b9;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #e4c879, #ba9148);
+  color: #2f4934;
+  box-shadow: 0 7px 0 #8e733f, 0 10px 0 #214e353b, 0 13px 17px #2e4c3840, inset 0 2px 0 #fff8ce;
+  font: 700 25px/1 var(--font-geist-sans), sans-serif;
+  outline-offset: 6px;
+  transition: transform 180ms, box-shadow 180ms;
+}
+.palace-experience .palace-game-atlas .palace-map-node button:hover { transform: translateY(-4px); }
+.palace-experience .palace-game-atlas .palace-map-node button:active { transform: translateY(3px); }
+.palace-experience .palace-game-atlas .palace-map-node button:focus-visible { outline: 4px solid #fff8d0; outline-offset: 7px; }
+.palace-experience .palace-game-atlas .palace-map-node.is-selected button { outline: 2px solid #f7e6ac; outline-offset: 7px; }
+.palace-experience .palace-game-atlas .palace-map-node.is-locked button {
+  background: linear-gradient(140deg, #a2b192, #748d70);
+  border-color: #c2cbaa;
+  color: #243e2e;
+  box-shadow: 0 7px 0 #536d52, 0 10px 0 #254c3533, inset 0 2px 0 #e3e5c75c;
+}
+.palace-experience .palace-game-atlas .palace-map-node.is-complete button {
+  background: linear-gradient(140deg, #f5dc92, #c39b50);
+  border-color: #fff2b9;
+  color: #345036;
+  box-shadow: 0 7px 0 #957340, 0 10px 23px #ffe09466, inset 0 2px 0 #fff7cf;
+}
+.palace-stage-number { display: grid; place-items: center; }
+.palace-stage-lock { position: absolute; bottom: -5px; right: -7px; padding: 3px; width: 24px; height: 24px; border-radius: 50%; color: #dfe5cb; background: #455f49; border: 1px solid #c2cbaa; }
+.palace-experience .palace-game-atlas .palace-map-node > span {
+  max-width: 185px;
+  padding: 4px 9px;
+  background: #f5f0ddeb;
+  color: #25412f;
+  border: 1px solid #fff8d979;
+  box-shadow: 0 3px 6px #3254341a;
+  border-radius: 5px;
+  font-size: 17px;
+  line-height: 1.3;
+  white-space: normal;
+}
+.palace-game-atlas .palace-map-node > small { display: flex; align-items: center; gap: 4px; padding: 2px 5px; border-radius: 3px; color: #f6f2d8; background: #244f3fe8; font-size: 11px; letter-spacing: .7px; line-height: 1.3; font-weight: 600; }
+.palace-game-atlas .palace-map-node.is-complete > small { background: #735f2f; color: #fff3c6; }
+.palace-game-atlas .palace-node-pulse { animation: palace-game-beacon 2.6s ease-out infinite; }
+.palace-stage-flag { transform-box: fill-box; transform-origin: left center; animation: palace-flag-wave 3s ease-in-out infinite; }
+.palace-stage-sparkles { animation: palace-game-shimmer 3s ease-in-out infinite; }
+.palace-route-current { animation: palace-road-flow 2s linear infinite; }
+.palace-explorer { pointer-events: none; filter: drop-shadow(0 3px 1px #224f3433); }
+.palace-explorer-figure { animation: palace-explorer-idle 3s ease-in-out infinite; }
+.palace-game-next { display: flex; align-items: center; gap: 11px; padding: 15px 20px; background: #244d3f; color: #f1e9ce; border-top: 1px solid #d7dbb236; }
+.palace-game-next > span { color: #e1c984; display: flex; }
+.palace-game-next p { font-size: 10px; line-height: 1.6; flex: 1; }
+.palace-game-next p strong { display: block; font-size: 12px; font-weight: 500; }
+.palace-experience .palace-game-next button { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; min-width: 84px; padding: 9px 14px; background: #e1c27e; color: #263e2e; border: 1px solid #f3dfaa; border-radius: 7px; box-shadow: 0 3px 0 #a08048; font-size: 12px; font-weight: 600; }
+.palace-experience .palace-game-next button:hover { background: #efda9e; }
+.palace-game-atlas .palace-map-controls { padding: 9px 15px; border-color: #dde1c326; background: #1d4438; }
+.palace-game-atlas .palace-map-controls > span { color: #d2dcc2; font-size: 10px; }
+.palace-map-controls b { font-family: var(--font-geist-mono), monospace; font-size: 9px; font-weight: 400; }
+.palace-experience .palace-game-atlas .palace-map-controls button { background: #315544; border-color: #789476; color: #f1e9ce; border-radius: 7px; }
+.palace-experience .palace-game-atlas .palace-map-controls button:disabled { opacity: .4; }
+.palace-game-atlas .palace-map-disclaimer { background: #f1f0e4; border-color: #d4d8c3; color: #52644d; margin: 0; }
+@keyframes palace-game-beacon { 0% { opacity: .9; transform: scale(.9); } 80%, 100% { opacity: 0; transform: scale(1.55); } }
+@keyframes palace-flag-wave { 0%, 100% { rotate: -3deg; } 50% { rotate: 3deg; } }
+@keyframes palace-game-shimmer { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+@keyframes palace-road-flow { to { stroke-dashoffset: -30; } }
+@keyframes palace-explorer-idle { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@media (max-width: 1100px) {
+  .palace-game-hud-title strong { font-size: 16px; }
+  .palace-game-hud { padding: 16px; gap: 8px; }
+}
+@media (max-width: 500px) {
+  .palace-experience .palace-game-atlas { border-radius: 11px; }
+  .palace-game-atlas .palace-atlas-bar { padding: 12px; gap: 8px; }
+  .palace-game-atlas .palace-atlas-bar > span:first-child { font-size: 8px; letter-spacing: 1px; }
+  .palace-game-atlas .palace-atlas-bar > span:last-child { font-size: 7px; gap: 5px; letter-spacing: -.2px; }
+  .palace-game-hud { padding: 14px 12px; }
+  .palace-game-hud-title { gap: 8px; }
+  .palace-game-hud-title > span { width: 30px; height: 35px; }
+  .palace-game-hud-title small { font-size: 7px; letter-spacing: .7px; }
+  .palace-game-hud-title strong { font-size: 14px; }
+  .palace-game-gems > span { gap: 2px; }
+  .palace-game-gems > span svg { width: 11px; height: 11px; }
+  .palace-game-next { padding: 12px; gap: 8px; }
+  .palace-game-next p strong { font-size: 11px; }
+  .palace-experience .palace-game-next button { min-width: 70px; gap: 7px; padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .palace-game-atlas *, .palace-game-atlas *::before, .palace-game-atlas *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

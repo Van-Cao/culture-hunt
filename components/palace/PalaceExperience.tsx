@@ -33,6 +33,7 @@ import GameDialog from "@/components/UI/GameDialog";
 import StoryCard from "@/components/UI/StoryCard";
 import Fireworks from "@/components/UI/Fireworks";
 import PalaceMap from "./PalaceMap";
+import PalaceRoomStudy from "./PalaceRoomStudy";
 import PalaceCapture from "./PalaceCapture";
 import type { PalaceGame } from "./usePalaceJourney";
 import "./palace.css";
@@ -74,6 +75,7 @@ export default function PalaceExperience({
   const [choice, setChoice] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<boolean | null>(null);
   const [hint, setHint] = useState(false);
+  const [quizQuestionId, setQuizQuestionId] = useState<string | null>(null);
   const [journalRunId, setJournalRunId] = useState("all");
   const checkpoints = getCheckpoints(locale);
   const state = game.state;
@@ -92,6 +94,10 @@ export default function PalaceExperience({
       : completed;
   const actor = completed.at(-1) || "facade";
   const visit = currentRun?.visits[selectedId];
+  const quiz = visit?.quiz || checkpoint.questions;
+  const pendingQuestion = quiz.find(q => !visit?.attempts.some(a => a.correct && a.questionId === q.id));
+  const question = quiz.find(q => q.id === quizQuestionId) || pendingQuestion || quiz[quiz.length - 1];
+  const questionIndex = quiz.indexOf(question);
   const isDone = Boolean(visit?.completedAt);
   const index = checkpointIds.indexOf(selectedId);
   const unlocked =
@@ -131,6 +137,7 @@ export default function PalaceExperience({
     setChoice(null);
     setFeedback(null);
     setHint(false);
+    setQuizQuestionId(null);
     setStage(
       mode === "journal" || currentRun?.visits[id]?.completedAt
         ? "visit"
@@ -139,6 +146,7 @@ export default function PalaceExperience({
   }
   async function begin() {
     if (!unlocked || game.busy) return;
+    setPicked(selectedId);
     if (!state?.activeRunId) {
       const response = await game.start();
       if (!response) return;
@@ -155,7 +163,7 @@ export default function PalaceExperience({
   }
   async function submit() {
     if (!currentRun || choice === null || game.busy) return;
-    const response = await game.answer(currentRun.id, selectedId, choice);
+    const response = await game.answer(currentRun.id, selectedId, choice, question.id);
     if (response) setFeedback(response.correct);
   }
   async function replay() {
@@ -340,6 +348,7 @@ export default function PalaceExperience({
           available={mode === "journal" ? undefined : nextId}
           selected={selectedId}
           actor={actor}
+          paused={stage !== null}
           journal={mode === "journal"}
           onSelect={select}
         />
@@ -371,7 +380,7 @@ export default function PalaceExperience({
                 </span>
                 <span>
                   <Clock3 size={13} />
-                  {t("2–3 phút", "2–3 min")}
+                  {quiz.length} {t("câu hỏi", "questions")} · {t("2–3 phút", "2–3 min")}
                 </span>
               </div>
               <button
@@ -396,6 +405,7 @@ export default function PalaceExperience({
               <button
                 className="palace-text-button"
                 onClick={() => {
+                  setPicked(selectedId);
                   setStage("capture");
                   setRecognition(null);
                 }}
@@ -647,7 +657,7 @@ export default function PalaceExperience({
               ? t("Bắt đầu lượt mới", "Start a new run")
               : checkpoint.name
           }
-          wide={stage === "capture" || stage === "story"}
+          wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit"}
         >
           <div className="palace-modal">
             {game.error && (
@@ -657,17 +667,13 @@ export default function PalaceExperience({
             )}
             {stage === "brief" && (
               <div className="palace-brief">
-                <Image
-                  src={checkpoint.photo}
-                  alt={checkpoint.name}
-                  width={700}
-                  height={430}
-                />
+                <PalaceRoomStudy checkpoint={checkpoint} />
                 <span className="palace-overline">
                   CHECKPOINT {index + 1} / 05
                 </span>
                 <h2>{checkpoint.name}</h2>
                 <p>{checkpoint.clue}</p>
+                <ul className="palace-room-features">{checkpoint.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
                 <div className="palace-brief-steps">
                   <span>
                     <ScanLine size={17} />
@@ -767,10 +773,12 @@ export default function PalaceExperience({
                   onQuiz={() => {
                     if (isDone || mode === "journal") close();
                     else {
+                      setPicked(selectedId);
                       setStage("quiz");
                       setChoice(null);
                       setFeedback(null);
                       setHint(false);
+                      setQuizQuestionId(pendingQuestion?.id || null);
                     }
                   }}
                 />
@@ -782,13 +790,16 @@ export default function PalaceExperience({
                   <Sparkles size={28} />
                 </span>
                 <span className="palace-overline">
-                  {t("THỬ THÁCH TRI THỨC", "KNOWLEDGE CHALLENGE")} / {index + 1}
+                  {t("THỬ THÁCH TRI THỨC", "KNOWLEDGE CHALLENGE")} · {t("CÂU", "QUESTION")} {questionIndex + 1}/{quiz.length}
                 </span>
-                <h2>{checkpoint.mission.question}</h2>
+                <div className="palace-question-progress" aria-label={`${questionIndex + 1} / ${quiz.length}`}>
+                  {quiz.map((q, i) => <span key={q.id} className={visit?.attempts.some(a => a.correct && a.questionId === q.id) ? "is-passed" : q.id === question.id ? "is-current" : ""}>{i + 1}</span>)}
+                </div>
+                <h2>{question.question[locale]}</h2>
                 <p>
                   {t(
-                    "Mỗi đáp án là một bước gần hơn với câu chuyện.",
-                    "Every answer brings you closer to the story.",
+                    "Giải đúng các câu hỏi của trạm để khai mở dấu ấn.",
+                    "Solve every question at this stop to unlock its discovery.",
                   )}
                 </p>
                 <div
@@ -796,7 +807,7 @@ export default function PalaceExperience({
                   role="group"
                   aria-label={t("Chọn một đáp án", "Choose an answer")}
                 >
-                  {checkpoint.mission.answers.map((answer, i) => (
+                  {question.answers[locale].map((answer, i) => (
                     <button
                       key={answer}
                       className={`${choice === i ? "is-selected" : ""} ${feedback !== null && choice === i ? (feedback ? "is-correct" : "is-wrong") : ""}`}
@@ -820,8 +831,8 @@ export default function PalaceExperience({
                       <strong>
                         {feedback
                           ? t(
-                              "Chính xác! Điểm mới đã được khai mở.",
-                              "Correct! A new discovery is illuminated.",
+                              isDone ? "Chính xác! Điểm mới đã được khai mở." : "Chính xác! Tiếp tục giải mã câu tiếp theo.",
+                              isDone ? "Correct! A new discovery is illuminated." : "Correct! Continue to the next question.",
                             )
                           : t(
                               "Chưa đúng. Thử thêm một lần nhé!",
@@ -829,21 +840,27 @@ export default function PalaceExperience({
                             )}
                       </strong>
                       {feedback
-                        ? checkpoint.mission.explanation
-                        : checkpoint.mission.hint}
+                        ? question.explanation[locale]
+                        : question.hint[locale]}
                     </p>
                   ) : hint ? (
                     <p className="palace-inline-notice">
-                      {checkpoint.mission.hint}
+                      {question.hint[locale]}
                     </p>
                   ) : null}
                 </div>
                 {feedback === true ? (
                   <button
                     className="palace-button"
-                    onClick={() => setStage("success")}
+                    onClick={() => {
+                      if (isDone) setStage("success");
+                      else {
+                        setQuizQuestionId(pendingQuestion?.id || null);
+                        setChoice(null); setFeedback(null); setHint(false);
+                      }
+                    }}
                   >
-                    {t("Nhận dấu ấn", "Claim your discovery")}
+                    {isDone ? t("Nhận dấu ấn", "Claim your discovery") : t("Câu tiếp theo", "Next question")}
                     <ArrowRight size={17} />
                   </button>
                 ) : feedback === false ? (
@@ -936,12 +953,7 @@ export default function PalaceExperience({
             )}
             {stage === "visit" && (
               <div className="palace-visit">
-                <Image
-                  src={checkpoint.photo}
-                  alt={checkpoint.name}
-                  width={700}
-                  height={400}
-                />
+                <PalaceRoomStudy checkpoint={checkpoint} />
                 <span className="palace-overline">
                   MY HERITAGE ATLAS / CHECKPOINT {index + 1}
                 </span>
@@ -968,6 +980,7 @@ export default function PalaceExperience({
                           {formatDate(entry.recognizedAt)} ·{" "}
                           {entry.attempts.length} {t("lần trả lời", "answers")}
                         </small>
+                        <small>{new Set(entry.attempts.filter(a => a.correct).map(a => a.questionId)).size}/{entry.quiz.length} {t("câu đã giải", "questions solved")}</small>
                         <small>
                           {entry.mode === "openai"
                             ? t("Nhận diện bằng AI", "AI recognition")

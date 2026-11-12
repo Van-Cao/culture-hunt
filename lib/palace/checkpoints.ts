@@ -1,5 +1,6 @@
 import type { Locale } from "@/components/UI/LanguageProvider";
 import type { Mission } from "@/components/UI/game-data";
+import { getCheckpointQuestions, publicQuestion } from "./questions";
 
 export const checkpointIds = [
   "facade",
@@ -106,7 +107,7 @@ const catalog: Entry[] = [
         subtitle: "Theo dấu tấm thảm đỏ",
         storyTitle: "Một căn phòng, một vai trò.",
         story:
-          "Bạn đang nhìn phòng Khánh tiết. Thử dừng lại ở đường trục giữa phòng: cách sắp đặt đối xứng khiến mọi ánh nhìn hướng về cuối đại sảnh. Hãy ghi nhớ tên của nơi vừa khám phá.",
+          "Thảm đỏ phủ rộng nền phòng, rèm đỏ phía cuối sảnh, ghế hoa văn đối xứng và đèn chùm là những dấu hiệu của phòng Khánh tiết. Đây là không gian hội họp và đón tiếp với sức chứa khoảng 500 người. Phòng Đại yến là một phòng khác trong Dinh.",
         question: "Không gian bạn vừa nhận diện có tên là gì?",
         answers: [
           "Phòng Nội các",
@@ -124,7 +125,7 @@ const catalog: Entry[] = [
         subtitle: "Follow the red carpet",
         storyTitle: "Every room has a role.",
         story:
-          "This is the Reception Hall. Pause along its central axis: the symmetrical arrangement draws your eye toward the far wall. Remember the name of the space you have discovered.",
+          "Red patterned carpet, red stage curtains, symmetrical seating and chandeliers identify the Reception Hall. This meeting and reception space accommodates about 500 people. The State Banqueting Hall is a different room.",
         question: "Which space did you just identify?",
         answers: [
           "The Cabinet Room",
@@ -147,8 +148,8 @@ const catalog: Entry[] = [
     y: 290,
     photo: "/images/palace/cabinet.webp",
     clue: {
-      vi: "Theo dấu chiếc bàn họp lớn và các hàng ghế bao quanh.",
-      en: "Look for the large conference table surrounded by rows of chairs.",
+      vi: "Tìm bàn oval rỗng giữa, micro, ghế da sẫm và rèm xanh vàng.",
+      en: "Find the open-centred oval table, microphones, dark leather chairs and yellow-green curtains.",
     },
     detail: {
       vi: "Nơi những quyết định được thảo luận",
@@ -162,7 +163,7 @@ const catalog: Entry[] = [
         subtitle: "Từ bố cục đoán công năng",
         storyTitle: "Dấu vết của một cuộc họp.",
         story:
-          "Bàn dài, ghế ngồi và khoảng nhìn chung gợi ra một hoạt động tập thể. Đây là phòng Nội các, nơi từng diễn ra các cuộc họp. Hãy thử đọc chức năng căn phòng qua bố cục của nó.",
+          "Đây là phòng Nội các, nơi từng diễn ra các cuộc họp. Điểm nhận biết là chiếc bàn oval có khoảng rỗng ở giữa, micro đặt quanh bàn, các ghế da xanh sẫm và rèm xanh vàng. Hãy đọc công năng của căn phòng qua cách các ghế hướng về không gian chung.",
         question: "Bố cục căn phòng chủ yếu phục vụ hoạt động nào?",
         answers: [
           "Biểu diễn âm nhạc",
@@ -180,7 +181,7 @@ const catalog: Entry[] = [
         subtitle: "Read a room through its layout",
         storyTitle: "Traces of a meeting.",
         story:
-          "A long table and shared sightlines suggest a collective activity. This is the Cabinet Room, once used for meetings. Read the purpose of the room through its arrangement.",
+          "This is the Cabinet Room, once used for meetings. Look for its open-centred oval table, desk microphones, dark green leather chairs and yellow-green curtains. Read its purpose through the way the seats face a shared space.",
         question: "What activity does this layout primarily support?",
         answers: [
           "Music performances",
@@ -274,7 +275,7 @@ const catalog: Entry[] = [
         subtitle: "Khám phá lớp không gian phía dưới",
         storyTitle: "Lắng nghe một thời chưa có smartphone.",
         story:
-          "Các thiết bị trong khu hầm gợi nhắc cách con người trao đổi thông tin trước thời điện thoại thông minh. Đây là điểm dừng cuối: hãy nối hình ảnh hiện vật với công dụng của nó.",
+          "Ảnh chụp phòng thông tin cho thấy các máy điện báo để bàn, tường nâu đỏ, ghế kim loại và nền gạch hoa đen trắng; bên cạnh là hành lang bê tông hẹp. Các câu hỏi ở trạm này mở rộng ra chức năng bảo vệ và phòng tham mưu tác chiến trong cùng khu hầm, không phải mọi hiện vật đều nằm trong căn phòng trên ảnh.",
         question: "Nhóm thiết bị ở điểm này gắn với hoạt động nào?",
         answers: ["Thông tin liên lạc", "Nấu ăn", "Chiếu phim", "Chăm sóc cây"],
         correct: 0,
@@ -287,7 +288,7 @@ const catalog: Entry[] = [
         subtitle: "Discover the layer beneath",
         storyTitle: "Before the smartphone.",
         story:
-          "The bunker equipment invites you to imagine communication before smartphones. This is your final stop: connect what you see with what it was used for.",
+          "The communications photo shows desk-mounted teletypes, red-brown walls, metal chairs and black-and-white patterned tiles beside a narrow concrete corridor. This stop’s questions also explore the bunker’s protective structure and operations room; these are not all exhibits inside the photographed room.",
         question: "What activity is this equipment associated with?",
         answers: ["Communications", "Cooking", "Film screening", "Gardening"],
         correct: 0,
@@ -299,6 +300,14 @@ const catalog: Entry[] = [
   },
 ];
 
+const features: Record<CheckpointId, { vi: string[]; en: string[] }> = {
+  facade: { vi: ["Rèm hoa đá đốt trúc", "Ban công chạy ngang", "Đài phun nước"], en: ["Bamboo-inspired stone screens", "Horizontal balconies", "Fountain"] },
+  reception: { vi: ["Thảm đỏ hoa văn", "Ghế đối xứng", "Đèn chùm pha lê"], en: ["Patterned red carpet", "Symmetrical seating", "Crystal chandeliers"] },
+  cabinet: { vi: ["Bàn oval rỗng giữa", "Ghế da xanh sẫm", "Rèm xanh vàng · Micro"], en: ["Open-centred oval table", "Dark green leather chairs", "Yellow-green curtains · Microphones"] },
+  rooftop: { vi: ["UH-1 số 445", "Sơn ngụy trang", "Càng đáp · Sân mái"], en: ["UH-1 number 445", "Camouflage finish", "Landing skids · Rooftop"] },
+  bunker: { vi: ["Máy điện báo để bàn", "Tường nâu đỏ", "Gạch hoa đen trắng"], en: ["Desk-mounted teletypes", "Red-brown walls", "Black-and-white tiles"] },
+};
+
 export function getCheckpoints(locale: Locale = "vi") {
   return catalog.map((entry) => ({
     ...entry,
@@ -307,6 +316,8 @@ export function getCheckpoints(locale: Locale = "vi") {
     clue: entry.clue[locale],
     detail: entry.detail[locale],
     mission: entry.mission[locale],
+    questions: getCheckpointQuestions(entry.id).map(publicQuestion),
+    features: features[entry.id][locale],
     source: PALACE_SOURCE,
   }));
 }

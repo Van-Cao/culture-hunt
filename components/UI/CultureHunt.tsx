@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   ArrowRight,
   AudioLines,
-  Award,
   Check,
   ChevronRight,
   Compass,
@@ -49,6 +48,7 @@ import QuizCard from "./QuizCard";
 import AccountPanel from "./AccountPanel";
 import PalaceExperience from "@/components/palace/PalaceExperience";
 import { usePalaceJourney } from "@/components/palace/usePalaceJourney";
+import CollectionAtlas from "@/components/atlas/CollectionAtlas";
 import "./game.css";
 
 type View = "home" | "journeys" | "scan" | "collection";
@@ -524,22 +524,7 @@ function Game({
       label: t("Dấu ấn", "Collection"),
     },
   ];
-  const badges = [
-    {
-      name: t("Bước chân đầu tiên", "First footsteps"),
-      desc: t("Giải mã thử thách đầu tiên", "Decode your first challenge"),
-      kind: "compass" as const,
-      unlocked: totalCompleted > 0,
-      destination: (progress.palace > 0 ? "palace" : "hcmus") as PlaceId,
-    },
-    ...places.map((item) => ({
-      name: item.badge,
-      desc: item.shortName,
-      kind: item.id === "palace" ? ("landmark" as const) : ("star" as const),
-      unlocked: progress[item.id] === item.missions.length,
-      destination: item.id,
-    })),
-  ];
+
 
   return (
     <div className="mobile-app">
@@ -628,7 +613,7 @@ function Game({
                     ? t("Trạm quét", "Scan station")
                     : view === "journeys"
                       ? t("Hành trình của bạn", "Your adventure")
-                      : t("Những dấu ấn của bạn", "Your discoveries")}
+                      : t("Hộ chiếu khám phá", "Explorer passport")}
                 </h1>
               </div>
               <button
@@ -1091,176 +1076,16 @@ function Game({
         )}
 
         {view === "collection" && (
-          <motion.div
-            className="collection-view"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <PalaceExperience
-              game={palaceGame}
-              mode="journal"
-              sound={sound}
-              onJournal={() => navigate("collection")}
-              onMap={() => selectPlace("palace")}
-            />
-            <div className="passport-summary">
-              <span className="passport-icon">
-                <Compass size={34} />
-              </span>
-              <div>
-                <span className="eyebrow">CULTURE HUNT · EXPLORER ID</span>
-                <h2>
-                  {session?.user?.name ||
-                    t("Nhà thám hiểm tự do", "The curious explorer")}
-                </h2>
-                <span>
-                  {t(
-                    "Đi để hiểu. Chơi để nhớ.",
-                    "Explore to learn. Play to remember.",
-                  )}
-                </span>
-              </div>
-              <span className="passport-level">
-                LV. {Math.floor(xp / 450) + 1}
-              </span>
-            </div>
-            <div className="passport-stats">
-              <div>
-                <strong>{xp}</strong>
-                <span>{t("XP đã nhận", "XP earned")}</span>
-              </div>
-              <div>
-                <strong>
-                  {totalCompleted}
-                  <small>
-                    /
-                    {places.reduce(
-                      (sum, item) => sum + item.missions.length,
-                      0,
-                    )}
-                  </small>
-                </strong>
-                <span>{t("Thử thách", "Challenges")}</span>
-              </div>
-              <div>
-                <strong>
-                  {badges.filter((item) => item.unlocked).length}
-                  <small>/3</small>
-                </strong>
-                <span>{t("Huy hiệu", "Badges")}</span>
-              </div>
-            </div>
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">COLLECT MOMENTS, NOT THINGS</span>
-                <h2>{t("Bộ sưu tập huy hiệu", "Your badge collection")}</h2>
-              </div>
-              <Award size={23} />
-            </div>
-            <div className="badge-collection">
-              {badges.map((badge) => (
-                <button
-                  key={badge.name}
-                  className={`collection-badge ${badge.unlocked ? "unlocked" : ""}`}
-                  disabled={!badge.unlocked}
-                  onClick={() => {
-                    setPlaceId(badge.destination);
-                    setOverlay("achievement");
-                  }}
-                >
-                  <span className="badge-state">
-                    {badge.unlocked ? (
-                      <Check size={12} />
-                    ) : (
-                      <LockKeyhole size={11} />
-                    )}
-                    {badge.unlocked
-                      ? t("ĐÃ MỞ KHÓA", "UNLOCKED")
-                      : t("CHỜ KHÁM PHÁ", "YET TO DISCOVER")}
-                  </span>
-                  <ExplorerBadge kind={badge.kind} locked={!badge.unlocked} />
-                  <h3>{badge.name}</h3>
-                  <p>{badge.desc}</p>
-                </button>
-              ))}
-            </div>
-            <div className="share-banner">
-              <span>
-                <Share2 size={23} />
-              </span>
-              <div>
-                <h3>
-                  {t(
-                    "Chuyện hay là để chia sẻ.",
-                    "Good stories are meant to be shared.",
-                  )}
-                </h3>
-                <p>
-                  {t(
-                    "Mang dấu ấn lên Facebook & Instagram.",
-                    "Take your story to Facebook & Instagram.",
-                  )}
-                </p>
-              </div>
-              <button
-                className="icon-button"
-                aria-label={t("Mở thẻ thành tích", "Open achievement card")}
-                onClick={() => setOverlay("achievement")}
-              >
-                <ArrowRight size={19} />
-              </button>
-            </div>
-            <div className="section-heading saved-heading">
-              <div>
-                <span className="eyebrow">FOR YOUR NEXT ADVENTURE</span>
-                <h2>{t("Địa điểm đã lưu", "Saved destinations")}</h2>
-              </div>
-              <Heart size={21} />
-            </div>
-            {saved.length ? (
-              <div className="saved-places">
-                {places
-                  .filter((item) => saved.includes(item.id))
-                  .map((item) => (
-                    <button key={item.id} onClick={() => selectPlace(item.id)}>
-                      <Image
-                        src={item.coverImage}
-                        alt={item.name}
-                        width={76}
-                        height={76}
-                      />
-                      <span>
-                        <strong>{item.shortName}</strong>
-                        <small>
-                          {progress[item.id]}/{item.missions.length}{" "}
-                          {t("thử thách đã giải mã", "challenges decoded")}
-                        </small>
-                      </span>
-                      <ArrowRight size={18} />
-                    </button>
-                  ))}
-              </div>
-            ) : (
-              <div className="saved-empty">
-                <Heart size={24} />
-                <p>
-                  {t(
-                    "Chạm trái tim ở điểm đến để lưu cho hành trình sau.",
-                    "Tap the heart on a destination to save it for your next adventure.",
-                  )}
-                </p>
-                <button
-                  className="text-button"
-                  onClick={() => navigate("home")}
-                >
-                  {t("Tìm điểm đến", "Find a destination")}
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-            )}
-          </motion.div>
+          <CollectionAtlas
+            game={palaceGame}
+            campusProgress={progress.hcmus}
+            name={session?.user?.name || t("Nhà thám hiểm tự do", "The curious explorer")}
+            savedDestinations={saved}
+            onToggleSaved={toggleSaved}
+            onPlay={selectPlace}
+            sound={sound}
+          />
         )}
-
         <footer className="app-footer">
           <Compass size={14} />
           <span>
