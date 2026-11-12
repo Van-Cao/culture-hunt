@@ -29,6 +29,8 @@ async function AuthenticatedGame({
     return Array.isArray(entry) ? entry[0] : entry;
   };
   const language = value("lang");
+  const destination = value("place");
+  const view = value("view");
   const session = googleAuthConfigured ? await auth() : null;
   return (
     <CultureHunt
@@ -40,6 +42,19 @@ async function AuthenticatedGame({
       initialPlay={value("play") === "1"}
       initialStart={value("start") === "1"}
       initialAuthFailed={Boolean(value("error"))}
+      initialDestination={
+        destination === "palace" || destination === "hcmus"
+          ? destination
+          : undefined
+      }
+      initialView={
+        view === "home" ||
+        view === "journeys" ||
+        view === "scan" ||
+        view === "collection"
+          ? view
+          : undefined
+      }
     />
   );
 }

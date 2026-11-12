@@ -1,0 +1,145 @@
+{
+    "source":  "CultureHunt_NganHangCauHoi_DinhDocLap.docx",
+    "questions":  [
+                      {
+                          "id":  "station-1-q1",
+                          "station":  1,
+                          "number":  1,
+                          "question":  "Bức rèm hoa đá bao bọc toàn bộ tầng 2 của Dinh Độc Lập được kiến trúc sư Ngô Viết Thụ lấy cảm hứng từ hình ảnh nào mang đậm chất Việt Nam?",
+                          "answers":  [
+                                          "Lóng tre (đốt trúc)",
+                                          "Bông hoa sen",
+                                          "Vảy rồng",
+                                          "Chữ Hán cổ"
+                                      ],
+                          "answer":  "A. Lóng tre.",
+                          "story":  "Những bức rèm hoa đá này không chỉ mang tính thẩm mỹ mà còn là một hệ thống \"điều hòa tự nhiên\" xuất sắc. Lấy cảm hứng từ các lóng tre thanh tao, nó giúp công trình cản nắng gắt của Sài Gòn, đón gió mát nhưng vẫn đảm bảo sự kín đáo cho người bên trong."
+                      },
+                      {
+                          "id":  "station-1-q2",
+                          "station":  1,
+                          "number":  2,
+                          "question":  "Nếu nhìn toàn cảnh từ trên cao xuống, toàn bộ mặt bằng của Dinh Độc Lập được thiết kế xếp thành hình chữ gì trong Hán tự?",
+                          "answers":  [
+                                          "Chữ Vương (Vua)",
+                                          "Chữ Cát (Tốt lành)",
+                                          "Chữ Trung (Trung tâm)",
+                                          "Chữ Nhân (Con người)"
+                                      ],
+                          "answer":  "B. Chữ Cát (Tốt lành).",
+                          "story":  "Kiến trúc sư Ngô Viết Thụ đã lồng ghép triết lý phương Đông vào từng viên gạch. Chữ \"Cát\" (吉) mang ý nghĩa cầu mong sự tốt lành, may mắn cho quốc gia. Cấu trúc tòa nhà là một tác phẩm phong thủy khổng lồ."
+                      },
+                      {
+                          "id":  "station-2-q1",
+                          "station":  2,
+                          "number":  1,
+                          "question":  "Căn phòng lộng lẫy này có sức chứa khổng lồ lên tới bao nhiêu người trong các buổi quốc yến?",
+                          "answers":  [
+                                          "Khoảng 200 người",
+                                          "Khoảng 500 người",
+                                          "Khoảng 800 người",
+                                          "Khoảng 1000 người"
+                                      ],
+                          "answer":  "B. Khoảng 500 người.",
+                          "story":  "Đây là căn phòng lớn nhất Dinh Độc Lập. Không gian được thiết kế hoàn toàn không có cột chống ở giữa để không làm khuất tầm nhìn, tạo ra một hội trường thênh thang chuyên dùng để tiếp đón các nguyên thủ quốc gia và tổ chức dạ tiệc."
+                      },
+                      {
+                          "id":  "station-2-q2",
+                          "station":  2,
+                          "number":  2,
+                          "question":  "Điểm nhấn đặc biệt nhất để cách âm và trang trí cho toàn bộ sàn của Phòng Khánh tiết là gì?",
+                          "answers":  [
+                                          "Lát gỗ trầm hương",
+                                          "Lát đá cẩm thạch Ý",
+                                          "Trải một tấm thảm liền khối khổng lồ",
+                                          "Lát gạch men nung thủ công"
+                                      ],
+                          "answer":  "C. Trải một tấm thảm liền khối.",
+                          "story":  "Tấm thảm đỏ quyền lực này không chỉ để trang trí mà còn có tác dụng tiêu âm cực tốt, giúp các bài diễn văn hoặc âm nhạc trong các buổi tiệc không bị vang vọng, tạo ra không gian giao tiếp hoàn hảo."
+                      },
+                      {
+                          "id":  "station-3-q1",
+                          "station":  3,
+                          "number":  1,
+                          "question":  "Chiếc bàn họp trung tâm của Phòng Nội các được thiết kế theo hình dáng gì?",
+                          "answers":  [
+                                          "Hình chữ nhật dài",
+                                          "Hình tròn",
+                                          "Hình bầu dục (Ovan)",
+                                          "Hình chữ U"
+                                      ],
+                          "answer":  "C. Hình bầu dục (Ovan).",
+                          "story":  "Chiếc bàn bầu dục mang ý nghĩa về mặt tâm lý và quyền lực. Nó giúp các thành viên nội các dễ dàng quan sát nét mặt của nhau khi thảo luận, đồng thời giảm bớt cảm giác phân cấp \"chủ tọa - cấp dưới\" so với bàn hình chữ nhật truyền thống."
+                      },
+                      {
+                          "id":  "station-3-q2",
+                          "station":  3,
+                          "number":  2,
+                          "question":  "Phía sau lưng ghế của người chủ tọa (Tổng thống) trong phòng này có đặt vật gì đặc biệt?",
+                          "answers":  [
+                                          "Một bản đồ thế giới bằng vàng",
+                                          "Tượng rồng đúc đồng",
+                                          "Một giá để cờ và kiếm",
+                                          "Một bức bình phong hoặc trống đồng"
+                                      ],
+                          "answer":  "D. Bức bình phong/Trống đồng (tùy thời điểm bài trí).",
+                          "story":  "Việc đặt các vật phẩm mang tính biểu tượng phía sau chỗ ngồi không chỉ để trang trí mà còn tạo ra \"điểm tựa\" vững chắc về mặt phong thủy cho người đứng đầu khi đưa ra các quyết định hệ trọng."
+                      },
+                      {
+                          "id":  "station-4-q1",
+                          "station":  4,
+                          "number":  1,
+                          "question":  "Chiếc trực thăng đang đậu trên nóc Dinh hiện nay thuộc dòng máy bay nào rất phổ biến thời đó?",
+                          "answers":  [
+                                          "Apache",
+                                          "Boeing CH-47 Chinook",
+                                          "UH-1 (Huey)",
+                                          "Black Hawk"
+                                      ],
+                          "answer":  "C. UH-1 (Huey).",
+                          "story":  "UH-1 là biểu tượng của tính cơ động trong chiến tranh. Sân đỗ trực thăng trên nóc Dinh được thiết kế để đảm bảo Tổng thống có thể di chuyển hoặc tản cư khẩn cấp chỉ trong vòng vài phút mà không cần ra sân bay Tân Sơn Nhất."
+                      },
+                      {
+                          "id":  "station-4-q2",
+                          "station":  4,
+                          "number":  2,
+                          "question":  "Ngoài việc làm bãi đỗ trực thăng, vị trí sân thượng này (Sân lầu tứ phương) còn có chức năng gì trong thiết kế của Ngô Viết Thụ?",
+                          "answers":  [
+                                          "Nơi ngắm sao và tĩnh tâm",
+                                          "Kho chứa vũ khí dự phòng",
+                                          "Trạm thu sóng radar",
+                                          "Hồ chứa nước cứu hỏa ngầm"
+                                      ],
+                          "answer":  "A. Nơi tĩnh tâm (Lầu Tứ Phương).",
+                          "story":  "Nơi đây được gọi là \"Tứ Phương Vô Sự Lầu\". KTS Ngô Viết Thụ thiết kế nó như một không gian để người đứng đầu quốc gia có thể lên đây tĩnh tâm, ngắm nhìn bốn phương tám hướng và đưa ra những quyết sách sáng suốt."
+                      },
+                      {
+                          "id":  "station-5-q1",
+                          "station":  5,
+                          "number":  1,
+                          "question":  "Mạng lưới bản đồ chằng chịt dán trên tường của phòng Tham mưu tác chiến dùng để theo dõi khu vực nào?",
+                          "answers":  [
+                                          "Chỉ riêng Sài Gòn",
+                                          "4 vùng chiến thuật của VNCH",
+                                          "Toàn bộ khu vực Đông Nam Á",
+                                          "Đường mòn Hồ Chí Minh"
+                                      ],
+                          "answer":  "B. 4 vùng chiến thuật.",
+                          "story":  "Căn phòng này là \"bộ não\" quân sự thu nhỏ. Từ các tấm bản đồ chi chít cờ hiệu này, mọi biến động trên chiến trường từ vĩ tuyến 17 trở vào đều được cập nhật từng phút qua hệ thống liên lạc viba và sóng cực ngắn."
+                      },
+                      {
+                          "id":  "station-5-q2",
+                          "station":  5,
+                          "number":  2,
+                          "question":  "Tại sao các hành lang dưới hầm ngầm lại được đúc bằng bê tông cốt thép rất dày và có nhiều đoạn bẻ góc vuông?",
+                          "answers":  [
+                                          "Để tạo vẻ đẹp kiến trúc",
+                                          "Giảm sóng xung kích và mảnh văng của bom",
+                                          "Chống ngập nước từ sông Sài Gòn",
+                                          "Đánh lừa kẻ đột nhập"
+                                      ],
+                          "answer":  "B. Giảm sóng xung kích của bom.",
+                          "story":  "Thiết kế bẻ góc vuông (zíc zắc) là nguyên lý kinh điển trong xây dựng hầm ngầm. Nếu một quả bom nổ ở đầu hầm, các góc vuông này sẽ triệt tiêu áp suất và cản sức công phá của sóng xung kích, bảo vệ những người đang làm việc ở các căn phòng sâu bên trong."
+                      }
+                  ]
+}
