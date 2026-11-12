@@ -10,9 +10,12 @@ Không thay đổi camera, prompt, bố cục hoặc Auth.js của đồng độ
 Nhánh sửa build độc lập: `fix/ui-vision-dependency`. Nhánh đó chỉ thêm SDK
 Google đang được API vision import. Tech Lead cần review/merge vào `UI/UX`.
 
-Project Supabase hosted chưa được tạo/xác minh khi viết tài liệu này. Cần người
-phụ trách đăng nhập Supabase để thực hiện phần thiết lập dưới đây. Không coi
-việc unit test đạt là bằng chứng kết nối cloud hoặc đăng nhập Google thật.
+Project Supabase Free đã được tạo và xác minh ngày 2026-11-12 tại Singapore:
+`pgbkgaofzqbnfkbtrtew` — https://supabase.com/dashboard/project/pgbkgaofzqbnfkbtrtew
+Schema đã áp dụng; anonymous sign-ins đã bật; bucket private đã tạo; `.env.local`
+đã cấu hình trên máy của chủ dự án và được Git bỏ qua. Không chia sẻ file env.
+Google provider chưa cấu hình OAuth client của nhóm; không coi test tài khoản
+email/password là bằng chứng Google OAuth thật đã chạy.
 
 ## Luật đã chốt
 
@@ -191,9 +194,20 @@ xác thực, lọc đáp án, lỗi upload. Chúng không chứng minh OAuth/Sto
 
 `supabase/tests/game.sql` kiểm tra transaction thật, phần thưởng, merge và
 RLS. Chỉ chạy trong database phát triển/test riêng; dùng transaction rollback.
-Đã chạy bằng PostgreSQL WASM (PGlite) với schema auth/storage mô phỏng. Chưa
-kiểm chứng hành vi mạng, tải thật, concurrency nhiều kết nối hay OAuth thật.
-Khi có project dev, chạy SQL test và Security Advisor để xác minh trên Supabase.
+Đã chạy đạt bằng PostgreSQL WASM (PGlite) và SQL Editor của project Supabase.
+
+Đã chạy `scripts/cloud-smoke.ts` trên project mới trống: guest Auth thật,
+check-in, đáp án sai/đúng, thưởng một lần, ảnh private và signed URL, merge với
+tài khoản email/password thử, RLS và từ chối client tự sửa điểm/đọc đáp án.
+Script đã dọn danh tính và ảnh thử; `users`/`checkins` trở lại trống.
+Muốn chạy lại phải tự đặt `CULTURE_HUNT_CLOUD_SMOKE=yes`; script từ chối project
+đã có Auth users hoặc dữ liệu game. Không chạy trên project có người dùng thật.
+Chưa xác minh tải đồng thời nhiều kết nối, camera/AI thật hay Google OAuth thật.
+
+Do migration đầu tiên được áp dụng bằng SQL Editor, Dashboard chưa có migration
+history từ CLI. Nếu chuyển sang deploy bằng CLI, Tech Lead cần đồng bộ lịch sử
+migration đã áp dụng trước; không chạy lại migration khởi tạo vào database này.
+Tham khảo `supabase migration repair --help` của phiên bản CLI đang dùng.
 
 Trước khi demo cần test thêm: chơi khách → reload → quét thật → sai một câu →
 hoàn thành → chơi lại câu sai để nhận điểm lần đầu → đăng nhập Google → kiểm

@@ -84,3 +84,18 @@ Step 2: commit this project memory and `rules.md` before core implementation.
 Step 3: SQL, connection/data functions, meaningful tests, integration handoff.
 Report honestly whether verification used a local test database or the actual
 Supabase project. Never claim cloud setup or UI synchronization without proof.
+
+## Confirmed implementation status — 2026-11-12
+
+- Supabase Free project `culture-hunt`, ref `pgbkgaofzqbnfkbtrtew`, Singapore,
+  belongs to the owner's organization. Two-table schema and private photo
+  bucket are applied; anonymous sign-ins enabled. Local env is configured and
+  ignored. Never print its values or commit it.
+- Actual cloud smoke passed: guest, scan persistence, wrong-answer progress,
+  first-correct and completion XP, private photos, account merge, RLS and
+  denied client writes. Temporary test data was removed.
+- Google OAuth credentials and UI/vision event wiring remain teammate
+  integration work; do not claim that the demo UI already uses Supabase.
+- See `docs/DATABASE_HANDOFF.md` for setup, API/quiz contracts and test details.
+- `scripts/cloud-smoke.ts` refuses existing users/data and requires explicit
+  opt-in; never use it on a populated/production project.
