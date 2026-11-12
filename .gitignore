@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/.culture-hunt/
+/output/playwright/
+/.playwright-cli/
 
 # next.js
 /.next/

@@ -1,3 +1,4 @@
+import { getCheckpoints } from "@/lib/palace/checkpoints";
 import type { Locale } from "./LanguageProvider";
 
 export type Mission = {
@@ -48,111 +49,7 @@ export function getPlaces(locale: Locale): Place[] {
       sourceName: en ? "Independence Palace" : "Di tích Dinh Độc Lập",
       journey: en ? "Decoding Independence Palace" : "Giải mã Dinh Độc Lập",
       badge: en ? "Palace explorer" : "Nhà thám hiểm Dinh",
-      missions: en
-        ? [
-            {
-              title: "Meet the architect",
-              subtitle: "A vision behind the landmark",
-              storyTitle: "A landmark. A remarkable vision.",
-              story:
-                "Architect Ngô Viết Thụ designed Independence Palace, bringing modern lines together with traditional Asian ideas. Look at the façade: its architecture has stories of its own.",
-              question: "Who designed the current Independence Palace?",
-              answers: [
-                "Gustave Eiffel",
-                "Ngô Viết Thụ",
-                "Ernest Hébrard",
-                "Nguyễn An",
-              ],
-              correct: 1,
-              hint: "This Vietnamese architect's surname is Ngô.",
-              explanation:
-                "Exactly! Ngô Viết Thụ brought modern architecture and Asian traditions together in this landmark.",
-              fact: "Architecture · Modern meets traditional",
-            },
-            {
-              title: "Decode the stone curtain",
-              subtitle: "Look closer at the façade",
-              storyTitle: "Bamboo, reimagined in stone.",
-              story:
-                "The stone screens around the second floor echo the shape of bamboo segments. Beyond their distinctive appearance, they also help control the natural light entering the building.",
-              question: "What inspired the Palace's stone screens?",
-              answers: [
-                "Ocean waves",
-                "Lotus petals",
-                "Bamboo segments",
-                "Mountain peaks",
-              ],
-              correct: 2,
-              hint: "Think of a familiar plant with a tall, segmented stem.",
-              explanation:
-                "Well spotted! Bamboo segments inspired these screens, combining beauty with a practical purpose.",
-              fact: "Stone screens · Light and shade",
-            },
-            {
-              title: "Find the milestone",
-              subtitle: "Complete the architecture story",
-              storyTitle: "The day a new chapter opened.",
-              story:
-                "Construction began in July 1962. The Palace was inaugurated on 31 October 1966, marking the completion of the building you can explore today.",
-              question: "In which year was the current Palace inaugurated?",
-              answers: ["1966", "1954", "1975", "1945"],
-              correct: 0,
-              hint: "Four years after construction began in 1962.",
-              explanation:
-                "You got it! The Palace was inaugurated in 1966. Your architecture quest is complete.",
-              fact: "1962 → 1966 · A new chapter",
-            },
-          ]
-        : [
-            {
-              title: "Gặp gỡ kiến trúc sư",
-              subtitle: "Người đứng sau một biểu tượng",
-              storyTitle: "Một công trình. Ngàn điều muốn kể.",
-              story:
-                "Kiến trúc sư Ngô Viết Thụ thiết kế Dinh Độc Lập, kết hợp đường nét hiện đại với tinh thần Á Đông. Hãy nhìn mặt tiền: kiến trúc cũng có những câu chuyện riêng.",
-              question: "Ai thiết kế công trình Dinh Độc Lập hiện nay?",
-              answers: [
-                "Gustave Eiffel",
-                "Ngô Viết Thụ",
-                "Ernest Hébrard",
-                "Nguyễn An",
-              ],
-              correct: 1,
-              hint: "Vị kiến trúc sư người Việt này mang họ Ngô.",
-              explanation:
-                "Chính xác! Ngô Viết Thụ kết hợp kiến trúc hiện đại với truyền thống Á Đông trong công trình này.",
-              fact: "Kiến trúc · Hiện đại và truyền thống",
-            },
-            {
-              title: "Giải mã rèm hoa đá",
-              subtitle: "Nhìn kỹ hơn vào mặt tiền",
-              storyTitle: "Khi đốt trúc hóa thành đá.",
-              story:
-                "Rèm hoa đá bao quanh tầng hai mô phỏng những đốt trúc. Không chỉ tạo vẻ đẹp riêng, lớp rèm này còn giúp điều hòa ánh sáng tự nhiên vào bên trong Dinh.",
-              question:
-                "Rèm hoa đá của Dinh được lấy cảm hứng từ hình ảnh nào?",
-              answers: ["Sóng biển", "Cánh sen", "Đốt trúc", "Đỉnh núi"],
-              correct: 2,
-              hint: "Một loài cây thân cao, chia thành nhiều đốt, rất quen thuộc ở Việt Nam.",
-              explanation:
-                "Tinh mắt lắm! Đốt trúc là cảm hứng cho lớp rèm đá, kết hợp vẻ đẹp và công năng.",
-              fact: "Rèm hoa đá · Ánh sáng và bóng râm",
-            },
-            {
-              title: "Chạm mốc thời gian",
-              subtitle: "Ghép trọn câu chuyện kiến trúc",
-              storyTitle: "Ngày một chương mới bắt đầu.",
-              story:
-                "Dinh được khởi công vào tháng 7/1962 và khánh thành ngày 31/10/1966. Đó là dấu mốc hoàn thiện công trình mà bạn có thể khám phá hôm nay.",
-              question: "Công trình Dinh Độc Lập hiện nay khánh thành năm nào?",
-              answers: ["1966", "1954", "1975", "1945"],
-              correct: 0,
-              hint: "Bốn năm sau khi công trình khởi công vào năm 1962.",
-              explanation:
-                "Đúng rồi! Dinh khánh thành năm 1966. Bạn đã hoàn thành hành trình giải mã kiến trúc!",
-              fact: "1962 → 1966 · Một chương mới",
-            },
-          ],
+      missions: getCheckpoints(locale).map((checkpoint) => checkpoint.mission),
     },
     {
       id: "hcmus",

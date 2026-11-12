@@ -47,6 +47,8 @@ import GameDialog from "./GameDialog";
 import StoryCard from "./StoryCard";
 import QuizCard from "./QuizCard";
 import AccountPanel from "./AccountPanel";
+import PalaceExperience from "@/components/palace/PalaceExperience";
+import { usePalaceJourney } from "@/components/palace/usePalaceJourney";
 import "./game.css";
 
 type View = "home" | "journeys" | "scan" | "collection";
@@ -61,6 +63,8 @@ export default function CultureHunt({
   initialPlay = false,
   initialStart = false,
   initialAuthFailed = false,
+  initialDestination,
+  initialView,
 }: {
   session: Session | null;
   googleEnabled: boolean;
@@ -68,6 +72,8 @@ export default function CultureHunt({
   initialPlay?: boolean;
   initialStart?: boolean;
   initialAuthFailed?: boolean;
+  initialDestination?: PlaceId;
+  initialView?: View;
 }) {
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
@@ -78,6 +84,8 @@ export default function CultureHunt({
             initialPlay={initialPlay}
             initialStart={initialStart}
             initialAuthFailed={initialAuthFailed}
+            initialDestination={initialDestination}
+            initialView={initialView}
           />
         </MotionConfig>
       </LanguageProvider>
@@ -90,11 +98,15 @@ function Experience({
   initialPlay,
   initialStart,
   initialAuthFailed,
+  initialDestination,
+  initialView,
 }: {
   googleEnabled: boolean;
   initialPlay: boolean;
   initialStart: boolean;
   initialAuthFailed: boolean;
+  initialDestination?: PlaceId;
+  initialView?: View;
 }) {
   const { t, locale } = useLanguage();
   const { data: session } = useSession();
@@ -103,6 +115,9 @@ function Experience({
     initialStart || initialAuthFailed,
   );
   const [authFailed, setAuthFailed] = useState(initialAuthFailed);
+  const [entryDestination, setEntryDestination] = useState<PlaceId | undefined>(
+    initialDestination,
+  );
   useEffect(() => {
     function readNavigation() {
       const query = new URLSearchParams(window.location.search);
@@ -117,10 +132,14 @@ function Experience({
     window.addEventListener("popstate", readNavigation);
     return () => window.removeEventListener("popstate", readNavigation);
   }, []);
-  function enter() {
+  function enter(destination = entryDestination) {
     setEntryDialog(false);
     setEntered(true);
-    window.history.pushState(null, "", `/?play=1&lang=${locale}`);
+    window.history.pushState(
+      null,
+      "",
+      `/?play=1&lang=${locale}${destination ? `&place=${destination}&view=journeys` : ""}`,
+    );
     window.scrollTo(0, 0);
   }
   function intro() {
@@ -131,10 +150,19 @@ function Experience({
   return (
     <div className="culture-app" lang={locale}>
       {entered ? (
-        <Game googleEnabled={googleEnabled} onIntro={intro} />
+        <Game
+          googleEnabled={googleEnabled}
+          onIntro={intro}
+          initialDestination={entryDestination}
+          initialView={initialView}
+        />
       ) : (
         <LandingPage
-          onStart={() => (session?.user ? enter() : setEntryDialog(true))}
+          onStart={(destination) => {
+            setEntryDestination(destination);
+            if (session?.user) enter(destination);
+            else setEntryDialog(true);
+          }}
         />
       )}
       <AnimatePresence>
@@ -148,7 +176,7 @@ function Experience({
               googleEnabled={googleEnabled}
               authFailed={authFailed}
               onClose={() => setEntryDialog(false)}
-              onGuest={enter}
+              onGuest={() => enter()}
             />
           </GameDialog>
         )}
@@ -194,7 +222,7 @@ function PlaceCard({
         </span>
         <span className="photo-xp">
           <Zap size={12} fill="currentColor" />
-          450 XP
+          {place.missions.length * 150} XP
         </span>
       </button>
       <button
@@ -215,10 +243,10 @@ function PlaceCard({
         <div className="discovery-card-bottom">
           <span>
             <Flag size={14} />
-            {completed}/3 {t("thử thách", "challenges")}
+            {completed}/{place.missions.length} {t("thử thách", "challenges")}
           </span>
           <button onClick={onOpen}>
-            {completed === 3
+            {completed === place.missions.length
               ? t("Xem lại", "Revisit")
               : t("Khám phá", "Explore")}
             <ArrowRight size={16} />
@@ -232,17 +260,33 @@ function PlaceCard({
 function Game({
   googleEnabled,
   onIntro,
+  initialDestination,
+  initialView,
 }: {
   googleEnabled: boolean;
   onIntro: () => void;
+  initialDestination?: PlaceId;
+  initialView?: View;
 }) {
   const { locale, t } = useLanguage();
   const { data: session } = useSession();
   const places = getPlaces(locale);
-  const [placeId, setPlaceId] = useState<PlaceId>("palace");
-  const [view, setView] = useState<View>("home");
+  const [placeId, setPlaceId] = useState<PlaceId>(
+    initialDestination || "palace",
+  );
+  const [view, setView] = useState<View>(
+    initialView || (initialDestination ? "journeys" : "home"),
+  );
   const [overlay, setOverlay] = useState<Overlay>(null);
-  const [progress, setProgress] = useState<Progress>({ palace: 0, hcmus: 0 });
+  const [localProgress, setProgress] = useState<Progress>({
+    palace: 0,
+    hcmus: 0,
+  });
+  const palaceGame = usePalaceJourney();
+  const progress: Progress = {
+    palace: palaceGame.state?.discovered.length || 0,
+    hcmus: localProgress.hcmus,
+  };
   const [saved, setSaved] = useState<PlaceId[]>([]);
   const [filter, setFilter] = useState<"all" | PlaceId>("all");
   const [sound, setSound] = useState(true);
@@ -267,9 +311,7 @@ function Game({
             typeof n === "number" && Number.isInteger(n) && n >= 0 && n <= 3,
         )
       )
-        queueMicrotask(() =>
-          setProgress({ palace: stored.palace, hcmus: stored.hcmus }),
-        );
+        queueMicrotask(() => setProgress({ palace: 0, hcmus: stored.hcmus }));
       const favorites = JSON.parse(
         localStorage.getItem("culture-hunt-saved-v1") || "[]",
       );
@@ -291,14 +333,42 @@ function Game({
     };
   }, []);
 
-  function navigate(next: View) {
+  useEffect(() => {
+    const restore = () => {
+      const query = new URLSearchParams(window.location.search);
+      const destination = query.get("place");
+      const target = query.get("view");
+      if (destination === "palace" || destination === "hcmus")
+        setPlaceId(destination);
+      setView(
+        target === "journeys" || target === "scan" || target === "collection"
+          ? target
+          : "home",
+      );
+    };
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, []);
+  function navigate(next: View, destination = placeId) {
     setView(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set("play", "1");
+    url.searchParams.set("view", next);
+    url.searchParams.set("place", destination);
+    url.searchParams.set("lang", locale);
+    if (url.search !== window.location.search)
+      window.history.pushState(null, "", `${url.pathname}${url.search}`);
     window.scrollTo({ top: 0, behavior: "instant" });
   }
   function selectPlace(id: PlaceId) {
     setPlaceId(id);
-    setActiveMission(Math.min(progress[id], 2));
-    navigate("journeys");
+    setActiveMission(
+      Math.min(
+        progress[id],
+        places.find((item) => item.id === id)!.missions.length - 1,
+      ),
+    );
+    navigate("journeys", id);
   }
   function toggleSaved(id: PlaceId) {
     const next = saved.includes(id)
@@ -317,7 +387,7 @@ function Game({
     toastTimer.current = setTimeout(() => setToast(""), 4500);
   }
   function capture() {
-    if (completed === 3) {
+    if (completed === place.missions.length) {
       setOverlay("achievement");
       return;
     }
@@ -332,7 +402,10 @@ function Game({
   function completeMission() {
     setProgress((current) => {
       if (current[placeId] !== activeMission) return current;
-      const next = { ...current, [placeId]: Math.min(3, activeMission + 1) };
+      const next = {
+        ...current,
+        [placeId]: Math.min(place.missions.length, activeMission + 1),
+      };
       try {
         localStorage.setItem("culture-hunt-progress-v1", JSON.stringify(next));
       } catch {
@@ -366,8 +439,8 @@ function Game({
   }
   async function share() {
     const text = t(
-      `Mình đã giải mã ${completed}/3 thử thách tại ${place.name} và nhận ${completed * 150} XP trên Culture Hunt! #CultureHunt`,
-      `I decoded ${completed}/3 challenges at ${place.name} and earned ${completed * 150} XP on Culture Hunt! #CultureHunt`,
+      `Mình đã giải mã ${completed}/${place.missions.length} thử thách tại ${place.name} và nhận ${completed * 150} XP trên Culture Hunt! #CultureHunt`,
+      `I decoded ${completed}/${place.missions.length} challenges at ${place.name} and earned ${completed * 150} XP on Culture Hunt! #CultureHunt`,
     );
     try {
       if (navigator.share)
@@ -415,7 +488,7 @@ function Game({
     ctx.fillText(place.shortName, 540, 650);
     ctx.fillStyle = "#c1f17d";
     ctx.font = "bold 110px Arial";
-    ctx.fillText(`${completed}/3`, 540, 860);
+    ctx.fillText(`${completed}/${place.missions.length}`, 540, 860);
     ctx.fillStyle = "#c6dfeb";
     ctx.font = "30px Arial";
     ctx.fillText(t("THỬ THÁCH ĐÃ GIẢI MÃ", "CHALLENGES DECODED"), 540, 925);
@@ -463,7 +536,7 @@ function Game({
       name: item.badge,
       desc: item.shortName,
       kind: item.id === "palace" ? ("landmark" as const) : ("star" as const),
-      unlocked: progress[item.id] === 3,
+      unlocked: progress[item.id] === item.missions.length,
       destination: item.id,
     })),
   ];
@@ -526,49 +599,56 @@ function Game({
       </header>
 
       <main className={`app-main view-${view}`} id="app-main">
-        {view !== "home" && (
-          <div className="app-page-heading">
-            <button
-              className="icon-button"
-              aria-label={t("Về khám phá", "Back to explore")}
-              onClick={() => navigate("home")}
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div>
-              <span className="eyebrow">
-                {view === "scan"
-                  ? t("MỘT CHẠM, MỞ CÂU CHUYỆN", "ONE TAP. A NEW STORY.")
-                  : view === "journeys"
-                    ? t("ĐI TỪ TÒ MÒ ĐẾN KHÁM PHÁ", "FROM CURIOUS TO EXPLORER")
-                    : "YOUR EXPLORER PASSPORT"}
-              </span>
-              <h1>
-                {view === "scan"
-                  ? t("Trạm quét", "Scan station")
-                  : view === "journeys"
-                    ? t("Hành trình của bạn", "Your adventure")
-                    : t("Những dấu ấn của bạn", "Your discoveries")}
-              </h1>
+        {view !== "home" &&
+          !(
+            placeId === "palace" &&
+            (view === "journeys" || view === "scan")
+          ) && (
+            <div className="app-page-heading">
+              <button
+                className="icon-button"
+                aria-label={t("Về khám phá", "Back to explore")}
+                onClick={() => navigate("home")}
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div>
+                <span className="eyebrow">
+                  {view === "scan"
+                    ? t("MỘT CHẠM, MỞ CÂU CHUYỆN", "ONE TAP. A NEW STORY.")
+                    : view === "journeys"
+                      ? t(
+                          "ĐI TỪ TÒ MÒ ĐẾN KHÁM PHÁ",
+                          "FROM CURIOUS TO EXPLORER",
+                        )
+                      : "YOUR EXPLORER PASSPORT"}
+                </span>
+                <h1>
+                  {view === "scan"
+                    ? t("Trạm quét", "Scan station")
+                    : view === "journeys"
+                      ? t("Hành trình của bạn", "Your adventure")
+                      : t("Những dấu ấn của bạn", "Your discoveries")}
+                </h1>
+              </div>
+              <button
+                className="icon-button sound-toggle"
+                aria-label={
+                  sound
+                    ? t("Tắt âm thanh", "Mute sound")
+                    : t("Bật âm thanh", "Enable sound")
+                }
+                aria-pressed={sound}
+                onClick={() => {
+                  setSound(!sound);
+                  if (sound && "speechSynthesis" in window)
+                    window.speechSynthesis.cancel();
+                }}
+              >
+                {sound ? <Volume2 size={19} /> : <VolumeX size={19} />}
+              </button>
             </div>
-            <button
-              className="icon-button sound-toggle"
-              aria-label={
-                sound
-                  ? t("Tắt âm thanh", "Mute sound")
-                  : t("Bật âm thanh", "Enable sound")
-              }
-              aria-pressed={sound}
-              onClick={() => {
-                setSound(!sound);
-                if (sound && "speechSynthesis" in window)
-                  window.speechSynthesis.cancel();
-              }}
-            >
-              {sound ? <Volume2 size={19} /> : <VolumeX size={19} />}
-            </button>
-          </div>
-        )}
+          )}
 
         {view === "home" && (
           <motion.div
@@ -693,26 +773,28 @@ function Game({
               </div>
               <div>
                 <span className="eyebrow">
-                  {completed === 3
+                  {completed === place.missions.length
                     ? t("HÀNH TRÌNH ĐÃ HOÀN THÀNH", "JOURNEY COMPLETED")
                     : t("THỬ THÁCH ĐANG CHỜ", "YOUR NEXT LITTLE CHALLENGE")}
                 </span>
                 <h2>
-                  {completed === 3
+                  {completed === place.missions.length
                     ? place.badge
                     : place.missions[completed].title}
                 </h2>
                 <p>
-                  {place.shortName} <span>·</span> {completed}/3{" "}
-                  {t("đã giải mã", "decoded")}
+                  {place.shortName} <span>·</span> {completed}/
+                  {place.missions.length} {t("đã giải mã", "decoded")}
                 </p>
               </div>
               <button
                 onClick={() =>
-                  completed === 3 ? navigate("collection") : navigate("scan")
+                  completed === place.missions.length
+                    ? navigate("collection")
+                    : navigate("scan")
                 }
                 aria-label={
-                  completed === 3
+                  completed === place.missions.length
                     ? t("Xem bộ sưu tập", "View collection")
                     : t("Đến trạm quét", "Go to scanner")
                 }
@@ -758,7 +840,7 @@ function Game({
           </motion.div>
         )}
 
-        {(view === "journeys" || view === "scan") && (
+        {(view === "journeys" || view === "scan") && placeId !== "palace" && (
           <div
             className="place-choice-strip"
             role="group"
@@ -771,7 +853,9 @@ function Game({
                 className={placeId === item.id ? "place-choice-active" : ""}
                 onClick={() => {
                   setPlaceId(item.id);
-                  setActiveMission(Math.min(progress[item.id], 2));
+                  setActiveMission(
+                    Math.min(progress[item.id], item.missions.length - 1),
+                  );
                 }}
               >
                 {item.id === "palace" ? (
@@ -785,7 +869,16 @@ function Game({
           </div>
         )}
 
-        {view === "journeys" && (
+        {placeId === "palace" && (view === "journeys" || view === "scan") && (
+          <PalaceExperience
+            game={palaceGame}
+            mode={view === "scan" ? "scan" : "map"}
+            sound={sound}
+            onJournal={() => navigate("collection")}
+          />
+        )}
+
+        {view === "journeys" && placeId !== "palace" && (
           <motion.div
             className="journey-view"
             key={placeId}
@@ -807,10 +900,11 @@ function Game({
                 <h2>{place.shortName}</h2>
                 <p>{place.journey}</p>
                 <span>
-                  <Flag size={14} />3 {t("thử thách", "challenges")}
+                  <Flag size={14} />
+                  {place.missions.length} {t("thử thách", "challenges")}
                   <i />
                   <Zap size={14} fill="currentColor" />
-                  450 XP
+                  {place.missions.length * 150} XP
                 </span>
               </div>
               <button
@@ -833,12 +927,16 @@ function Game({
                     "Every discovery leaves a mark.",
                   )}
                 </strong>
-                <span>{completed}/3</span>
+                <span>
+                  {completed}/{place.missions.length}
+                </span>
               </div>
               <div className="progress-track">
                 <motion.div
                   initial={false}
-                  animate={{ width: `${(completed / 3) * 100}%` }}
+                  animate={{
+                    width: `${(completed / place.missions.length) * 100}%`,
+                  }}
                 />
               </div>
             </div>
@@ -893,8 +991,8 @@ function Game({
             <div className="journey-badge">
               <ExplorerBadge
                 small
-                kind={placeId === "palace" ? "landmark" : "star"}
-                locked={completed < 3}
+                kind="star"
+                locked={completed < place.missions.length}
               />
               <div>
                 <span className="eyebrow">
@@ -902,18 +1000,18 @@ function Game({
                 </span>
                 <h3>{place.badge}</h3>
                 <p>
-                  {completed === 3
+                  {completed === place.missions.length
                     ? t(
                         "Bạn đã chinh phục hành trình này!",
                         "You conquered this journey!",
                       )
                     : t(
                         "Hoàn thành đủ 3 thử thách để mở khóa.",
-                        "Complete all 3 challenges to unlock.",
+                        "Complete every challenge to unlock.",
                       )}
                 </p>
               </div>
-              {completed === 3 && (
+              {completed === place.missions.length && (
                 <button
                   className="icon-button"
                   onClick={() => setOverlay("achievement")}
@@ -926,7 +1024,7 @@ function Game({
           </motion.div>
         )}
 
-        {view === "scan" && (
+        {view === "scan" && placeId !== "palace" && (
           <motion.div
             className="scan-layout"
             initial={{ opacity: 0 }}
@@ -938,12 +1036,15 @@ function Game({
                   <span className="live-dot" />
                   {place.shortName}
                 </span>
-                <span>{Math.min(completed + 1, 3)}/3</span>
+                <span>
+                  {Math.min(completed + 1, place.missions.length)}/
+                  {place.missions.length}
+                </span>
               </div>
               <ArtifactScanner
                 key={`${placeId}-${locale}`}
                 place={place}
-                complete={completed === 3}
+                complete={completed === place.missions.length}
                 onCapture={capture}
               />
             </div>
@@ -955,7 +1056,7 @@ function Game({
                     {t("NHIỆM VỤ HIỆN TẠI", "CURRENT QUEST")}
                   </span>
                   <h2>
-                    {completed === 3
+                    {completed === place.missions.length
                       ? t("Hành trình trọn vẹn!", "Journey complete!")
                       : place.missions[completed].title}
                   </h2>
@@ -995,6 +1096,13 @@ function Game({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
+            <PalaceExperience
+              game={palaceGame}
+              mode="journal"
+              sound={sound}
+              onJournal={() => navigate("collection")}
+              onMap={() => selectPlace("palace")}
+            />
             <div className="passport-summary">
               <span className="passport-icon">
                 <Compass size={34} />
@@ -1024,7 +1132,13 @@ function Game({
               <div>
                 <strong>
                   {totalCompleted}
-                  <small>/6</small>
+                  <small>
+                    /
+                    {places.reduce(
+                      (sum, item) => sum + item.missions.length,
+                      0,
+                    )}
+                  </small>
                 </strong>
                 <span>{t("Thử thách", "Challenges")}</span>
               </div>
@@ -1118,7 +1232,7 @@ function Game({
                       <span>
                         <strong>{item.shortName}</strong>
                         <small>
-                          {progress[item.id]}/3{" "}
+                          {progress[item.id]}/{item.missions.length}{" "}
                           {t("thử thách đã giải mã", "challenges decoded")}
                         </small>
                       </span>
@@ -1272,7 +1386,7 @@ function Game({
                     title: t("Giải mã & nhận thưởng", "Decode & earn"),
                     text: t(
                       "Mỗi quiz đúng nhận 150 XP. Hoàn thành đủ 3 để mở huy hiệu địa điểm và chia sẻ thành tích.",
-                      "Each correct quiz earns 150 XP. Finish all 3 to unlock a destination badge and share your story.",
+                      "The Palace has five checkpoints: identify a photo, discover its story, and answer a quiz. Complete the trail to earn a badge and save your discovery atlas.",
                     ),
                   },
                 ].map(({ Icon, title, text }, index) => (
@@ -1307,10 +1421,10 @@ function Game({
                 </span>
                 <ExplorerBadge
                   kind={placeId === "palace" ? "landmark" : "star"}
-                  locked={completed < 3}
+                  locked={completed < place.missions.length}
                 />
                 <h2>
-                  {completed === 3
+                  {completed === place.missions.length
                     ? place.badge
                     : t(
                         "Hành trình đang viết tiếp",
@@ -1322,7 +1436,7 @@ function Game({
                   <div>
                     <strong>
                       {completed}
-                      <span>/3</span>
+                      <span>/{place.missions.length}</span>
                     </strong>
                     <small>{t("THỬ THÁCH", "CHALLENGES")}</small>
                   </div>
@@ -1332,21 +1446,21 @@ function Game({
                   </div>
                   <div>
                     <strong>
-                      {Math.round((completed / 3) * 100)}
+                      {Math.round((completed / place.missions.length) * 100)}
                       <span>%</span>
                     </strong>
                     <small>{t("KHÁM PHÁ", "EXPLORED")}</small>
                   </div>
                 </div>
                 <p className="achievement-caption">
-                  {completed === 3
+                  {completed === place.missions.length
                     ? t(
                         "Không chỉ đi qua. Bạn đã mang về những câu chuyện.",
                         "You did more than visit. You brought back stories.",
                       )
                     : t(
                         "Hoàn thành cả 3 thử thách để mở huy hiệu địa điểm nhé.",
-                        "Complete all 3 challenges to unlock this destination's badge.",
+                        "Complete every checkpoint to unlock this destination's badge.",
                       )}
                 </p>
                 <button className="primary-button" onClick={share}>
