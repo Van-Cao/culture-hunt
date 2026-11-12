@@ -42,3 +42,4 @@ next-env.d.ts
 
 # Local project reference; not part of source publication.
 /proposal.docx
+/supabase/.temp/
