@@ -19,7 +19,6 @@ import {
   HelpCircle,
   Home,
   Landmark,
-  LockKeyhole,
   MapPin,
   ScanLine,
   Share2,
@@ -46,6 +45,7 @@ import GameDialog from "./GameDialog";
 import StoryCard from "./StoryCard";
 import QuizCard from "./QuizCard";
 import AccountPanel from "./AccountPanel";
+import CampusExperience from "./CampusExperience";
 import PalaceExperience from "@/components/palace/PalaceExperience";
 import { usePalaceJourney } from "@/components/palace/usePalaceJourney";
 import CollectionAtlas from "@/components/atlas/CollectionAtlas";
@@ -585,10 +585,8 @@ function Game({
 
       <main className={`app-main view-${view}`} id="app-main">
         {view !== "home" &&
-          !(
-            placeId === "palace" &&
-            (view === "journeys" || view === "scan")
-          ) && (
+          view !== "journeys" &&
+          !(placeId === "palace" && view === "scan") && (
             <div className="app-page-heading">
               <button
                 className="icon-button"
@@ -601,19 +599,12 @@ function Game({
                 <span className="eyebrow">
                   {view === "scan"
                     ? t("MỘT CHẠM, MỞ CÂU CHUYỆN", "ONE TAP. A NEW STORY.")
-                    : view === "journeys"
-                      ? t(
-                          "ĐI TỪ TÒ MÒ ĐẾN KHÁM PHÁ",
-                          "FROM CURIOUS TO EXPLORER",
-                        )
-                      : "YOUR EXPLORER PASSPORT"}
+                    : "YOUR EXPLORER PASSPORT"}
                 </span>
                 <h1>
                   {view === "scan"
                     ? t("Trạm quét", "Scan station")
-                    : view === "journeys"
-                      ? t("Hành trình của bạn", "Your adventure")
-                      : t("Hộ chiếu khám phá", "Explorer passport")}
+                    : t("Hộ chiếu khám phá", "Explorer passport")}
                 </h1>
               </div>
               <button
@@ -825,35 +816,6 @@ function Game({
           </motion.div>
         )}
 
-        {(view === "journeys" || view === "scan") && placeId !== "palace" && (
-          <div
-            className="place-choice-strip"
-            role="group"
-            aria-label={t("Địa điểm khám phá", "Discovery locations")}
-          >
-            {places.map((item) => (
-              <button
-                key={item.id}
-                aria-pressed={placeId === item.id}
-                className={placeId === item.id ? "place-choice-active" : ""}
-                onClick={() => {
-                  setPlaceId(item.id);
-                  setActiveMission(
-                    Math.min(progress[item.id], item.missions.length - 1),
-                  );
-                }}
-              >
-                {item.id === "palace" ? (
-                  <Landmark size={16} />
-                ) : (
-                  <GraduationCap size={17} />
-                )}
-                {item.shortName}
-              </button>
-            ))}
-          </div>
-        )}
-
         {placeId === "palace" && (view === "journeys" || view === "scan") && (
           <PalaceExperience
             game={palaceGame}
@@ -863,150 +825,21 @@ function Game({
           />
         )}
 
-        {view === "journeys" && placeId !== "palace" && (
-          <motion.div
-            className="journey-view"
-            key={placeId}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="journey-hero">
-              <Image
-                src={place.coverImage}
-                alt={place.name}
-                fill
-                sizes="(max-width: 600px) 100vw, 1100px"
-              />
-              <span className="journey-hero-tag">
-                <MapPin size={13} />
-                {place.tag}
-              </span>
-              <div>
-                <h2>{place.shortName}</h2>
-                <p>{place.journey}</p>
-                <span>
-                  <Flag size={14} />
-                  {place.missions.length} {t("thử thách", "challenges")}
-                  <i />
-                  <Zap size={14} fill="currentColor" />
-                  {place.missions.length * 150} XP
-                </span>
-              </div>
-              <button
-                className={`save-place ${saved.includes(placeId) ? "is-saved" : ""}`}
-                aria-pressed={saved.includes(placeId)}
-                aria-label={t("Lưu địa điểm này", "Save this destination")}
-                onClick={() => toggleSaved(placeId)}
-              >
-                <Heart
-                  size={19}
-                  fill={saved.includes(placeId) ? "currentColor" : "none"}
-                />
-              </button>
-            </div>
-            <div className="journey-progress">
-              <div>
-                <strong>
-                  {t(
-                    "Mỗi khám phá, một dấu ấn.",
-                    "Every discovery leaves a mark.",
-                  )}
-                </strong>
-                <span>
-                  {completed}/{place.missions.length}
-                </span>
-              </div>
-              <div className="progress-track">
-                <motion.div
-                  initial={false}
-                  animate={{
-                    width: `${(completed / place.missions.length) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">YOUR DISCOVERY TRAIL</span>
-                <h2>{t("Lộ trình giải mã", "Your discovery trail")}</h2>
-              </div>
-              <span className="route-line-icon">
-                <Flag size={21} />
-              </span>
-            </div>
-            <div className="mission-list">
-              {place.missions.map((item, index) => (
-                <button
-                  key={index}
-                  disabled={index > completed}
-                  className={`mission-step ${index < completed ? "mission-done" : index === completed ? "mission-current" : "mission-locked"}`}
-                  onClick={() => openMission(index)}
-                >
-                  <span className="mission-node">
-                    {index < completed ? (
-                      <Check size={20} />
-                    ) : index > completed ? (
-                      <LockKeyhole size={18} />
-                    ) : (
-                      <ScanLine size={21} />
-                    )}
-                  </span>
-                  <span>
-                    <small>
-                      {t("THỬ THÁCH", "CHALLENGE")} 0{index + 1}
-                    </small>
-                    <strong>{item.title}</strong>
-                    <span>
-                      {index < completed
-                        ? t("Đã hoàn thành", "Completed")
-                        : item.subtitle}
-                    </span>
-                  </span>
-                  <span className="mission-end">
-                    {index > completed ? (
-                      <LockKeyhole size={14} />
-                    ) : (
-                      <ChevronRight size={20} />
-                    )}
-                    <small>+150 XP</small>
-                  </span>
-                </button>
-              ))}
-            </div>
-            <div className="journey-badge">
-              <ExplorerBadge
-                small
-                kind="star"
-                locked={completed < place.missions.length}
-              />
-              <div>
-                <span className="eyebrow">
-                  {t("PHẦN THƯỞNG ĐÍCH ĐẾN", "DESTINATION REWARD")}
-                </span>
-                <h3>{place.badge}</h3>
-                <p>
-                  {completed === place.missions.length
-                    ? t(
-                        "Bạn đã chinh phục hành trình này!",
-                        "You conquered this journey!",
-                      )
-                    : t(
-                        "Hoàn thành đủ 3 thử thách để mở khóa.",
-                        "Complete every challenge to unlock.",
-                      )}
-                </p>
-              </div>
-              {completed === place.missions.length && (
-                <button
-                  className="icon-button"
-                  onClick={() => setOverlay("achievement")}
-                  aria-label={t("Chia sẻ thành tích", "Share achievement")}
-                >
-                  <Share2 size={18} />
-                </button>
-              )}
-            </div>
-          </motion.div>
+        {view === "journeys" && placeId === "hcmus" && (
+          <CampusExperience
+            place={place}
+            completed={completed}
+            saved={saved.includes(placeId)}
+            sound={sound}
+            onSave={() => toggleSaved(placeId)}
+            onSound={() => {
+              setSound(!sound);
+              if (sound && "speechSynthesis" in window)
+                window.speechSynthesis.cancel();
+            }}
+            onOpenMission={openMission}
+            onAchievement={() => setOverlay("achievement")}
+          />
         )}
 
         {view === "scan" && placeId !== "palace" && (

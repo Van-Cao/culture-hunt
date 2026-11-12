@@ -28,6 +28,7 @@ import {
 } from "@/lib/palace/checkpoints";
 import type { JourneyRun, RecognitionResult } from "@/lib/palace/types";
 import { useLanguage } from "@/components/UI/LanguageProvider";
+import JourneyHeader from "@/components/UI/JourneyHeader";
 import GameDialog from "@/components/UI/GameDialog";
 import CheckpointStory from "./CheckpointStory";
 import PalaceMiniGame from "./PalaceMiniGame";
@@ -67,7 +68,6 @@ export default function PalaceExperience({
   sound?: boolean;
 }) {
   const { locale, t } = useLanguage();
-  const Title = mode === "journal" ? "h2" : "h1";
   const [picked, setPicked] = useState<CheckpointId | null>(null);
   const [stage, setStage] = useState<Stage>(null);
   const [notice, setNotice] = useState("");
@@ -253,46 +253,13 @@ export default function PalaceExperience({
       className="palace-experience"
       aria-label={t("Hành trình Dinh Độc Lập", "Independence Palace journey")}
     >
-      <div className="palace-title-row">
-        <div>
-          <span className="palace-overline">
-            {mode === "journal"
-              ? "CULTURE HUNT / MY HERITAGE ATLAS"
-              : "CHAPTER 01 / THE INDEPENDENCE PALACE"}
-          </span>
-          <Title>
-            {mode === "journal" ? (
-              t("Bản đồ những dấu ấn.", "An atlas of your discoveries.")
-            ) : (
-              <>
-                {t("Giải mã ", "Decoding ")}
-                <em>{t("Dinh Độc Lập.", "the Palace.")}</em>
-              </>
-            )}
-          </Title>
-          <p>
-            {mode === "journal"
-              ? t(
-                  "Mỗi điểm sáng là một câu chuyện bạn đã chạm tới.",
-                  "Every illuminated stop holds a story you discovered.",
-                )
-              : t(
-                  "Năm điểm dừng. Một chuyến đi từ tò mò đến khám phá.",
-                  "Five stops. One journey from curiosity to discovery.",
-                )}
-          </p>
-        </div>
-        <span className="palace-edition">
-          <Compass size={26} strokeWidth={1.2} />
-          <span>
-            SAIGON
-            <br />
-            HERITAGE / 01
-          </span>
-        </span>
-      </div>
-
-      <div className="palace-summary-strip">
+      <JourneyHeader
+        chapter={mode === "journal" ? "CULTURE HUNT / MY HERITAGE ATLAS" : "CHAPTER 01 / THE INDEPENDENCE PALACE"}
+        edition="01"
+        heading={mode === "journal" ? "h2" : "h1"}
+        title={mode === "journal" ? t("Bản đồ những dấu ấn.", "An atlas of your discoveries.") : <>{t("Giải mã ", "Decoding ")}<em>{t("Dinh Độc Lập.", "the Palace.")}</em></>}
+        description={mode === "journal" ? t("Mỗi điểm sáng là một câu chuyện bạn đã chạm tới.", "Every illuminated stop holds a story you discovered.") : t("Năm điểm dừng. Một chuyến đi từ tò mò đến khám phá.", "Five stops. One journey from curiosity to discovery.")}
+      >
         <span>
           <Flag size={16} />
           <strong>
@@ -317,7 +284,7 @@ export default function PalaceExperience({
             "Server saved · This browser profile",
           )}
         </span>
-      </div>
+      </JourneyHeader>
       {game.error && (
         <div className="palace-alert" role="alert">
           <span>{localMessage(game.error)}</span>
