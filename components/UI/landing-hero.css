@@ -86,6 +86,22 @@
 .travel-hero .intro-start svg { color: inherit; }
 .intro-page .travel-hero .intro-start:hover { background: var(--intro-paper); transform: translateY(-3px); }
 .travel-guest-note { margin-top: 15px; font-size: 10px; color: #f6f5efdd; }
+.travel-touch-hint { display: none; }
+@media (any-pointer: coarse) {
+  .travel-hero {
+    /* Pinch is handled on the photo; vertical swipes still scroll the page. */
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .travel-touch-hint {
+    display: block;
+    margin-top: 12px;
+    font-size: 10px;
+    color: var(--intro-lime);
+  }
+}
 .travel-hero-bottom {
   position: absolute;
   inset: auto 0 30px;
@@ -138,6 +154,8 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .travel-hero-scene { transform: none !important; }
+  .travel-hero { touch-action: auto; }
+  .travel-touch-hint { display: none; }
   .travel-hero-photo, .intro-place-image img { transition: none; }
   .intro-place-image:hover img, .intro-place-image:focus-visible img { transform: none; }
 }

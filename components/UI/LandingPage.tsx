@@ -71,6 +71,9 @@ export default function LandingPage({
   const places = getPlaces(locale);
   const reduced = useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
+  const touchPointer = useRef<number | null>(null);
+  const touchPoints = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ distance: number; scale: number } | null>(null);
   const [activePhoto, setActivePhoto] = useState(0);
   const [paused, setPaused] = useState(false);
   const photoCount = places.length;
@@ -83,22 +86,72 @@ export default function LandingPage({
     if (paused) return;
     const timer = window.setInterval(() => {
       const bounds = heroRef.current?.getBoundingClientRect();
-      if (document.hidden || !bounds || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+      if (document.hidden || touchPointer.current !== null || !bounds || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
       setActivePhoto(current => (current + 1) % photoCount);
     }, 10_000);
     return () => window.clearInterval(timer);
   }, [paused, photoCount]);
 
+  useEffect(() => {
+    const reset = () => {
+      touchPointer.current = null;
+      touchPoints.current.clear();
+      pinch.current = null;
+      photoScale.set(1);
+    };
+    window.addEventListener("blur", reset);
+    document.addEventListener("visibilitychange", reset);
+    return () => {
+      window.removeEventListener("blur", reset);
+      document.removeEventListener("visibilitychange", reset);
+    };
+  }, [photoScale]);
+
+  function resetPointer() {
+    touchPointer.current = null;
+    touchPoints.current.clear();
+    pinch.current = null;
+    photoScale.set(1);
+  }
+
+  function startTouch(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse" || reduced) return;
+    // Image gestures never capture links/buttons or block vertical page scrolling.
+    const target = event.target as HTMLElement;
+    if (!heroRef.current?.contains(target) || target.closest("a, button, input, select, textarea")) return;
+    if (!event.isPrimary && touchPoints.current.size === 0) return;
+    touchPoints.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    touchPointer.current ??= event.pointerId;
+    if (touchPoints.current.size === 2) {
+      const [a, b] = [...touchPoints.current.values()];
+      pinch.current = { distance: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), scale: photoScale.get() };
+    }
+    followPointer(event);
+  }
+
   function followPointer(event: PointerEvent<HTMLDivElement>) {
-    if (reduced || event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (reduced) return;
+    if (event.pointerType === "mouse") {
+      if (!window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches) return;
+    } else {
+      if (!touchPoints.current.has(event.pointerId)) return;
+      touchPoints.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    }
     const bounds = heroRef.current?.getBoundingClientRect();
     if (!bounds || event.clientY < bounds.top || event.clientY > bounds.bottom) {
-      photoScale.set(1);
+      resetPointer();
       return;
     }
-    originX.set(Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)));
-    originY.set(Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)));
-    photoScale.set(1.2);
+    let x = event.clientX, y = event.clientY, scale = 1.2;
+    if (pinch.current && touchPoints.current.size >= 2) {
+      const [a, b] = [...touchPoints.current.values()];
+      x = (a.x + b.x) / 2;
+      y = (a.y + b.y) / 2;
+      scale = Math.max(1, Math.min(2.4, pinch.current.scale * Math.hypot(a.x - b.x, a.y - b.y) / pinch.current.distance));
+    }
+    originX.set(Math.max(0, Math.min(1, (x - bounds.left) / bounds.width)));
+    originY.set(Math.max(0, Math.min(1, (y - bounds.top) / bounds.height)));
+    photoScale.set(scale);
   }
   const backToTop = () =>
     window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
@@ -133,7 +186,15 @@ export default function LandingPage({
   ];
 
   return (
-    <div className="intro-page" onPointerMove={followPointer} onPointerLeave={() => photoScale.set(1)}>
+    <div
+      className="intro-page"
+      onPointerDown={startTouch}
+      onPointerMove={followPointer}
+      onPointerUp={event => { if (event.pointerType !== "mouse") resetPointer(); }}
+      onPointerCancel={resetPointer}
+      onLostPointerCapture={resetPointer}
+      onPointerLeave={resetPointer}
+    >
       <a className="skip-link" href="#landing-main">
         {t("Đến nội dung chính", "Skip to content")}
       </a>
@@ -179,6 +240,7 @@ export default function LandingPage({
             <p>{t("Khám phá di sản. Giải mã dấu vết. Viết nên hành trình của riêng bạn.", "Explore heritage. Follow the clues. Make the journey your own.")}</p>
             <StartAction onStart={onStart} hero />
             <span className="travel-guest-note">{t("Đăng nhập hoặc khám phá ngay với tư cách khách", "Sign in or jump straight in as a guest")}</span>
+            <span className="travel-touch-hint">{t("Giữ để rê ảnh · Dùng hai ngón để phóng/thu", "Hold to explore · Pinch to zoom the photo")}</span>
           </div>
           <div className="travel-hero-bottom intro-container">
             <a className="travel-location" href="#destinations">

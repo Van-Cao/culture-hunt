@@ -30,6 +30,7 @@ export default function CityMap({ destinations, onOpen }: { destinations: AtlasD
   const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
   useEffect(() => {
     let disposed = false;
+    let failed = false;
     let instance: LibreMap | undefined;
     let resize: ResizeObserver | undefined;
     async function mount() {
@@ -45,10 +46,14 @@ export default function CityMap({ destinations, onOpen }: { destinations: AtlasD
         };
         instance.fitBounds(bounds, { padding: { top: 85, bottom: 70, left: 45, right: 45 }, duration: 0 });
         instance.on("move", positionMarkers);
-        instance.on("load", () => { if (!disposed) { setReady(true); positionMarkers(); } });
-        instance.on("webglcontextlost", () => { if (!disposed) setReady(false); });
+        instance.on("load", () => { if (!disposed && !failed) { setReady(true); positionMarkers(); } });
+        const showFallback = () => {
+          failed = true;
+          if (!disposed) setReady(false);
+        };
+        instance.on("webglcontextlost", showFallback);
         // A local schematic remains usable if WebGL, tiles or the network are unavailable.
-        instance.on("error", () => {});
+        instance.on("error", showFallback);
         resize = new ResizeObserver(() => { if (!disposed && instance) { instance.resize(); instance.fitBounds(bounds, { padding: { top: 85, bottom: 70, left: 45, right: 45 }, duration: 0 }); positionMarkers(); } });
         resize.observe(container.current);
       } catch {
@@ -78,7 +83,7 @@ export default function CityMap({ destinations, onOpen }: { destinations: AtlasD
         </button>;
       })}
       <div className="atlas-map-tools"><button aria-label={t("Phóng to bản đồ thành phố", "Zoom in city map")} onClick={() => map.current?.zoomIn()} disabled={!ready}><Plus size={17} /></button><button aria-label={t("Thu nhỏ bản đồ thành phố", "Zoom out city map")} onClick={() => map.current?.zoomOut()} disabled={!ready}><Minus size={17} /></button><button aria-label={t("Xem toàn bộ địa điểm", "Fit all destinations")} onClick={reset} disabled={!ready}><LocateFixed size={17} /></button></div>
-      <div className="atlas-map-scale" aria-hidden="true"><span>N ↑</span><i /><small>{t("Kéo để khám phá", "Drag to explore")}</small></div>
+      <div className="atlas-map-scale" aria-hidden="true"><span>N ↑</span><i /><small>{ready ? t("Kéo để khám phá", "Drag to explore") : t("Chạm địa điểm để xem hành trình", "Tap a destination to open its journey")}</small></div>
     </div>
     <div className="atlas-city-map-footer"><span><i />{t("Hoàn thành thử thách để thắp sáng bản đồ", "Complete challenges to illuminate your map")}</span><span>© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> · <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">OpenMapTiles</a> · <a href="https://openfreemap.org/" target="_blank" rel="noreferrer">OpenFreeMap</a></span></div>
   </div>;
