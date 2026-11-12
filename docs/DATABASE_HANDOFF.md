@@ -200,6 +200,11 @@ RLS. Chỉ chạy trong database phát triển/test riêng; dùng transaction ro
 check-in, đáp án sai/đúng, thưởng một lần, ảnh private và signed URL, merge với
 tài khoản email/password thử, RLS và từ chối client tự sửa điểm/đọc đáp án.
 Script đã dọn danh tính và ảnh thử; `users`/`checkins` trở lại trống.
+Advisor Center có cảnh báo `Anonymous Sign-Ins Allowed` vì game chủ động cho
+khách lưu thành tích. Đã kiểm tra policy chỉ đọc theo chính `auth.uid()` và
+không cấp quyền ghi trực tiếp. Không tắt guest sign-in chỉ để ẩn cảnh báo này.
+Các request từ chối đọc đáp án/sửa điểm trong smoke test là kiểm tra chủ ý;
+chúng có thể hiện trong log lỗi/quyền truy cập của khoảng thời gian chạy test.
 Muốn chạy lại phải tự đặt `CULTURE_HUNT_CLOUD_SMOKE=yes`; script từ chối project
 đã có Auth users hoặc dữ liệu game. Không chạy trên project có người dùng thật.
 Chưa xác minh tải đồng thời nhiều kết nối, camera/AI thật hay Google OAuth thật.
