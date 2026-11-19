@@ -1,0 +1,5 @@
+# Python 3.11+. The model can infer on CPU; an NVIDIA GPU is optional.
+ultralytics==8.4.215
+torch==2.11.0
+torchvision==0.26.0
+Pillow>=10,<14

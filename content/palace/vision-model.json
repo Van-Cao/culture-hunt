@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "weights": "output/yolo/palace-v3-web/weights/best.pt",
+  "model_sha256": "6baac2e932c32e5634319f19cd8e5da189c47abaf92bffcec5f7f37bb05734af",
+  "image_size": 320,
+  "preprocessing": "RGB; resize entire image 320x320; float tensor [0,1]",
+  "min_probability": 0.98,
+  "min_margin": 0.5,
+  "enabled_checkpoints": [
+    "bunker",
+    "cabinet",
+    "facade",
+    "reception",
+    "rooftop"
+  ],
+  "dataset_fingerprint": "5cf69ca41022",
+  "intended_use": "Small Palace demo with abstention. Confidence is not a calibrated probability of correctness.",
+  "validation_support": {
+    "reception": 2,
+    "rooftop": 3,
+    "cabinet": 1,
+    "bunker": 1,
+    "facade": 3,
+    "other": 5
+  },
+  "policy_frozen_before_test": true
+}

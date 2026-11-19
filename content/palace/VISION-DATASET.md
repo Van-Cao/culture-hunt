@@ -1,5 +1,9 @@
 # Dữ liệu ảnh cho YOLO Classification — Culture Hunt
 
+Bản thử nghiệm mới nhất: xem [Palace YOLO v3](VISION-V3.md) để biết dataset mở rộng, bộ test riêng, kết quả so với v2 và cách chạy predictor có từ chối ảnh không chắc chắn. Nội dung v1/v2 bên dưới được giữ làm lịch sử thí nghiệm.
+
+Trọng số và thư mục kết quả train v1/v2 đã được xóa theo yêu cầu. Những đường dẫn v1/v2 bên dưới là thông tin lịch sử, không còn file model local. Báo cáo JSON được giữ để đối chiếu; sử dụng model v3 theo hướng dẫn mới nhất.
+
 Mục tiêu: phân loại ảnh theo đúng 5 checkpoint trong `lib/palace/checkpoints.ts`.
 Đây là bộ dữ liệu khởi đầu được thu thập từ mạng, chưa phải benchmark xác nhận độ chính xác ngoài thực tế. Đã bổ sung quy trình train thử; API nhận diện đang chạy vẫn chưa thay đổi.
 
@@ -127,7 +131,7 @@ Nếu `playwright` có sẵn trong Node module resolution thì bỏ tham số `-
 
 Bản v2 có **78 ảnh train + cùng 14 ảnh validation của v1**. Bộ val Commons được giữ nguyên trước khi thêm screenshot, không có ảnh tour ở val và có kiểm tra hash gần trùng giữa hai nguồn. Có thêm góc nhìn nhưng không thể coi 27 screenshot là 27 bối cảnh độc lập. Chưa có ảnh tour bổ sung cho sân thượng hay phòng thông tin dưới hầm.
 
-Kết quả v2 lưu riêng ở `output/yolo/palace-v2-tour/`; v1 vẫn được giữ. Báo cáo v2 được ghi riêng vào `vision-tour-training-report.json`. Validation đã dùng chọn epoch và đã được quan sát qua nhiều lần thử; chưa có test độc lập, không suy ra độ chính xác sử dụng thực tế.
+Lượt train v2 trước đây lưu ở `output/yolo/palace-v2-tour/`; thư mục kết quả v1/v2 nay đã được xóa. Báo cáo v2 được giữ trong `vision-tour-training-report.json`. Validation đã dùng chọn epoch và đã được quan sát qua nhiều lần thử; chưa có test độc lập, không suy ra độ chính xác sử dụng thực tế.
 
 Kết quả checkpoint đã nạp lại: **13/14 ảnh validation đúng (92,9%)**, macro-F1 **0,8148**, so với v1 là 12/14 và macro-F1 0,6333 trên cùng 14 ảnh. Chỉ tăng một ảnh dự đoán đúng, chưa đủ bằng chứng kết luận cải thiện đáng tin cậy ngoài thực tế. Chưa bật model trong gameplay và chưa hiệu chuẩn ngưỡng confidence.
 

@@ -1,0 +1,868 @@
+{
+  "model": {
+    "version": 3,
+    "weights": "output/yolo/palace-v3-web/weights/best.pt",
+    "model_sha256": "6baac2e932c32e5634319f19cd8e5da189c47abaf92bffcec5f7f37bb05734af",
+    "image_size": 320,
+    "preprocessing": "RGB; resize entire image 320x320; float tensor [0,1]",
+    "min_probability": 0.98,
+    "min_margin": 0.5,
+    "enabled_checkpoints": [
+      "bunker",
+      "cabinet",
+      "facade",
+      "reception",
+      "rooftop"
+    ],
+    "dataset_fingerprint": "5cf69ca41022",
+    "intended_use": "Small Palace demo with abstention. Confidence is not a calibrated probability of correctness.",
+    "validation_support": {
+      "reception": 2,
+      "rooftop": 3,
+      "cabinet": 1,
+      "bunker": 1,
+      "facade": 3,
+      "other": 5
+    },
+    "policy_frozen_before_test": true
+  },
+  "counts": {
+    "train": {
+      "cabinet": 13,
+      "reception": 16,
+      "other": 74,
+      "rooftop": 18,
+      "bunker": 7,
+      "facade": 45
+    },
+    "val": {
+      "reception": 2,
+      "rooftop": 3,
+      "cabinet": 1,
+      "bunker": 1,
+      "facade": 3,
+      "other": 5
+    },
+    "test": {
+      "facade": 4,
+      "cabinet": 2,
+      "other": 31,
+      "reception": 1,
+      "rooftop": 1,
+      "bunker": 1
+    }
+  },
+  "environment": {
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "ultralytics": "8.4.215"
+  },
+  "protocol": "New source groups reserved before v3 inference. Do not train, select epochs, or tune rejection thresholds on test. Web-only evaluation, not a real-world accuracy guarantee.",
+  "source_group_counts": {
+    "train": 41,
+    "val": 5,
+    "test": 4
+  },
+  "validation": {
+    "count": 15,
+    "correct": 15,
+    "macro_f1": 1.0,
+    "per_class": {
+      "bunker": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "cabinet": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "facade": {
+        "support": 3,
+        "correct": 3,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "other": {
+        "support": 5,
+        "correct": 5,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "reception": {
+        "support": 2,
+        "correct": 2,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "rooftop": {
+        "support": 3,
+        "correct": 3,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "confusion_matrix": {
+      "bunker": {
+        "bunker": 1,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "cabinet": {
+        "bunker": 0,
+        "cabinet": 1,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "facade": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 3,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "other": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 5,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "reception": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 2,
+        "rooftop": 0
+      },
+      "rooftop": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 3
+      }
+    },
+    "accuracy": 1.0,
+    "rejection_policy": {
+      "accepted": 10,
+      "accepted_correct": 10,
+      "accepted_wrong": 0,
+      "rejected": 5,
+      "accepted_precision": 1.0,
+      "positive_recall": 1.0,
+      "negative_false_accepts": 0,
+      "negative_count": 5
+    }
+  },
+  "test": {
+    "count": 40,
+    "correct": 34,
+    "macro_f1": 0.797799422799423,
+    "per_class": {
+      "bunker": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 0.5
+      },
+      "cabinet": {
+        "support": 2,
+        "correct": 2,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "facade": {
+        "support": 4,
+        "correct": 4,
+        "recall": 1.0,
+        "f1": 0.7272727272727273
+      },
+      "other": {
+        "support": 31,
+        "correct": 25,
+        "recall": 0.8064516129032258,
+        "f1": 0.8928571428571429
+      },
+      "reception": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "rooftop": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 0.6666666666666666
+      }
+    },
+    "confusion_matrix": {
+      "bunker": {
+        "bunker": 1,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "cabinet": {
+        "bunker": 0,
+        "cabinet": 2,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "facade": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 4,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "other": {
+        "bunker": 2,
+        "cabinet": 0,
+        "facade": 3,
+        "other": 25,
+        "reception": 0,
+        "rooftop": 1
+      },
+      "reception": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 1,
+        "rooftop": 0
+      },
+      "rooftop": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 1
+      }
+    },
+    "accuracy": 0.85,
+    "rejection_policy": {
+      "accepted": 10,
+      "accepted_correct": 9,
+      "accepted_wrong": 1,
+      "rejected": 30,
+      "accepted_precision": 0.9,
+      "positive_recall": 1.0,
+      "negative_false_accepts": 1,
+      "negative_count": 31
+    }
+  },
+  "v2_on_same_test": {
+    "count": 40,
+    "correct": 27,
+    "macro_f1": 0.5249766573295985,
+    "per_class": {
+      "bunker": {
+        "support": 1,
+        "correct": 0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cabinet": {
+        "support": 2,
+        "correct": 2,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "facade": {
+        "support": 4,
+        "correct": 4,
+        "recall": 1.0,
+        "f1": 0.5714285714285714
+      },
+      "other": {
+        "support": 31,
+        "correct": 19,
+        "recall": 0.6129032258064516,
+        "f1": 0.7450980392156863
+      },
+      "reception": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 0.3333333333333333
+      },
+      "rooftop": {
+        "support": 1,
+        "correct": 1,
+        "recall": 1.0,
+        "f1": 0.5
+      }
+    },
+    "confusion_matrix": {
+      "bunker": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 1,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "cabinet": {
+        "bunker": 0,
+        "cabinet": 2,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "facade": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 4,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 0
+      },
+      "other": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 6,
+        "other": 19,
+        "reception": 4,
+        "rooftop": 2
+      },
+      "reception": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 1,
+        "rooftop": 0
+      },
+      "rooftop": {
+        "bunker": 0,
+        "cabinet": 0,
+        "facade": 0,
+        "other": 0,
+        "reception": 0,
+        "rooftop": 1
+      }
+    },
+    "accuracy": 0.675
+  },
+  "validation_predictions": [
+    {
+      "id": "commons-127208396",
+      "expected": "reception",
+      "source_group": "commons-author-cc68d98f567d7fcb",
+      "predicted": "reception",
+      "confidence": 0.9999963045120239,
+      "margin": 0.9999926686286926,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-127208399",
+      "expected": "rooftop",
+      "source_group": "commons-author-cc68d98f567d7fcb",
+      "predicted": "rooftop",
+      "confidence": 0.9991501569747925,
+      "margin": 0.9985499978065491,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-28971201",
+      "expected": "rooftop",
+      "source_group": "commons-author-0791a085afbef6d9",
+      "predicted": "rooftop",
+      "confidence": 0.9879155158996582,
+      "margin": 0.9783793091773987,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-29018234",
+      "expected": "cabinet",
+      "source_group": "commons-author-0791a085afbef6d9",
+      "predicted": "cabinet",
+      "confidence": 0.9999070167541504,
+      "margin": 0.9998658299446106,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-65466098",
+      "expected": "bunker",
+      "source_group": "commons-author-06b00428d06f0491",
+      "predicted": "bunker",
+      "confidence": 1.0,
+      "margin": 0.9999999403953552,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-127208400",
+      "expected": "facade",
+      "source_group": "commons-author-cc68d98f567d7fcb",
+      "predicted": "facade",
+      "confidence": 0.9999082088470459,
+      "margin": 0.9998562932014465,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-136086094",
+      "expected": "rooftop",
+      "source_group": "commons-author-73e8370cc9b1dfaf",
+      "predicted": "rooftop",
+      "confidence": 0.9999203681945801,
+      "margin": 0.9998536109924316,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-136086105",
+      "expected": "reception",
+      "source_group": "commons-author-73e8370cc9b1dfaf",
+      "predicted": "reception",
+      "confidence": 0.9993360638618469,
+      "margin": 0.9986722469329834,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-136086118",
+      "expected": "facade",
+      "source_group": "commons-author-73e8370cc9b1dfaf",
+      "predicted": "facade",
+      "confidence": 0.9999160766601562,
+      "margin": 0.9998672008514404,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-00",
+      "expected": "other",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "other",
+      "confidence": 0.8161187767982483,
+      "margin": 0.7554910182952881,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-01",
+      "expected": "other",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "other",
+      "confidence": 0.9936284422874451,
+      "margin": 0.9895169138908386,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-02",
+      "expected": "facade",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "facade",
+      "confidence": 0.9999614953994751,
+      "margin": 0.999930739402771,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-03",
+      "expected": "other",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "other",
+      "confidence": 0.9999974966049194,
+      "margin": 0.999996542930603,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-04",
+      "expected": "other",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "other",
+      "confidence": 0.9936443567276001,
+      "margin": 0.9881689548492432,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-journey-05",
+      "expected": "other",
+      "source_group": "web-publisher-thejourneytaken.wordpress.com",
+      "predicted": "other",
+      "confidence": 0.7793213725090027,
+      "margin": 0.5788424015045166,
+      "quality_reasons": []
+    }
+  ],
+  "test_predictions": [
+    {
+      "id": "commons-138250049",
+      "expected": "facade",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "facade",
+      "confidence": 0.9996594190597534,
+      "margin": 0.9994126558303833,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250053",
+      "expected": "cabinet",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "cabinet",
+      "confidence": 0.9999643564224243,
+      "margin": 0.9999306797981262,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250055",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9999401569366455,
+      "margin": 0.9998843669891357,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250056",
+      "expected": "reception",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "reception",
+      "confidence": 0.9999947547912598,
+      "margin": 0.9999896287918091,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250057",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9851913452148438,
+      "margin": 0.9705106019973755,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250058",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9999854564666748,
+      "margin": 0.9999793171882629,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250059",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "facade",
+      "confidence": 0.6336998343467712,
+      "margin": 0.3306575119495392,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250060",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9998564720153809,
+      "margin": 0.9997783303260803,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250061",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9999850988388062,
+      "margin": 0.9999790191650391,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250063",
+      "expected": "rooftop",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "rooftop",
+      "confidence": 0.9999982118606567,
+      "margin": 0.9999967813491821,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-138250065",
+      "expected": "other",
+      "source_group": "commons-author-98a3f6b1a2a8eee5",
+      "predicted": "other",
+      "confidence": 0.9923194050788879,
+      "margin": 0.9886980056762695,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-146380621",
+      "expected": "facade",
+      "source_group": "commons-author-ba9f0738b1261d83",
+      "predicted": "facade",
+      "confidence": 0.9998717308044434,
+      "margin": 0.9997687339782715,
+      "quality_reasons": []
+    },
+    {
+      "id": "commons-146380622",
+      "expected": "facade",
+      "source_group": "commons-author-ba9f0738b1261d83",
+      "predicted": "facade",
+      "confidence": 0.9998537302017212,
+      "margin": 0.999721109867096,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-04",
+      "expected": "cabinet",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "cabinet",
+      "confidence": 0.9935778379440308,
+      "margin": 0.9873554706573486,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-06",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.923007607460022,
+      "margin": 0.8860406875610352,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-07",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9999972581863403,
+      "margin": 0.9999951124191284,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-08",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.997138261795044,
+      "margin": 0.9956079721450806,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-09",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9634080529212952,
+      "margin": 0.9307612776756287,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-10",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.8183545470237732,
+      "margin": 0.7625730633735657,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-12",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9976309537887573,
+      "margin": 0.9964045882225037,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-13",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.5815475583076477,
+      "margin": 0.22354409098625183,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-14",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9361681938171387,
+      "margin": 0.8931372165679932,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-15",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9989718198776245,
+      "margin": 0.9982969760894775,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-16",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.9947927594184875,
+      "margin": 0.9913251996040344,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-22",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "other",
+      "confidence": 0.5162505507469177,
+      "margin": 0.2653801441192627,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-nomadic-23",
+      "expected": "other",
+      "source_group": "web-publisher-www.nomadicexperiences.com",
+      "predicted": "bunker",
+      "confidence": 0.654815673828125,
+      "margin": 0.33794349431991577,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-02",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.574465811252594,
+      "margin": 0.27455857396125793,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-05",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "facade",
+      "confidence": 0.8177399635314941,
+      "margin": 0.6362383961677551,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-07",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.99970942735672,
+      "margin": 0.9996106624603271,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-09",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "facade",
+      "confidence": 0.7022311091423035,
+      "margin": 0.5561518669128418,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-13",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.9916239380836487,
+      "margin": 0.9883507490158081,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-14",
+      "expected": "facade",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "facade",
+      "confidence": 0.9998886585235596,
+      "margin": 0.999811053276062,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-17",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.9998934268951416,
+      "margin": 0.9998174905776978,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-24",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.993126392364502,
+      "margin": 0.9889622926712036,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-25",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "bunker",
+      "confidence": 0.9910325407981873,
+      "margin": 0.9830552935600281,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-27",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "rooftop",
+      "confidence": 0.6724397540092468,
+      "margin": 0.3696969449520111,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-28",
+      "expected": "bunker",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "bunker",
+      "confidence": 0.9999995231628418,
+      "margin": 0.9999991059303284,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-34",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.9998606443405151,
+      "margin": 0.9997523427009583,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-37",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.7957321405410767,
+      "margin": 0.6127845048904419,
+      "quality_reasons": []
+    },
+    {
+      "id": "web-baughman-43",
+      "expected": "other",
+      "source_group": "web-publisher-baughmanblog.com",
+      "predicted": "other",
+      "confidence": 0.9797201752662659,
+      "margin": 0.9729005098342896,
+      "quality_reasons": []
+    }
+  ],
+  "limitations": "Small web-only test with sparse positive classes, not field accuracy. Validation selects both epoch and rejection policy. No automatic gameplay unlock integration has been enabled."
+}
