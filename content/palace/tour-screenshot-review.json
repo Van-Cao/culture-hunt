@@ -1,0 +1,215 @@
+{
+  "description": "Visually reviewed exact browser captures. Reject curtain/stage-only, corridor and uncertain room views despite scene name. All accepted views are train-only, one tour session.",
+  "decisions": {
+    "tour-00_phia_truoc_dinh_tren_cao-0": {
+      "file_sha256": "77edf1c76d832ceceb85d601feb34d2d590b7ffa1bb838f0014c2eb3e8523c4c",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-00_phia_truoc_dinh_tren_cao-1": {
+      "file_sha256": "21e2612ba0264934e9f9ca9069dbbfb85db3c8d543757f78314af65f7886eeaf",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-00_phia_truoc_dinh_tren_cao-2": {
+      "file_sha256": "88d66df01477383f90d8c05515db23d8de4653c2d3dae7c6234280aeb6829cfb",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-02_phong_tiep_khach_tong_thong_1-0": {
+      "file_sha256": "bb4010455c3df064377f45a54a51faabf4a3436069e37ade2c8c3d945b5ef26c",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-02_phong_tiep_khach_tong_thong_1-1": {
+      "file_sha256": "e1093f7a1f7aa7c30f41ff904b3fe98de35b22c17cecde5e68ea07cb530dfaf0",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-02_phong_tiep_khach_tong_thong_1-2": {
+      "file_sha256": "fbc40785f674b067a42d16f186060cc8513df8c728986fb89954e93fec122a19",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_dai_yen_1-0": {
+      "file_sha256": "58a69233ddcf495c8bb8b947dd38878bf5eae253d98087884b7db150cc0722bb",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_dai_yen_1-1": {
+      "file_sha256": "8bdb522ecf36301d0927070dfaf56301c914559c7cf8efe5207ba240d15acf46",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_dai_yen_1-2": {
+      "file_sha256": "d180471955db339d87421b096546d2077446e4aa1d035a15f790b62198d426a2",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_1-0": {
+      "file_sha256": "222565a27e1bc4ae20e21ab251a79341cf2ed4fc058f4cbd568c2d41c151ca58",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_1-1": {
+      "file_sha256": "3749c79398cc8ea28294f5753134691dacf6debdd25b3c0598780fd8a6fe0462",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_1-2": {
+      "file_sha256": "71af483a8c8ad19a64dd0e4e5674abf78295cebadb9dcfe52574b98d23fcf0ed",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_2-0": {
+      "file_sha256": "7f1e16c27d0af9dff0b86e6a11cbff2503bd2ce462d05b3dc617968dd1923e41",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_khanh_tiet_2-1": {
+      "file_sha256": "62bf1d61bdc069932518775212133c8f2375b9c9861114c6eea6b83c3819a439",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_khanh_tiet_2-2": {
+      "file_sha256": "979ae858ab338dd44ffc11b0245ec4b8445995e756179386f2e599cbd2ca2b61",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_khanh_tiet_3-0": {
+      "file_sha256": "74d21634d8dec963f530de0d85b5b72a6030a6ff8dc5f0cdb00d55381c89faa6",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_3-1": {
+      "file_sha256": "b4279a9ad2d48cb7bf6a63697e50327a7df204e40fbfdd0049190917007032e6",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_3-2": {
+      "file_sha256": "6c8efdaf1f4d8764ac6ada6302b8347334e29844c7e332eb21f4ab0c55261859",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_4-0": {
+      "file_sha256": "95699426c7e6daddf7e1e355814eca58c03c5d6a2bf60a6eda5092e8a42019ff",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_khanh_tiet_4-1": {
+      "file_sha256": "1fd9bfa27cb2d4ad64b7fac4f94746bc3c9276503561809c81e5a9ca1ff82246",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_khanh_tiet_4-2": {
+      "file_sha256": "ff970ac5b79403a0e0d5616c662a087db0cc1d56152fe06975e0a059ce4cca64",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_1-0": {
+      "file_sha256": "e18ca00fabdafcf24d623c596582482b53024a66875d2c79d50300cc09937b82",
+      "label": "cabinet",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_noi_cac_1-1": {
+      "file_sha256": "61b73219fe122e3f3127351b8e9a4807854b5af6fea6409780f80834eef99836",
+      "label": "cabinet",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_noi_cac_1-2": {
+      "file_sha256": "cad79151c47b95ad227c22dbad9fef115a926bfe189f9a668ba07b4b58188ea1",
+      "label": "cabinet",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_noi_cac_2-0": {
+      "file_sha256": "c444660dde0dd0e9afa395bb85ca2fd129313bb50d9cd520cc0fad9fb6224760",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_2-1": {
+      "file_sha256": "8216d2f1151258123c0de1b0d0f6fd8f431aafbb2747fcca2694123937d5fbfd",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_2-2": {
+      "file_sha256": "00f3733a204255c1241f6abab8b660a9aaeef1991dcd13deffeb3f3e37fcd99d",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_3-0": {
+      "file_sha256": "b8a2f1acc2e142ad81a787cb3cd8c951384e6230330cb1f548457f6afd94ff7b",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_3-1": {
+      "file_sha256": "e1f113d768bf04dd9b0b2274995414e47b79cd10a3e8eee0ca3cb38e61c9fea7",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_3-2": {
+      "file_sha256": "61cc6b06868fce6cd9aef2ad05e4f5c612d635eb04ae1e34afce6ba3d9a68678",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_4-0": {
+      "file_sha256": "47909f25c62983e1d28c0ed8137778b8fb87d7baff2bd702c03fba92510ff96c",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_4-1": {
+      "file_sha256": "46c9424f8bc9cb47b4b90f77197ee0e81703b32f3966f74da6221525e45f8ded",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-01_phong_noi_cac_4-2": {
+      "file_sha256": "16eac6a97badcb20a4d4eebc6fa79570d364e92af9c81d6fca383b5ca16e93c7",
+      "label": null,
+      "reason": "Insufficient or ambiguous checkpoint features"
+    },
+    "tour-03_phong_giai_tri_1-0": {
+      "file_sha256": "d55332d0fc7e0828f95ac10f324a3e5d2b66b2078d02235e03c3aa5f6225f15b",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-03_phong_giai_tri_1-1": {
+      "file_sha256": "496ec9aa20867ed3439b8924749e9a39b0aee351b7e2c2fa528ca8ec3969b27c",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-03_phong_giai_tri_1-2": {
+      "file_sha256": "54f806d1dc025fe3712df990a98c7a338715af1c59f8be6c8f233b9a88bb4897",
+      "label": "other",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_mat_tien_dinh_1-0": {
+      "file_sha256": "66b8b793d813a95de43344707f8ec5114e2c7f6b70bf123520a098a10a3d10c2",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_mat_tien_dinh_1-1": {
+      "file_sha256": "7da32d84493df355e1d0b64b8a7c86b5388626a50a570a1e1b9d43e3e417a0ea",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_mat_tien_dinh_1-2": {
+      "file_sha256": "4b4312c4620534b80182ec65c4cd55e577899caf5fda0f60159c2b1e8e934a46",
+      "label": "facade",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_5-0": {
+      "file_sha256": "b1e21d6c2970b3d1e51b03f87fbe93863741d08292f04275009964273403c834",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_5-1": {
+      "file_sha256": "efaf2e551e192a2a217720ea379a359f67dca099184189b2870035614cc9970d",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    },
+    "tour-01_phong_khanh_tiet_5-2": {
+      "file_sha256": "669d9077ef90ef87ff525e0720d43a75af78d8e6b788f9f4fb0efd315d7e5309",
+      "label": "reception",
+      "reason": "Distinctive scene features visible"
+    }
+  }
+}

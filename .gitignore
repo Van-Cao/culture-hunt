@@ -2,6 +2,12 @@
 
 # dependencies
 /node_modules
+/.venv-yolo/
+/runs/
+/yolo26s-cls.pt
+/datasets/
+/output/yolo/
+__pycache__/
 /.pnp
 .pnp.*
 .yarn/*

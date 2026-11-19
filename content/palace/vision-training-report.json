@@ -1,0 +1,211 @@
+{
+  "weights": "output\\yolo\\palace-v1-top1\\weights\\best.pt",
+  "counts": {
+    "train": {
+      "cabinet": 7,
+      "reception": 3,
+      "other": 20,
+      "rooftop": 13,
+      "bunker": 1,
+      "facade": 7
+    },
+    "val": {
+      "other": 4,
+      "reception": 1,
+      "cabinet": 3,
+      "facade": 1,
+      "bunker": 1,
+      "rooftop": 4
+    }
+  },
+  "dataset_fingerprint": "6a26da9efb8a",
+  "validation_correct": 12,
+  "validation_count": 14,
+  "validation_accuracy": 0.8571428571428571,
+  "macro_f1": 0.6333333333333333,
+  "per_class": {
+    "bunker": {
+      "support": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "cabinet": {
+      "support": 3,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "facade": {
+      "support": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "other": {
+      "support": 4,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "reception": {
+      "support": 1,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "rooftop": {
+      "support": 4,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8
+    }
+  },
+  "confusion_matrix": {
+    "bunker": {
+      "bunker": 0,
+      "cabinet": 0,
+      "facade": 0,
+      "other": 0,
+      "reception": 0,
+      "rooftop": 1
+    },
+    "cabinet": {
+      "bunker": 0,
+      "cabinet": 3,
+      "facade": 0,
+      "other": 0,
+      "reception": 0,
+      "rooftop": 0
+    },
+    "facade": {
+      "bunker": 0,
+      "cabinet": 0,
+      "facade": 0,
+      "other": 0,
+      "reception": 0,
+      "rooftop": 1
+    },
+    "other": {
+      "bunker": 0,
+      "cabinet": 0,
+      "facade": 0,
+      "other": 4,
+      "reception": 0,
+      "rooftop": 0
+    },
+    "reception": {
+      "bunker": 0,
+      "cabinet": 0,
+      "facade": 0,
+      "other": 0,
+      "reception": 1,
+      "rooftop": 0
+    },
+    "rooftop": {
+      "bunker": 0,
+      "cabinet": 0,
+      "facade": 0,
+      "other": 0,
+      "reception": 0,
+      "rooftop": 4
+    }
+  },
+  "predictions": [
+    {
+      "id": "commons-147770377",
+      "expected": "other",
+      "predicted": "other",
+      "confidence": 0.9538806080818176
+    },
+    {
+      "id": "commons-147770386",
+      "expected": "reception",
+      "predicted": "reception",
+      "confidence": 0.9997960925102234
+    },
+    {
+      "id": "commons-30078167",
+      "expected": "other",
+      "predicted": "other",
+      "confidence": 0.9996634721755981
+    },
+    {
+      "id": "commons-30078179",
+      "expected": "cabinet",
+      "predicted": "cabinet",
+      "confidence": 0.9983469247817993
+    },
+    {
+      "id": "commons-30078190",
+      "expected": "other",
+      "predicted": "other",
+      "confidence": 0.5568428635597229
+    },
+    {
+      "id": "commons-30078235",
+      "expected": "cabinet",
+      "predicted": "cabinet",
+      "confidence": 0.9999432563781738
+    },
+    {
+      "id": "commons-30078237",
+      "expected": "cabinet",
+      "predicted": "cabinet",
+      "confidence": 0.9993095397949219
+    },
+    {
+      "id": "commons-3905258",
+      "expected": "facade",
+      "predicted": "rooftop",
+      "confidence": 0.5092400908470154
+    },
+    {
+      "id": "commons-65466098",
+      "expected": "bunker",
+      "predicted": "rooftop",
+      "confidence": 0.6961891055107117
+    },
+    {
+      "id": "commons-98861096",
+      "expected": "other",
+      "predicted": "other",
+      "confidence": 0.952596127986908
+    },
+    {
+      "id": "commons-98861100",
+      "expected": "rooftop",
+      "predicted": "rooftop",
+      "confidence": 0.9994943141937256
+    },
+    {
+      "id": "commons-98861103",
+      "expected": "rooftop",
+      "predicted": "rooftop",
+      "confidence": 0.999966025352478
+    },
+    {
+      "id": "commons-98861113",
+      "expected": "rooftop",
+      "predicted": "rooftop",
+      "confidence": 0.9999270439147949
+    },
+    {
+      "id": "commons-98861115",
+      "expected": "rooftop",
+      "predicted": "rooftop",
+      "confidence": 0.9999806880950928
+    }
+  ],
+  "preprocessing": "RGB, resize entire image to 320x320, tensor [0,1]; no crop",
+  "independent_test_set": false,
+  "limitations": "Tiny validation set used for epoch selection; no real-world accuracy claim or calibrated rejection threshold. Do not enable checkpoint unlocks yet.",
+  "model_sha256": "e3fc3c30c3f9f876a4cf38460422de4f9e6f5bb7b080f1c104f32e4fac0b524c",
+  "environment": {
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "ultralytics": "8.4.215"
+  },
+  "selection_metric": "validation top-1 accuracy",
+  "seed": 2026
+}
