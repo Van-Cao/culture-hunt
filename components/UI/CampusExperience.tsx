@@ -37,7 +37,7 @@ export default function CampusExperience({
         chapter="CHAPTER 02 / THE UNIVERSITY OF SCIENCE"
         edition="02"
         title={<>{t("Khám phá ", "Discover ")}<em>{place.shortName}.</em></>}
-        description={t("Ba điểm dừng. Một chuyến đi theo dấu tri thức.", "Three stops. One journey following the trail of knowledge.")}
+        description={t(`${total} điểm dừng tại cơ sở Nguyễn Văn Cừ. Một chuyến đi theo dấu tri thức.`, `${total} stops at the Nguyen Van Cu campus. One journey following the trail of knowledge.`)}
       >
         <span><Flag size={16} /><strong>{completed}<small>/{total}</small></strong>{t("đã khai mở", "uncovered")}</span>
         <span><Zap size={16} /><strong>{completed * 150}</strong>XP</span>
@@ -71,7 +71,7 @@ export default function CampusExperience({
                 const locked = index > completed;
                 const isDone = index < completed;
                 return (
-                  <button key={item.title} disabled={locked} aria-pressed={selected === index} onClick={() => setPicked(index)} className={`campus-journey-stop ${isDone ? "is-complete" : ""} ${locked ? "is-locked" : ""}`}>
+                  <button key={item.id ?? item.title} disabled={locked} aria-pressed={selected === index} onClick={() => setPicked(index)} className={`campus-journey-stop ${isDone ? "is-complete" : ""} ${locked ? "is-locked" : ""}`}>
                     <span className="campus-stop-number">{isDone ? <Check size={24} /> : locked ? <LockKeyhole size={22} /> : String(index + 1).padStart(2, "0")}</span>
                     <strong>{item.title}</strong>
                     <small>{isDone ? t("Đã khai mở", "Uncovered") : locked ? t("Chưa mở khóa", "Locked") : t("Sẵn sàng khám phá", "Ready to explore")}</small>
@@ -85,7 +85,7 @@ export default function CampusExperience({
             <p><strong>{allComplete ? t("Hành trình trọn vẹn!", "Journey complete!") : t("Mỗi khám phá, một dấu ấn.", "Every discovery leaves a mark.")}</strong>{allComplete ? place.badge : t("Theo những điểm dừng để mở câu chuyện của trường.", "Follow the stops to uncover the university’s story.")}</p>
             <button onClick={() => allComplete ? onAchievement() : onOpenMission(completed)}>{allComplete ? t("Dấu ấn", "Reward") : t("Tiếp tục", "Continue")}<ArrowRight size={15} /></button>
           </div>
-          <p className="palace-map-disclaimer">{t("Sơ đồ minh họa ba chặng câu chuyện, không phải vị trí phòng trong trường.", "The map illustrates three story chapters, rather than physical room locations.")}</p>
+          <p className="palace-map-disclaimer">{t("Sơ đồ hành trình tại cơ sở Nguyễn Văn Cừ; không dùng để chỉ đường trong khuôn viên.", "Journey diagram for the Nguyen Van Cu campus; not a campus navigation map.")}</p>
         </div>
 
         <aside className="palace-quest-panel">
@@ -113,7 +113,7 @@ export default function CampusExperience({
       </div>
       <div className="campus-reward">
         <Trophy size={30} />
-        <div><span className="palace-overline">{t("PHẦN THƯỞNG ĐÍCH ĐẾN", "DESTINATION REWARD")}</span><h3>{place.badge}</h3><p>{allComplete ? t("Bạn đã chinh phục hành trình này!", "You conquered this journey!") : t("Hoàn thành đủ 3 thử thách để mở khóa.", "Complete all 3 challenges to unlock.")}</p></div>
+        <div><span className="palace-overline">{t("PHẦN THƯỞNG ĐÍCH ĐẾN", "DESTINATION REWARD")}</span><h3>{place.badge}</h3><p>{allComplete ? t("Bạn đã chinh phục hành trình này!", "You conquered this journey!") : t(`Hoàn thành đủ ${total} thử thách để mở khóa.`, `Complete all ${total} challenges to unlock.`)}</p></div>
         {allComplete && <button className="icon-button" onClick={onAchievement} aria-label={t("Chia sẻ thành tích", "Share achievement")}><Share2 size={18} /></button>}
       </div>
     </section>

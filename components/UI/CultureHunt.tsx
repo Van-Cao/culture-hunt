@@ -49,6 +49,7 @@ import CampusExperience from "./CampusExperience";
 import PalaceExperience from "@/components/palace/PalaceExperience";
 import { usePalaceJourney } from "@/components/palace/usePalaceJourney";
 import CollectionAtlas from "@/components/atlas/CollectionAtlas";
+import { HCMUS_PROGRESS_STORAGE_KEY, readHcmusProgress } from "@/lib/hcmus/progress";
 import "./game.css";
 
 type View = "home" | "journeys" | "scan" | "collection";
@@ -301,17 +302,8 @@ function Game({
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(
-        localStorage.getItem("culture-hunt-progress-v1") || "null",
-      );
-      if (
-        stored &&
-        [stored.palace, stored.hcmus].every(
-          (n: unknown) =>
-            typeof n === "number" && Number.isInteger(n) && n >= 0 && n <= 3,
-        )
-      )
-        queueMicrotask(() => setProgress({ palace: 0, hcmus: stored.hcmus }));
+      const hcmus = readHcmusProgress(localStorage.getItem(HCMUS_PROGRESS_STORAGE_KEY));
+      queueMicrotask(() => setProgress({ palace: 0, hcmus }));
       const favorites = JSON.parse(
         localStorage.getItem("culture-hunt-saved-v1") || "[]",
       );
@@ -407,7 +399,7 @@ function Game({
         [placeId]: Math.min(place.missions.length, activeMission + 1),
       };
       try {
-        localStorage.setItem("culture-hunt-progress-v1", JSON.stringify(next));
+        localStorage.setItem(HCMUS_PROGRESS_STORAGE_KEY, JSON.stringify(next.hcmus));
       } catch {
         /* Keep session progress. */
       }
@@ -1043,8 +1035,8 @@ function Game({
                     Icon: Trophy,
                     title: t("Giải mã & nhận thưởng", "Decode & earn"),
                     text: t(
-                      "Mỗi quiz đúng nhận 150 XP. Hoàn thành đủ 3 để mở huy hiệu địa điểm và chia sẻ thành tích.",
-                      "The Palace has five checkpoints: identify a photo, discover its story, and answer a quiz. Complete the trail to earn a badge and save your discovery atlas.",
+                      "Mỗi thử thách hoàn thành nhận 150 XP. Hoàn thành đủ các checkpoint của địa điểm để mở huy hiệu và chia sẻ thành tích.",
+                      "Each completed challenge earns 150 XP. Complete every checkpoint at a destination to unlock its badge and share your achievements.",
                     ),
                   },
                 ].map(({ Icon, title, text }, index) => (
@@ -1117,7 +1109,7 @@ function Game({
                         "You did more than visit. You brought back stories.",
                       )
                     : t(
-                        "Hoàn thành cả 3 thử thách để mở huy hiệu địa điểm nhé.",
+                        "Hoàn thành tất cả checkpoint để mở huy hiệu địa điểm nhé.",
                         "Complete every checkpoint to unlock this destination's badge.",
                       )}
                 </p>
