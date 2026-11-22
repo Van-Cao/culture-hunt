@@ -60,6 +60,22 @@ def load_data(config):
 
 
 def prepare(root, rows):
+    if any("split" in row for row in rows):
+        if any(row.get("split") not in {"train", "val", "test"} for row in rows):
+            raise ValueError("Every reviewed row must specify train, val or test when using a fixed split")
+        group_splits = {}
+        for row in rows:
+            existing = group_splits.setdefault(row["split_group"], row["split"])
+            if existing != row["split"]:
+                raise ValueError("A photographer/session group cannot cross dataset splits")
+        classes = {row["label"] for row in rows}
+        splits = {row["split"] for row in rows}
+        if not {"train", "val"} <= splits:
+            raise ValueError("Fixed splits need train and validation data")
+        for split in splits:
+            if {row["label"] for row in rows if row["split"] == split} != classes:
+                raise ValueError(f"Every class needs coverage in the {split} split")
+        return materialize(root, rows)
     groups = sorted({r["split_group"] for r in rows})
     counts = Counter(r["label"] for r in rows)
     rng, best = random.Random(2026), None
@@ -74,6 +90,10 @@ def prepare(root, rows):
     if best is None:
         raise ValueError("Cannot split source groups without losing a class; collect more independent sessions")
     rows = [dict(r, split="val" if r["split_group"] in best[1] else "train") for r in rows]
+    return materialize(root, rows)
+
+
+def materialize(root, rows):
     fingerprint = hashlib.sha256(json.dumps([(r["id"], r["label"], r["pixel_sha256"], r["split"]) for r in rows]).encode()).hexdigest()[:12]
     folder = root / ("training-" + fingerprint)
     for row in rows:
@@ -82,8 +102,12 @@ def prepare(root, rows):
         if not target.exists():
             with Image.open(root / row["local_path"]) as original:
                 ImageOps.exif_transpose(original).convert("RGB").save(target, quality=95)
-    manifest = dict(fingerprint=fingerprint, records=rows, independent_test_set=False,
-                    note="Train/validation only; collect a separate source-disjoint test before claiming accuracy.")
+    has_test = any(row["split"] == "test" for row in rows)
+    manifest = dict(fingerprint=fingerprint, records=rows, independent_test_set=has_test,
+                    counts={split: dict(Counter(row["label"] for row in rows if row["split"] == split))
+                            for split in ("train", "val", "test")},
+                    note="Source-disjoint web data. Test is held out from training/epoch selection; this is not a field evaluation."
+                    if has_test else "Train/validation only; collect a separate source-disjoint test before claiming accuracy.")
     (folder / "split-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return folder
 
@@ -93,6 +117,7 @@ def main():
     parser.add_argument("--check-data", action="store_true")
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--epochs", type=int, default=60)
+    parser.add_argument("--name", default="hcmus-v1")
     args = parser.parse_args()
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     try:
@@ -119,9 +144,9 @@ def main():
     model = YOLO(str(ROOT / config["baseModel"]))
     model.train(trainer=shared.FullImageTrainer, data=str(folder), device=0, epochs=args.epochs,
                 patience=20, imgsz=config["imageSize"], batch=8, workers=0,
-                optimizer="AdamW", lr0=0.001, cls_pw=0.5, freeze=8, dropout=0.2,
+                optimizer="AdamW", lr0=0.0003, warmup_epochs=0, cls_pw=0.5, freeze=0, dropout=0.2,
                 seed=2026, deterministic=True, amp=False,
-                project=str(ROOT / config["outputDirectory"]), name="hcmus-v1")
+                project=str(ROOT / config["outputDirectory"]), name=args.name)
     print("HCMUS model:", model.trainer.best, flush=True)
     print("Evaluate on independent HCMUS photos before enabling recognition.", flush=True)
 

@@ -1,0 +1,56 @@
+{
+  "sources": [
+    {
+      "id": "O59Cr6vZD0Y",
+      "webpage_url": "https://www.youtube.com/watch?v=O59Cr6vZD0Y",
+      "title": "Khám Phá Trường Đại Học Khoa Học Tự Nhiên ( HCMUS ) Cơ Sở 1",
+      "uploader": "Trung Hiếu Võ",
+      "upload_date": "20230428",
+      "duration": 880
+    },
+    {
+      "id": "OPKa7SUlOYc",
+      "webpage_url": "https://www.youtube.com/watch?v=OPKa7SUlOYc",
+      "title": "[HCMUS] GIỚI THIỆU TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN, ĐHQG-HCM",
+      "uploader": "Thông Tin Truyền Thông - ĐH KHTN, ĐHQG - HCM",
+      "upload_date": "20230410",
+      "duration": 433
+    },
+    {
+      "id": "5kqDpBh0XNg",
+      "webpage_url": "https://www.youtube.com/watch?v=5kqDpBh0XNg",
+      "title": "Trường ĐH Khoa học Tự nhiên TP. HCM, cơ sở Nguyễn Văn Cừ, Q5",
+      "uploader": "Du Uyeen Channel",
+      "upload_date": "20220803",
+      "duration": 353
+    },
+    {
+      "id": "LRT97Flrcww",
+      "webpage_url": "https://www.youtube.com/watch?v=LRT97Flrcww",
+      "title": "#Uni32| ĐẠI HỌC KHOA HỌC TỰ NHIÊN || KHÁM PHÁ || cơ sở NGUYỄN VĂN CỪ, quận 5, tphcm",
+      "uploader": "Tu family vlog",
+      "upload_date": "20200602",
+      "duration": 558
+    },
+    {
+      "id": "a5lRaVjg5WU",
+      "webpage_url": "https://www.youtube.com/watch?v=a5lRaVjg5WU",
+      "title": "Ngao du ĐH Khoa học Tự nhiên | Khám phá \"nội thất\" cơ sở Nguyễn Văn Cừ",
+      "uploader": "Cuộc sống cầu vồng của Khôi Mai",
+      "upload_date": "20210506",
+      "duration": 550
+    },
+    {
+      "id": "Zrlmfq6aIhw",
+      "webpage_url": "https://www.youtube.com/watch?v=Zrlmfq6aIhw",
+      "title": "[TVTS] Trường Đại học Khoa học tự nhiên, ĐHQG-HCM",
+      "uploader": "VNUHCM-University of Science",
+      "upload_date": "20250603",
+      "duration": 74
+    }
+  ],
+  "notes": [
+    "Public videos manually reviewed by timestamp; one complete video is one split group.",
+    "OPKa7SUlOYc and Zrlmfq6aIhw include the other campus and are used only for reviewed negative frames."
+  ]
+}

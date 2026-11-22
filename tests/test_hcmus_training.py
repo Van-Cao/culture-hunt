@@ -67,6 +67,29 @@ class DatasetTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stay inside"):
             training.load_data(self.config)
 
+    def test_fixed_split_cannot_put_frames_from_one_video_on_both_sides(self):
+        self.write()
+        root, rows, _ = training.load_data(self.config)
+        for row in rows:
+            row["split"] = "train" if row["split_group"] == "session-0" else "val"
+        rows[0]["split"] = "val"
+        with self.assertRaisesRegex(ValueError, "cannot cross dataset splits"):
+            training.prepare(root, rows)
+
+    def test_fixed_holdout_is_preserved_and_requires_every_class(self):
+        self.write()
+        root, rows, _ = training.load_data(self.config)
+        for row in rows:
+            row["split"] = "train" if row["split_group"] == "session-0" else "val"
+        holdout = [dict(row, id=row["id"]+"-heldout", split="test", split_group="session-test")
+                   for row in rows if row["split"] == "val"]
+        folder = training.prepare(root, rows+holdout)
+        saved = json.loads((folder / "split-manifest.json").read_text(encoding="utf-8"))
+        self.assertTrue(saved["independent_test_set"])
+        self.assertEqual(saved["counts"]["test"], {"building-a": 1, "building-b": 1, "other": 1})
+        with self.assertRaisesRegex(ValueError, "Every class needs coverage"):
+            training.prepare(root, rows+holdout[:-1])
+
 
 if __name__ == "__main__":
     unittest.main()

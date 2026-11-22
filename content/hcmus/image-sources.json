@@ -30,11 +30,51 @@
       "url": "https://hcmus.edu.vn/hcmus-don-chao-sinh-vien-khoa-2025-nhap-hoc/",
       "candidateCheckpoint": null,
       "note": "Nguyen Van Cu campus candidates; enrolment activities can span multiple buildings."
+    },
+    {
+      "id": "nobel-2023",
+      "url": "https://hcmus.edu.vn/giao-su-nobel-hoa-hoc-thuyet-giang-tai-truong-dh-khoa-hoc-tu-nhien/",
+      "candidateCheckpoint": "lecture-hall-1",
+      "note": "Official article explicitly identifies Lecture Hall 1 at Nguyen Van Cu; review individual images."
+    },
+    {
+      "id": "graduation-2018",
+      "url": "https://hcmus.edu.vn/truong-dh-khtn-dhqg-hcm-1318-sinh-vien-nhan-bang-tot-nghiep-cu-nhan-khoa-hoc/",
+      "candidateCheckpoint": "lecture-hall-1",
+      "note": "Official graduation held at Lecture Hall 1; exclude close-ups and unrelated sidebar images."
+    },
+    {
+      "id": "library-nvc",
+      "url": "https://glib.hcmus.edu.vn/introduction/physical_space",
+      "candidateCheckpoint": "building-i",
+      "note": "Only the nine Nguyen Van Cu library photographs. Official library introduction locates this campus library on floors 9/10 of Building I.",
+      "imageUrls": [
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/Circulation-CSVC.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/Circulation-CSVC-Khosach.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/Circulation-CSVC-Sachmoi.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/thamkhao-CSVC.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/thamkhao-CSVC-Khosach.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/thamkhao-CSVC-khuvucLuanVan.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/learningcommons-CSVC.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/learningcommons-CSVC-maytinh.jpg",
+        "https://glib.hcmus.edu.vn/sites/default/files/inline-images/learningcommons-CSVC-phonghocnhom.jpg"
+      ]
+    },
+    {
+      "id": "alumni-piano",
+      "url": "https://alumniday.hcmus.edu.vn/news/mot-thanh-am-dep-cho-hanh-trinh-tiep-noi",
+      "candidateCheckpoint": "building-i",
+      "note": "Article explicitly locates piano at Building I entrance. Review photograph before use.",
+      "imageUrls": [
+        "https://vcystvqnqlquncjkhfqk.supabase.co/storage/v1/object/public/cm89y9q4b00023sx71w2h102c/Users/50602_imagejpeg"
+      ],
+      "allowedImageHosts": [
+        "vcystvqnqlquncjkhfqk.supabase.co"
+      ]
     }
   ],
   "notes": [
-    "These are discovery sources, not reviewed training labels.",
-    "Review found two Building A facade photos with a visible A; Building B coverage is still missing.",
-    "Source attribution is retained; no open reuse license is inferred from public website access."
+    "Discovery hints are not training labels. Reviewed photos and video timestamps are recorded separately.",
+    "Public source/author metadata is retained; no open reuse license is inferred from website access."
   ]
 }
