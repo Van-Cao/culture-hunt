@@ -1,6 +1,7 @@
 import type { Locale } from "@/components/UI/LanguageProvider";
 import { getPlaces, type Place } from "@/components/UI/game-data";
 import { getCheckpoints } from "@/lib/palace/checkpoints";
+import { getHcmusCheckpoints } from "@/lib/hcmus/checkpoints";
 import type { PalaceState } from "@/lib/palace/types";
 
 export type DestinationId = Place["id"];
@@ -22,7 +23,7 @@ export function atlasDestinations(locale: Locale, palace: PalaceState | null, un
       const visits = (palace?.runs || []).flatMap(run => run.visits[cp.id]?.completedAt ? [run.visits[cp.id]!] : []).sort((a, b) => a.completedAt!.localeCompare(b.completedAt!));
       const first = visits[0];
       return { id: cp.id, title: cp.name, story: cp.mission.story, photo: cp.photo, done: palace?.discovered.includes(cp.id) || false, at: first?.completedAt || undefined, method: first?.mode };
-    }) : place.missions.map((m, i) => ({ id: `chapter-${i + 1}`, title: m.title, story: m.story, photo: place.coverImage, done: i < Math.max(0, Math.min(place.missions.length, universityProgress)) }));
+    }) : getHcmusCheckpoints(locale).map((cp, i) => ({ id: cp.id, title: cp.name, story: cp.mission.story, photo: cp.photo, done: i < Math.max(0, Math.min(place.missions.length, universityProgress)) }));
     const completed = stops.filter(s => s.done).length;
     return { id: location.id, title: place.name, shortTitle: place.shortName, subtitle: locale === "vi" ? location.id === "palace" ? "Kiến trúc · Lịch sử · Ký ức" : "Tri thức · Cội nguồn · Khám phá" : location.id === "palace" ? "Architecture · History · Memory" : "Science · Origins · Discovery", address: place.address, coordinates: location.coordinates, photo: place.coverImage, completed, total: stops.length, xp: completed * 150, stops, at: stops.flatMap(s => s.at ? [s.at] : []).sort().at(-1) };
   });

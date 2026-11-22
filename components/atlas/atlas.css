@@ -174,4 +174,7 @@
 }
 @media (max-width: 350px) { .atlas-experience .atlas-tabs button { padding-inline: 5px; font-size: 9px; }.atlas-passport-stamp { display: none; }.atlas-destination-card { grid-template-columns: 90px minmax(0, 1fr); }.atlas-summary > span { font-size: 8px; }.atlas-city-map-heading > span:last-child { font-size: 5px; } }
 @media (max-width: 350px) { .atlas-experience .atlas-map-marker { --landmark-width: 140px; --landmark-height: 108px; }.atlas-map-halo { width: 101px; top: 65px; left: 20px; } }
+.atlas-campus-checkpoints { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 12px; padding: 0 20px 25px; }
+.atlas-experience .atlas-campus-checkpoints .atlas-campus-node { position: relative; width: 100%; transform: none; min-width: 0; }
+@media (max-width: 600px) { .atlas-campus-checkpoints { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 8px; padding-inline: 12px; } }
 @media (prefers-reduced-motion: reduce) { .atlas-experience *, .atlas-share-editor * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
