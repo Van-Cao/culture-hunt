@@ -1,8 +1,8 @@
 import { hcmusCheckpointIds } from "./checkpoints";
 
-// New catalog: do not treat completion of the old three story chapters as visits
-// to buildings. The old storage entry is retained but never mapped to new stops.
-export const HCMUS_PROGRESS_STORAGE_KEY = "culture-hunt-hcmus-checkpoints-v1";
+// The four-stop catalog changes the order of visits. Retain older storage entries
+// without mapping seven-stop or three-story progress onto this new journey.
+export const HCMUS_PROGRESS_STORAGE_KEY = "culture-hunt-hcmus-checkpoints-v2";
 
 export function readHcmusProgress(serialized: string | null): number {
   try {

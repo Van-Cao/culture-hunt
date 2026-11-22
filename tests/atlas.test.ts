@@ -25,7 +25,7 @@ test("badges follow completion requirements and avoid inventing dates for legacy
   const partial = atlasBadges(atlasDestinations("vi", fixture(2), 1), "vi");
   assert.deepEqual(partial.map(b => b.earned), [true, false, false, false]);
   assert.equal(partial[0].at, undefined);
-  const full = atlasBadges(atlasDestinations("en", fixture(5), 7), "en");
+  const full = atlasBadges(atlasDestinations("en", fixture(5), 4), "en");
   assert.ok(full.every(b => b.earned));
   assert.equal(full.find(b => b.id === "hcmus-explorer")!.at, undefined);
   assert.equal(full.find(b => b.id === "saigon-connected")!.at, undefined);
@@ -38,7 +38,7 @@ test("empty passports and clamped legacy progress produce honest share totals in
     assert.equal(empty.reduce((sum, d) => sum + d.completed, 0), 0);
     assert.ok(atlasBadges(empty, locale).every(b => !b.earned));
     const destinations = atlasDestinations(locale, fixture(5), 99);
-    assert.equal(destinations[1].completed, 7);
+    assert.equal(destinations[1].completed, 4);
     assert.deepEqual(destinationShare(destinations[0]), { kind: "destination", title: destinations[0].shortTitle, subtitle: destinations[0].subtitle, completed: 5, total: 5, xp: 750, destinationId: "palace", at: "2026-11-01T10:14:00Z" });
   }
 });

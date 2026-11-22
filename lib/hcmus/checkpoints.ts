@@ -2,21 +2,17 @@ import type { Locale } from "@/components/UI/LanguageProvider";
 import type { Mission } from "@/components/UI/game-data";
 
 export const hcmusCheckpointIds = [
-  "building-i", "building-b", "building-c", "building-e",
-  "building-f", "building-a", "lecture-hall-1",
+  "lecture-hall-1", "building-i", "building-a", "building-b",
 ] as const;
 export type HcmusCheckpointId = (typeof hcmusCheckpointIds)[number];
 
 export const HCMUS_CAMPUS_ADDRESS = "227 Nguyễn Văn Cừ, TP. HCM";
 
 const catalog = [
-  { id: "building-i", vi: "Tòa I", en: "Building I", mark: "I" },
-  { id: "building-b", vi: "Tòa B", en: "Building B", mark: "B" },
-  { id: "building-c", vi: "Tòa C", en: "Building C", mark: "C" },
-  { id: "building-e", vi: "Tòa E", en: "Building E", mark: "E" },
-  { id: "building-f", vi: "Tòa F", en: "Building F", mark: "F" },
-  { id: "building-a", vi: "Tòa A", en: "Building A", mark: "A" },
   { id: "lecture-hall-1", vi: "Giảng đường 1", en: "Lecture Hall 1", mark: "1" },
+  { id: "building-i", vi: "Tòa I", en: "Building I", mark: "I" },
+  { id: "building-a", vi: "Tòa A", en: "Building A", mark: "A" },
+  { id: "building-b", vi: "Tòa B", en: "Building B", mark: "B" },
 ] as const satisfies readonly { id: HcmusCheckpointId; vi: string; en: string; mark: string }[];
 
 // These are named destinations, not surveyed building coordinates. Until verified
