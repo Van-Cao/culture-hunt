@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "destinationId": "hcmus",
+  "campusId": "nguyen-van-cu",
+  "campusAddress": "227 Nguyễn Văn Cừ, TP. HCM",
+  "status": "awaiting_dataset",
+  "task": "classify",
+  "baseModel": "yolo26s-cls.pt",
+  "imageSize": 320,
+  "datasetDirectory": "datasets/hcmus-nguyen-van-cu",
+  "outputDirectory": "output/yolo/hcmus-nguyen-van-cu",
+  "checkpoints": [
+    { "id": "lecture-hall-1", "name": "Giảng đường 1" },
+    { "id": "building-i", "name": "Tòa I" },
+    { "id": "building-a", "name": "Tòa A" },
+    { "id": "building-b", "name": "Tòa B" }
+  ],
+  "backgroundClass": "other",
+  "notes": [
+    "Building I uses the letter I; Lecture Hall 1 uses the numeral 1.",
+    "Do not use the shared campus overview image as four differently labelled training images.",
+    "Collect reviewed photos of this specific campus and group by photographer/session before splitting.",
+    "No HCMUS trained model is currently available or enabled in gameplay. Palace uses a separate model."
+  ]
+}
