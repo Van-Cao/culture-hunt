@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import stories from "../content/palace/stories.json";
-import manifest from "../public/audio/palace/manifest.json";
+import stories from "../content/palace/stories-v3.json";
+import manifest from "../public/audio/palace-learning/manifest.json";
 import { checkpointIds } from "../lib/palace/checkpoints";
 
 test("all ten published narrations match the bilingual scripts and contain real audio assets", () => {

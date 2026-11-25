@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { CheckpointId } from "@/lib/palace/checkpoints";
 import type { PalaceState, RecognitionResult } from "@/lib/palace/types";
-import type { ChallengeMove } from "@/lib/palace/challenges";
+import type { QuestionAnswer } from "@/lib/palace/question-types";
 
 async function json<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, { cache: "no-store", ...options });
@@ -78,7 +78,7 @@ export function usePalaceJourney() {
       ),
     );
   }
-  function answer(runId: string, checkpointId: CheckpointId, answer: number, questionId: string) {
+  function answer(runId: string, checkpointId: CheckpointId, answer: QuestionAnswer, questionId: string) {
     return run(() =>
       json<{ state: PalaceState; correct: boolean }>("/api/palace", {
         method: "POST",
@@ -87,18 +87,7 @@ export function usePalaceJourney() {
       }),
     );
   }
-  function startChallenge(runId: string, checkpointId: CheckpointId) {
-    return run(() => json<{ state: PalaceState }>("/api/palace", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "challenge-start", runId, checkpointId }),
-    }));
-  }
-  function moveChallenge(runId: string, checkpointId: CheckpointId, version: string, move: ChallengeMove) {
-    return run(() => json<{ state: PalaceState; accepted: boolean; solved: boolean }>("/api/palace", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "challenge-move", runId, checkpointId, version, move }),
-    }));
-  }
-  return { state, busy, error, reload, start, recognize, answer, startChallenge, moveChallenge };
+  return { state, busy, error, reload, start, recognize, answer };
 }
+
 export type PalaceGame = ReturnType<typeof usePalaceJourney>;

@@ -4,18 +4,20 @@ import Image from "next/image";
 import { ArrowRight, AudioLines, BookOpen, Check, ExternalLink, Headphones, Pause, Play, RotateCcw, Trophy, Volume2 } from "lucide-react";
 import { useLanguage, type Locale } from "@/components/UI/LanguageProvider";
 import { getCheckpoints, type CheckpointId } from "@/lib/palace/checkpoints";
-import stories from "@/content/palace/stories.json";
-import manifest from "@/public/audio/palace/manifest.json";
+import stories from "@/content/palace/stories-v3.json";
+import manifest from "@/public/audio/palace-learning/manifest.json";
+import { learningChapters } from "@/lib/palace/learning-content";
 import "./minigames.css";
 
 type Track = { src: string; voice: string; duration: number; provider?: string };
 const tracks = manifest.tracks as Record<string, Partial<Record<Locale, Track>>>;
 const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 
-export default function CheckpointStory({ checkpointId, unlocked, sound, onContinue, onBonus, bonusComplete, reviewing = false, reward = null }: {
+export default function CheckpointStory({ checkpointId, unlocked, sound, onContinue, reviewing = false, reward = null, summary }: {
   checkpointId: CheckpointId; unlocked: boolean; sound: boolean; onContinue: () => void;
-  onBonus?: () => void; bonusComplete: boolean; reviewing?: boolean;
+  reviewing?: boolean;
   reward?: number | null;
+  summary?: { tasks: number; demo: boolean };
 }) {
   const { locale, t, setLocale } = useLanguage();
   const audio = useRef<HTMLAudioElement>(null);
@@ -26,6 +28,7 @@ export default function CheckpointStory({ checkpointId, unlocked, sound, onConti
   const [audioOptIn, setAudioOptIn] = useState(false);
   const story = stories.stories[checkpointId][locale];
   const checkpoint = getCheckpoints(locale).find(cp => cp.id === checkpointId)!;
+  const chapter = learningChapters[checkpointId];
   const track = tracks[checkpointId]?.[locale];
   const google = track?.provider?.startsWith("Google") || track?.voice.startsWith("Google");
   const voiceName = google ? "Google" : track?.voice.includes("Jenny") ? "Jenny" : "HoaiMy";
@@ -39,7 +42,7 @@ export default function CheckpointStory({ checkpointId, unlocked, sound, onConti
     setAudioOptIn(true); setError(false);
     try { await media.play(); } catch { setError(true); setPlaying(false); }
   }
-  if (!unlocked) return <div className="checkpoint-story-locked"><BookOpen size={28} /><h2>{t("Câu chuyện đang chờ được mở", "A story waiting to be unlocked")}</h2><p>{t("Nhận diện địa điểm và hoàn thành mini game để mở câu chuyện này.", "Identify the checkpoint and complete its mini game to unlock this story.")}</p><button className="palace-button" onClick={onContinue}>{t("Quay lại hành trình", "Back to journey")}</button></div>;
+  if (!unlocked) return <div className="checkpoint-story-locked"><BookOpen size={28} /><h2>{t("Câu chuyện đang chờ được mở", "A story waiting to be unlocked")}</h2><p>{t("Nhận diện địa điểm và hoàn thành quiz để mở câu chuyện này.", "Identify the checkpoint and complete its quiz to unlock this story.")}</p><button className="palace-button" onClick={onContinue}>{t("Quay lại hành trình", "Back to journey")}</button></div>;
   return <section className="checkpoint-story" aria-label={t("Câu chuyện checkpoint đã mở", "Unlocked checkpoint story")}>
     <div className="checkpoint-story-art"><Image src={checkpoint.photo} alt={checkpoint.name} width={1000} height={750} loading="eager" /><span><Check size={13} />{t("ĐÃ MỞ CÂU CHUYỆN", "STORY UNLOCKED")}</span><div><small>{checkpoint.floor}</small><h3>{checkpoint.name}</h3><p>{t("Một nơi đã đi qua. Một câu chuyện ở lại.", "A place discovered. A story to keep.")}</p></div></div>
     <div className="checkpoint-story-copy"><div className="minigame-topline"><span className="minigame-kicker"><Headphones size={14} />{t("LẮNG NGHE DI SẢN", "LISTEN TO HERITAGE")}</span><div className="mission-language" role="group" aria-label={t("Ngôn ngữ câu chuyện", "Story language")}><button aria-pressed={locale === "vi"} onClick={() => setLocale("vi")}>VI</button><button aria-pressed={locale === "en"} onClick={() => setLocale("en")}>EN</button></div></div><h2>{story.title}</h2>
@@ -52,7 +55,13 @@ export default function CheckpointStory({ checkpointId, unlocked, sound, onConti
         {(!track || error) && <p role="status">{t("Audio chưa tải được. Bạn vẫn có thể đọc trọn câu chuyện bên dưới.", "Audio could not load. The complete story is available below.")}</p>}
       </div>
       <p className="checkpoint-story-transcript">{story.text}</p><a className="checkpoint-story-source" href={checkpoint.source} target="_blank" rel="noreferrer">{t("Tư liệu và ảnh: Di tích Dinh Độc Lập", "Source and photograph: Independence Palace")}<ExternalLink size={12} /></a>
-      <div className="checkpoint-story-actions"><button className="palace-button" onClick={onContinue}>{reviewing ? t("Trở lại dấu ấn", "Back to discoveries") : t("Về bản đồ hành trình", "Back to journey map")}<ArrowRight size={16} /></button>{onBonus && <button className="palace-text-button" onClick={onBonus} disabled={bonusComplete}><BookOpen size={14} />{bonusComplete ? t("Đã hoàn thành câu hỏi mở rộng", "Bonus questions completed") : t("Khám phá thêm · Câu hỏi mở rộng", "Explore more · Bonus questions")}</button>}</div>
+      {summary && <section className="learning-completion" aria-label={t("Hành trình đã hoàn thành", "Journey complete")}>
+        <span><Trophy size={18} />{t("DINH ĐỘC LẬP · HÀNH TRÌNH HOÀN THÀNH", "INDEPENDENCE PALACE · JOURNEY COMPLETE")}</span>
+        <h3>{t("Năm không gian, một câu chuyện đã nối", "Five spaces, one connected story")}</h3>
+        <p>5 {t("checkpoint", "checkpoints")} · {summary.tasks} {t("nhiệm vụ đã giải", "tasks completed")}{summary.demo ? t(" · Trải nghiệm demo", " · Demo experience") : ""}</p>
+        <div>{getCheckpoints(locale).map(cp => <article key={cp.id}><Image src={cp.photo} alt="" width={180} height={120} /><strong>{cp.name}</strong><small>{learningChapters[cp.id].title[locale]}</small></article>)}</div>
+      </section>}
+      <div className="checkpoint-story-actions"><p className="checkpoint-story-next">{chapter.next[locale]}</p><button className="palace-button" onClick={onContinue}>{reviewing ? t("Trở lại dấu ấn", "Back to discoveries") : t("Về bản đồ hành trình", "Back to journey map")}<ArrowRight size={16} /></button></div>
     </div>
   </section>;
 }

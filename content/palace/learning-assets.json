@@ -1,0 +1,145 @@
+{
+  "facade": {
+    "src": "/images/palace/learning/facade.webp",
+    "width": 2848,
+    "height": 2136,
+    "originalWidth": 2848,
+    "originalHeight": 2136,
+    "source": "https://commons.wikimedia.org/wiki/File:Reunification_Palace_front_view.jpg",
+    "download": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Reunification_Palace_front_view.jpg?width=2848",
+    "credit": "Amore Mio · CC BY-SA 3.0",
+    "sha256": "d8439f3dfe5130b775ce881eec561f2841521fe9be630cb4dffb869c25403bb9"
+  },
+  "painting": {
+    "src": "/images/palace/learning/painting.webp",
+    "width": 3840,
+    "height": 1875,
+    "originalWidth": 3840,
+    "originalHeight": 1875,
+    "source": "https://commons.wikimedia.org/wiki/File:Palacio_de_la_Reunificaci%C3%B3n,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_11.JPG",
+    "download": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Palacio_de_la_Reunificaci%C3%B3n,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_11.JPG?width=3840",
+    "credit": "Diego Delso, delso.photo · CC BY-SA 3.0",
+    "sha256": "062db208eb8bc2a6001980c4c1cb76c20831196342959519928d5349353313a3"
+  },
+  "norodom": {
+    "src": "/images/palace/learning/norodom.webp",
+    "width": 3840,
+    "height": 2666,
+    "originalWidth": 4248,
+    "originalHeight": 2949,
+    "source": "https://dinhdoclap.gov.vn/lich-su-dinh-doc-lap/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2018/03/1.jpg",
+    "credit": "Di tích Dinh Độc Lập · ảnh tư liệu",
+    "sha256": "bdc7f801dfc993cbbd9bae7632db4d13332de6704d23df010509f1bf8182608c"
+  },
+  "damage-1962": {
+    "src": "/images/palace/learning/damage-1962.webp",
+    "width": 2560,
+    "height": 1707,
+    "originalWidth": 2560,
+    "originalHeight": 1707,
+    "source": "https://dinhdoclap.gov.vn/lich-su-dinh-doc-lap/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2018/03/5.-Dinh-Norodom-bi-nem-bom-27.2.1962-scaled.jpg",
+    "credit": "Di tích Dinh Độc Lập · ảnh tư liệu",
+    "sha256": "c847a149f4013b6654594a3bdccc3f64980208f377df9e0067b59b4aeec8d170"
+  },
+  "opening-1966": {
+    "src": "/images/palace/learning/opening-1966.webp",
+    "width": 2560,
+    "height": 1920,
+    "originalWidth": 2560,
+    "originalHeight": 1920,
+    "source": "https://dinhdoclap.gov.vn/lich-su-dinh-doc-lap/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2018/03/7.-Cat-bang-khanh-thanh-Dinh-scaled.jpg",
+    "credit": "Di tích Dinh Độc Lập · ảnh tư liệu",
+    "sha256": "ee1a65bdb70c64c860ebef22523ec83f7d7e049bb65069887e72b7dfebf90160"
+  },
+  "gate-1975": {
+    "src": "/images/palace/learning/gate-1975.webp",
+    "width": 2500,
+    "height": 1763,
+    "originalWidth": 2500,
+    "originalHeight": 1763,
+    "source": "https://dinhdoclap.gov.vn/lich-su-dinh-doc-lap/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2018/03/8.-ANH-XE-TANG-30-4-PHAP.jpg",
+    "credit": "Di tích Dinh Độc Lập · ảnh tư liệu",
+    "sha256": "d9a77f64e741583e01a1a091c59cf2eece5cea5d4702a050e1e82d8a96d04fc9"
+  },
+  "reception": {
+    "src": "/images/palace/learning/reception.webp",
+    "width": 3840,
+    "height": 2161,
+    "originalWidth": 3840,
+    "originalHeight": 2161,
+    "source": "https://commons.wikimedia.org/wiki/File:Independence_Palace_(36992717822).jpg",
+    "download": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Independence_Palace_(36992717822).jpg?width=3840",
+    "credit": "Terrazzo · CC BY 2.0 · 2017",
+    "sha256": "ce6a732c9bdbb5c3d30623aa081f4a09601557741296dc3068d8474d844790b8"
+  },
+  "cabinet-archive": {
+    "src": "/images/palace/learning/cabinet-archive.webp",
+    "width": 2000,
+    "height": 1212,
+    "originalWidth": 2000,
+    "originalHeight": 1212,
+    "source": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2025/12/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong-9976-15.jpg",
+    "credit": "Di tích Dinh Độc Lập · ảnh tư liệu",
+    "sha256": "813844f7e642e26adccfd0bf445b9a726166307b3afd72e26dbad38954cd0d60"
+  },
+  "cabinet": {
+    "src": "/images/palace/learning/cabinet.webp",
+    "width": 2000,
+    "height": 1277,
+    "originalWidth": 2000,
+    "originalHeight": 1277,
+    "source": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2025/12/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong-9976-16.jpg",
+    "credit": "Di tích Dinh Độc Lập",
+    "sha256": "fd35c033a9b96adb949ad77fce799d558469c6de172d594820cde82a8fc77ab6"
+  },
+  "roof": {
+    "src": "/images/palace/learning/roof.webp",
+    "width": 2000,
+    "height": 1333,
+    "originalWidth": 2000,
+    "originalHeight": 1333,
+    "source": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2025/12/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong-9976-20.jpg",
+    "credit": "Di tích Dinh Độc Lập",
+    "sha256": "8ccedf85406450f829f6e125d12e781c81c6ba3066780ffbbf659da9cbeb10a0"
+  },
+  "bunker": {
+    "src": "/images/palace/learning/bunker.webp",
+    "width": 2000,
+    "height": 1255,
+    "originalWidth": 2000,
+    "originalHeight": 1255,
+    "source": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2025/12/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong-9976-22.jpg",
+    "credit": "Di tích Dinh Độc Lập",
+    "sha256": "908141f67e07d2ee48870d6438ef25b37f784cc15d2667cf33541eae13af9451"
+  },
+  "screens": {
+    "src": "/images/palace/learning/screens.webp",
+    "width": 598,
+    "height": 480,
+    "originalWidth": 598,
+    "originalHeight": 480,
+    "source": "https://dinhdoclap.gov.vn/kien-truc-dinh-doc-lap/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2018/03/202512114-web-di-tich-docx-google-t-i-li-u.jpg",
+    "credit": "Di tích Dinh Độc Lập",
+    "sha256": "10ce6e0f987fef32152903f73a52bb21bb101c96a71a2a752846abc17e9d7ea6"
+  },
+  "f5e": {
+    "src": "/images/palace/learning/f5e.webp",
+    "width": 2416,
+    "height": 1558,
+    "originalWidth": 2416,
+    "originalHeight": 1558,
+    "source": "https://dinhdoclap.gov.vn/dau-tich-su-kien-nem-bom-dinh-doc-lap-ngay-08-04-1975/",
+    "download": "https://dinhdoclap.gov.vn/wp-content/uploads/2026/03/IMG_0016.jpg",
+    "credit": "Di tích Dinh Độc Lập · F-5E trưng bày đồng dạng",
+    "sha256": "4e94d78ce591e2542afa53b351c8a4f3bac3796dc6a55b5e52a9ecf7c8367f67"
+  }
+}

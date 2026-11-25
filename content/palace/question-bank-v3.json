@@ -1,0 +1,1374 @@
+{
+  "version": "palace-learning-v3",
+  "source": "CultureHunt.xlsx · reviewed 20-task learning journey",
+  "questions": [
+    {
+      "id": "facade-learning-1",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "facade",
+      "sourceId": "xlsx-row-6",
+      "sourceIds": [
+        "xlsx-row-6",
+        "xlsx-row-9"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Vì sao công trình trong tư liệu cũ khác với tòa Dinh hôm nay?",
+        "en": "Why does the old building look different from the Palace today?"
+      },
+      "answers": {
+        "vi": [
+          "Chỉ thay màu và trang trí lại mặt tiền.",
+          "Dinh cũ bị hư hại; một công trình mới được xây trên nền đất này.",
+          "Hai tư liệu nói về hai địa điểm khác nhau."
+        ],
+        "en": [
+          "Only the paint and façade decorations changed.",
+          "The old palace was damaged; a new building was constructed on this site.",
+          "The pictures show two different locations."
+        ]
+      },
+      "hint": {
+        "vi": "Xem mảnh tư liệu năm 1962 rồi đối chiếu với năm 1966.",
+        "en": "Read the 1962 record, then compare it with 1966."
+      },
+      "explanation": {
+        "vi": "Biến cố năm 1962 dẫn đến việc xây lại. Công trình do Ngô Viết Thụ thiết kế khánh thành năm 1966.",
+        "en": "The 1962 bombing led to reconstruction. Ngô Viết Thụ's new Palace opened in 1966."
+      },
+      "learning": {
+        "title": {
+          "vi": "Một nền đất, hai diện mạo",
+          "en": "One site, two buildings"
+        },
+        "context": {
+          "vi": "Lật mở ba mảnh tư liệu. Bạn có thể xem lại chúng trong lúc trả lời.",
+          "en": "Open the three records. They remain available while you answer."
+        },
+        "asset": "facade",
+        "caption": {
+          "vi": "Dinh Độc Lập nhìn từ chính diện.",
+          "en": "A frontal view of Independence Palace."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/di-tich-lich-su-dinh-doc-lap/",
+        "crop": [
+          10,
+          28,
+          80,
+          38
+        ],
+        "cards": [
+          {
+            "title": {
+              "vi": "Dinh Norodom",
+              "en": "Norodom Palace"
+            },
+            "text": {
+              "vi": "Diện mạo công trình cũ qua tranh khắc tư liệu.",
+              "en": "The earlier building in an archival engraving."
+            },
+            "asset": "norodom"
+          },
+          {
+            "title": {
+              "vi": "1962 · Biến cố",
+              "en": "1962 · Damage"
+            },
+            "text": {
+              "vi": "Công trình cũ bị ném bom, hư hại nặng.",
+              "en": "The earlier palace was badly damaged by bombing."
+            },
+            "asset": "damage-1962"
+          },
+          {
+            "title": {
+              "vi": "1966 · Diện mạo mới",
+              "en": "1966 · A new building"
+            },
+            "text": {
+              "vi": "Khánh thành công trình mới theo thiết kế Ngô Viết Thụ.",
+              "en": "Opening of the new building designed by Ngô Viết Thụ."
+            },
+            "asset": "opening-1966"
+          }
+        ]
+      }
+    },
+    {
+      "id": "facade-learning-2",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "facade",
+      "sourceId": "xlsx-row-3",
+      "sourceIds": [
+        "xlsx-row-3"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Ba đường kiến trúc được đánh dấu giống hình nào?",
+        "en": "Which shape resembles the three highlighted architectural lines?"
+      },
+      "answers": {
+        "vi": [
+          "三",
+          "口",
+          "人"
+        ],
+        "en": [
+          "三",
+          "口",
+          "人"
+        ]
+      },
+      "hint": {
+        "vi": "Đếm những nét ngang và đối chiếu với các hình.",
+        "en": "Count the horizontal strokes and compare the shapes."
+      },
+      "explanation": {
+        "vi": "Đó là chữ Tam 三. Những đường mái hiên và ban công cùng tạo nên một biểu tượng trong thiết kế.",
+        "en": "It is Tam 三. The eaves and balconies together form a symbol in the design."
+      },
+      "learning": {
+        "title": {
+          "vi": "Đọc chữ trong kiến trúc",
+          "en": "Read the architecture"
+        },
+        "context": {
+          "vi": "Theo dõi ba nét mảnh trên ảnh. Bạn không cần biết chữ Hán để đối chiếu hình dáng.",
+          "en": "Follow the three fine lines. You can compare their shapes without knowing Chinese characters."
+        },
+        "asset": "facade",
+        "caption": {
+          "vi": "Các nét đánh dấu minh họa cách đọc biểu tượng trên kiến trúc.",
+          "en": "The highlights illustrate an architectural symbol."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/kien-truc-dinh-doc-lap/",
+        "crop": [
+          10,
+          28,
+          80,
+          38
+        ],
+        "reveal": {
+          "kind": "tam",
+          "title": {
+            "vi": "Một chữ đang ở trước mắt bạn",
+            "en": "A character hidden in plain sight"
+          },
+          "text": {
+            "vi": "Ba nét ngang hiện thành Tam 三. Hãy nhìn lại mái hiên và ban công ngoài đời.",
+            "en": "Three horizontal lines resolve into Tam 三. Look back at the real eaves and balconies."
+          }
+        }
+      }
+    },
+    {
+      "id": "facade-learning-3",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "facade",
+      "sourceId": "xlsx-row-4",
+      "sourceIds": [
+        "xlsx-row-4",
+        "xlsx-row-5"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Lớp rèm đốt trúc kết hợp hai vai trò nào?",
+        "en": "Which two roles do the bamboo-inspired screens combine?"
+      },
+      "answers": {
+        "vi": [
+          "Bịt kín cửa và chặn toàn bộ ánh sáng.",
+          "Mở rộng sàn và tạo lối đi ngoài trời.",
+          "Điều hòa ánh sáng và gợi hình ảnh truyền thống."
+        ],
+        "en": [
+          "Sealing the openings and blocking all light.",
+          "Extending the floor and creating a walkway.",
+          "Moderating daylight and evoking a traditional form."
+        ]
+      },
+      "hint": {
+        "vi": "Quan sát những khoảng hở giữa các thanh và hình dáng đốt trúc.",
+        "en": "Look at the openings between the screens and their bamboo-like shape."
+      },
+      "explanation": {
+        "vi": "Rèm hoa đá giúp điều hòa ánh sáng tự nhiên, đồng thời đưa hình ảnh đốt trúc vào công trình hiện đại.",
+        "en": "The stone screens moderate daylight while bringing bamboo-inspired forms into a modern building."
+      },
+      "learning": {
+        "title": {
+          "vi": "Lớp rèm biết đón nắng",
+          "en": "A screen that shapes the light"
+        },
+        "context": {
+          "vi": "Tư liệu vật liệu: các lam bê tông tạo hình đốt trúc, có khoảng hở cho ánh sáng đi qua.",
+          "en": "Material note: concrete screens shaped like bamboo segments, with openings for light."
+        },
+        "asset": "facade",
+        "caption": {
+          "vi": "Cận cảnh lớp rèm mặt tiền; giữ nguyên chi tiết ảnh gốc.",
+          "en": "A closer view of the façade screens, retaining the original photographic detail."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/kien-truc-dinh-doc-lap/",
+        "crop": [
+          26,
+          40,
+          17,
+          14
+        ]
+      }
+    },
+    {
+      "id": "facade-learning-4",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "facade",
+      "sourceId": "xlsx-row-7",
+      "sourceIds": [
+        "xlsx-row-7",
+        "xlsx-row-8"
+      ],
+      "kind": "match",
+      "question": {
+        "vi": "Ghép mỗi sự kiện với ý nghĩa phù hợp.",
+        "en": "Match each event to its historical significance."
+      },
+      "answers": {
+        "vi": [
+          "Chuẩn bị cho thống nhất đất nước về mặt nhà nước.",
+          "Bước ngoặt kết thúc chính quyền Sài Gòn, gắn với thắng lợi giải phóng miền Nam."
+        ],
+        "en": [
+          "Preparing for national reunification at the state level.",
+          "The end of the Saigon government, associated with the liberation of the South."
+        ]
+      },
+      "hint": {
+        "vi": "Một thẻ nói về trưa 30/4; thẻ kia nói về công việc thống nhất sau đó.",
+        "en": "One card concerns 30 April; the other concerns the work of reunification afterwards."
+      },
+      "explanation": {
+        "vi": "Lịch sử của địa điểm tiếp tục sau năm 1975: những sự kiện có ý nghĩa khác nhau cùng được ghi dấu tại Dinh.",
+        "en": "The site's history continued beyond the events of April 1975, with different steps towards reunification."
+      },
+      "learning": {
+        "title": {
+          "vi": "Sau khoảnh khắc cổng mở",
+          "en": "After the gates opened"
+        },
+        "context": {
+          "vi": "30/4/1975: xe tăng 390 húc đổ cổng chính. Cuối năm 1975: Hội nghị hiệp thương tại Dinh bàn việc thống nhất về mặt nhà nước.",
+          "en": "30 April 1975: tank 390 broke through the main gate. Later in 1975: a consultative conference at the Palace discussed state reunification."
+        },
+        "asset": "gate-1975",
+        "caption": {
+          "vi": "Ảnh tư liệu xe tăng tiến vào Dinh; đọc cùng chú thích sự kiện.",
+          "en": "An archival photograph of tanks entering the Palace."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/di-tich-lich-su-dinh-doc-lap/"
+      },
+      "prompts": {
+        "vi": [
+          "Trưa 30/4/1975",
+          "Hội nghị hiệp thương cuối năm 1975"
+        ],
+        "en": [
+          "30 April 1975",
+          "Consultative conference, late 1975"
+        ]
+      }
+    },
+    {
+      "id": "reception-learning-1",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "reception",
+      "sourceId": "xlsx-row-10",
+      "sourceIds": [
+        "xlsx-row-10"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Cách sắp xếp nào nổi bật nhất trong căn phòng?",
+        "en": "Which arrangement stands out most in this room?"
+      },
+      "answers": {
+        "vi": [
+          "Các nhóm ghế quay về nhiều hướng riêng.",
+          "Một vòng tròn khép kín quanh bàn họp.",
+          "Bố cục cân đối, hướng về khu vực trung tâm."
+        ],
+        "en": [
+          "Separate groups of seats facing different ways.",
+          "A closed circle around a conference table.",
+          "A balanced arrangement focused on a central area."
+        ]
+      },
+      "hint": {
+        "vi": "So sánh bên trái và bên phải, rồi nhìn dọc trục giữa.",
+        "en": "Compare the two sides, then follow the centre line."
+      },
+      "explanation": {
+        "vi": "Bố cục cân đối tập trung sự chú ý vào hoạt động ở trung tâm.",
+        "en": "The balanced arrangement focuses attention on the central activity."
+      },
+      "learning": {
+        "title": {
+          "vi": "Ánh mắt đi về đâu?",
+          "en": "Where does your gaze go?"
+        },
+        "context": {
+          "vi": "Nhìn dọc thảm đỏ, những hàng ghế và phần cuối căn phòng.",
+          "en": "Follow the red carpet, the rows of seats and the far end of the hall."
+        },
+        "asset": "reception",
+        "caption": {
+          "vi": "Ảnh toàn cảnh Phòng Khánh tiết năm 2017.",
+          "en": "A wide photograph of the Reception Hall in 2017."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/"
+      }
+    },
+    {
+      "id": "reception-learning-2",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "reception",
+      "sourceId": "xlsx-row-10",
+      "sourceIds": [
+        "xlsx-row-10",
+        "xlsx-row-14"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Tư liệu và bố cục vừa quan sát cho thấy vai trò nào?",
+        "en": "What role do the record and the room's layout suggest?"
+      },
+      "answers": {
+        "vi": [
+          "Trung tâm tập trung thiết bị liên lạc quân sự.",
+          "Không gian nghi lễ, hội họp và hoạt động chính trị quan trọng.",
+          "Không gian họp nhóm nhỏ quanh một bàn làm việc."
+        ],
+        "en": [
+          "A centre for military communications equipment.",
+          "A setting for ceremonies, meetings and major political events.",
+          "A small team meeting around a work desk."
+        ]
+      },
+      "hint": {
+        "vi": "Kết nối khu vực trung tâm của phòng với sự kiện trên thẻ.",
+        "en": "Connect the room's central area with the event in the record."
+      },
+      "explanation": {
+        "vi": "Bố cục trang trọng từng là bối cảnh của những hoạt động chính trị quan trọng.",
+        "en": "The formal setting provided the backdrop for significant political events."
+      },
+      "learning": {
+        "title": {
+          "vi": "Một căn phòng bước vào lịch sử",
+          "en": "A room enters history"
+        },
+        "context": {
+          "vi": "Tư liệu: ngày 21/4/1975, Nguyễn Văn Thiệu đọc diễn văn từ chức tại Phòng Khánh tiết.",
+          "en": "Record: on 21 April 1975, Nguyễn Văn Thiệu delivered his resignation speech in the Reception Hall."
+        },
+        "asset": "reception",
+        "caption": {
+          "vi": "Ảnh toàn cảnh Phòng Khánh tiết năm 2017.",
+          "en": "A wide photograph of the Reception Hall in 2017."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dinh-doc-lap-trong-nhung-ngay-cuoi-cung-cua-che-do-viet-nam-cong-hoa/"
+      }
+    },
+    {
+      "id": "reception-learning-3",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "reception",
+      "sourceId": "xlsx-row-15",
+      "sourceIds": [
+        "xlsx-row-15"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Nhân vật ở giữa đang cầm vật gì ở bàn tay được khoanh nhẹ?",
+        "en": "What is held in the lightly marked hand of the central figure?"
+      },
+      "answers": {
+        "vi": [
+          "Một cây bút.",
+          "Một thanh kiếm.",
+          "Một chiếc quạt."
+        ],
+        "en": [
+          "A brush.",
+          "A sword.",
+          "A fan."
+        ]
+      },
+      "hint": {
+        "vi": "Quan sát bàn tay phía bên trái của nhân vật trên ảnh, rồi lần theo vật dài, mảnh.",
+        "en": "Look at the figure's hand on the left side of the image and follow the thin object."
+      },
+      "explanation": {
+        "vi": "Hùng Vương cầm bút viết hai chữ Văn Lang. Chú giải giúp bạn đọc chi tiết mà không cần biết chữ Hán.",
+        "en": "Hùng Vương holds a brush to write Văn Lang. The annotation explains the detail without requiring knowledge of Chinese characters."
+      },
+      "learning": {
+        "title": {
+          "vi": "Nhìn theo bàn tay trong tranh",
+          "en": "Follow the hand in the painting"
+        },
+        "context": {
+          "vi": "Bức Việt Nam Quốc Tổ của họa sĩ Trọng Nội. Phóng gần nhân vật trung tâm để xem chi tiết.",
+          "en": "Việt Nam Quốc Tổ by Trọng Nội. Look closely at the central figure."
+        },
+        "asset": "painting",
+        "caption": {
+          "vi": "Ảnh tác phẩm thật; vùng cận cảnh trích từ cùng ảnh gốc.",
+          "en": "A photograph of the actual painting; the detail comes from the same image."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/hanh-trinh-60-nam-cua-buc-tranh-thuy-mac-viet-nam-quoc-to/",
+        "crop": [
+          39,
+          32,
+          41,
+          52
+        ],
+        "reveal": {
+          "kind": "painting",
+          "title": {
+            "vi": "Hai chữ đưa câu chuyện về cội nguồn",
+            "en": "Two words pointing to origins"
+          },
+          "text": {
+            "vi": "Theo cây bút đến hai chữ Văn Lang. Nhân vật trung tâm là Hùng Vương, giữa hai hàng bá quan.",
+            "en": "Follow the brush to Văn Lang. The central figure is Hùng Vương, between two rows of officials."
+          }
+        }
+      }
+    },
+    {
+      "id": "reception-learning-4",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "reception",
+      "sourceId": "xlsx-row-15",
+      "sourceIds": [
+        "xlsx-row-15",
+        "xlsx-row-16"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Chi tiết nào khiến tác phẩm còn mang câu chuyện về một món quà?",
+        "en": "Which detail makes this painting the story of a gift as well?"
+      },
+      "answers": {
+        "vi": [
+          "Khách tham quan mua tặng sau năm 1975.",
+          "Người sáng tác tự nguyện trao tặng, không nhận thù lao.",
+          "Tác phẩm được đổi lấy một phần công việc xây dựng."
+        ],
+        "en": [
+          "Visitors bought it as a gift after 1975.",
+          "The artist voluntarily donated it without a fee.",
+          "It was exchanged for construction work."
+        ]
+      },
+      "hint": {
+        "vi": "Xem lại quyết định của Trọng Nội trong thẻ tư liệu.",
+        "en": "Read Trọng Nội's decision in the record."
+      },
+      "explanation": {
+        "vi": "Đằng sau tác phẩm là lựa chọn của người họa sĩ góp phần tạo nên không gian này.",
+        "en": "Behind the painting is the choice of an artist who contributed to this space."
+      },
+      "learning": {
+        "title": {
+          "vi": "Món quà phía sau tác phẩm",
+          "en": "The gift behind the painting"
+        },
+        "context": {
+          "vi": "Theo hồ sơ được Dinh giới thiệu: khi biết ngân sách tái thiết không đủ, Trọng Nội từ chối nhận thù lao và tự nguyện hiến tặng tác phẩm.",
+          "en": "According to records presented by the Palace, Trọng Nội declined payment and donated the work when he learned reconstruction funds were insufficient."
+        },
+        "asset": "painting",
+        "caption": {
+          "vi": "Việt Nam Quốc Tổ · Trọng Nội.",
+          "en": "Việt Nam Quốc Tổ · Trọng Nội."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/hanh-trinh-60-nam-cua-buc-tranh-thuy-mac-viet-nam-quoc-to/"
+      }
+    },
+    {
+      "id": "cabinet-learning-1",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "cabinet",
+      "sourceId": "xlsx-row-17",
+      "sourceIds": [
+        "xlsx-row-17",
+        "xlsx-row-19",
+        "xlsx-row-20",
+        "xlsx-row-21"
+      ],
+      "kind": "multi",
+      "question": {
+        "vi": "Chọn hai chi tiết trực tiếp phục vụ việc ngồi họp và phát biểu.",
+        "en": "Choose two details directly serving meetings and speaking."
+      },
+      "answers": {
+        "vi": [
+          "Nhiều ghế cùng bố trí quanh chiếc bàn lớn.",
+          "Rèm che cửa sổ.",
+          "Các micro đặt trên bàn.",
+          "Đèn chùm trên trần."
+        ],
+        "en": [
+          "Many chairs arranged around a large table.",
+          "Window curtains.",
+          "Microphones placed on the table.",
+          "Ceiling chandeliers."
+        ]
+      },
+      "hint": {
+        "vi": "Ưu tiên vật phục vụ việc ngồi thảo luận và phát biểu.",
+        "en": "Focus on objects used for discussion and speaking."
+      },
+      "explanation": {
+        "vi": "Bàn, ghế và micro là manh mối về hoạt động hội họp tại Phòng Nội các.",
+        "en": "The table, chairs and microphones indicate the Cabinet Room's meeting function."
+      },
+      "learning": {
+        "title": {
+          "vi": "Đọc một căn phòng qua hiện vật",
+          "en": "Read a room through its objects"
+        },
+        "context": {
+          "vi": "Đây là Phòng Nội các. Hãy quan sát hiện vật để hiểu cách căn phòng được sử dụng.",
+          "en": "This is the Cabinet Room. Read its use through the objects you can see."
+        },
+        "asset": "cabinet",
+        "caption": {
+          "vi": "Bàn oval rỗng giữa và các micro trong Phòng Nội các.",
+          "en": "The open-centred oval table and microphones in the Cabinet Room."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/"
+      }
+    },
+    {
+      "id": "cabinet-learning-2",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "cabinet",
+      "sourceId": "xlsx-row-19",
+      "sourceIds": [
+        "xlsx-row-19",
+        "xlsx-row-21",
+        "xlsx-row-25"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Ảnh tư liệu nào chụp chính căn phòng này?",
+        "en": "Which archival image shows this room?"
+      },
+      "answers": {
+        "vi": [
+          "Ảnh A",
+          "Ảnh B",
+          "Ảnh C"
+        ],
+        "en": [
+          "Image A",
+          "Image B",
+          "Image C"
+        ]
+      },
+      "hint": {
+        "vi": "Đối chiếu đường viền bàn và khoảng rỗng ở giữa.",
+        "en": "Compare the outline of the table and the opening in its centre."
+      },
+      "explanation": {
+        "vi": "Chiếc bàn giúp bạn nối căn phòng hiện tại với hoạt động hội họp trong ảnh tư liệu.",
+        "en": "The table connects the present room with the meeting shown in the archive."
+      },
+      "learning": {
+        "title": {
+          "vi": "Nhận ra căn phòng ngày ấy",
+          "en": "Recognise the room in the past"
+        },
+        "context": {
+          "vi": "Hình dáng chiếc bàn là manh mối. So sánh với ba ảnh bên dưới.",
+          "en": "The shape of the table is your clue. Compare the three images below."
+        },
+        "asset": "cabinet",
+        "caption": {
+          "vi": "Đối chiếu hai thời điểm; không xác định ngày họp khi ảnh không có chú thích ngày.",
+          "en": "Two views of the room; the meeting date is not assigned without an archival caption."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+        "choiceAssets": [
+          "reception",
+          "cabinet-archive",
+          "norodom"
+        ],
+        "reveal": {
+          "kind": "compare",
+          "title": {
+            "vi": "Những chiếc ghế đã từng có người ngồi",
+            "en": "When the chairs were occupied"
+          },
+          "text": {
+            "vi": "Chuyển giữa hai góc chụp để đối chiếu chiếc bàn. Ảnh tư liệu thật cho thấy hoạt động của căn phòng.",
+            "en": "Switch between the two photographs to compare the table. The genuine archive shows the room in use."
+          }
+        }
+      }
+    },
+    {
+      "id": "cabinet-learning-3",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "cabinet",
+      "sourceId": "xlsx-row-14",
+      "sourceIds": [
+        "xlsx-row-14",
+        "xlsx-row-24"
+      ],
+      "kind": "order",
+      "question": {
+        "vi": "Lần theo người nhận quyền lực để sắp xếp ba sự kiện.",
+        "en": "Follow the recipient of power to order the three events."
+      },
+      "answers": {
+        "vi": [
+          "Dương Văn Minh phát lời kêu gọi buông súng vào sáng 30/4.",
+          "Nguyễn Văn Thiệu từ chức, trao quyền cho Trần Văn Hương.",
+          "Trần Văn Hương bàn giao chức vụ cho Dương Văn Minh."
+        ],
+        "en": [
+          "Dương Văn Minh broadcasts an appeal to lay down arms on 30 April.",
+          "Nguyễn Văn Thiệu resigns and transfers power to Trần Văn Hương.",
+          "Trần Văn Hương transfers the presidency to Dương Văn Minh."
+        ]
+      },
+      "hint": {
+        "vi": "Người nhận quyền ở thẻ trước giúp bạn tìm thẻ tiếp theo.",
+        "en": "The recipient on one card helps you find the next card."
+      },
+      "explanation": {
+        "vi": "Các mốc tương ứng là 21/4, 28/4 và sáng 30/4/1975. Bạn đã hiểu trình tự trước khi nhìn lại ngày tháng.",
+        "en": "The corresponding dates are 21 April, 28 April and the morning of 30 April 1975."
+      },
+      "learning": {
+        "title": {
+          "vi": "Lần theo sự chuyển giao",
+          "en": "Trace the transfer of power"
+        },
+        "context": {
+          "vi": "Mỗi thẻ ghi rõ hành động và người liên quan. Dùng mối nối giữa các nhân vật để tìm trình tự.",
+          "en": "Each card names an action and its participants. Use the connections between people to find the sequence."
+        },
+        "asset": "cabinet-archive",
+        "caption": {
+          "vi": "Ảnh minh họa không gian hội họp; không gán ảnh cho các sự kiện trong thẻ.",
+          "en": "The archive illustrates the meeting space, not necessarily the events described on the cards."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dinh-doc-lap-trong-nhung-ngay-cuoi-cung-cua-che-do-viet-nam-cong-hoa/"
+      }
+    },
+    {
+      "id": "cabinet-learning-4",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "cabinet",
+      "sourceId": "xlsx-row-22",
+      "sourceIds": [
+        "xlsx-row-22",
+        "xlsx-row-24",
+        "xlsx-row-25"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Lời kêu gọi buông súng được phát khi nào so với giờ dự kiến trình diện?",
+        "en": "When was the appeal broadcast relative to the planned cabinet presentation?"
+      },
+      "answers": {
+        "vi": [
+          "Trước.",
+          "Cùng lúc.",
+          "Sau."
+        ],
+        "en": [
+          "Before.",
+          "At the same time.",
+          "After."
+        ]
+      },
+      "hint": {
+        "vi": "Đối chiếu 9 giờ 30 với 10 giờ đang hiện trên hai thẻ.",
+        "en": "Compare the visible times: 9:30 and 10:00."
+      },
+      "explanation": {
+        "vi": "9 giờ 30 diễn ra trước giờ dự kiến 10 giờ. Lời kêu gọi buổi sáng khác với tuyên bố đầu hàng phát sau đó.",
+        "en": "9:30 precedes the planned 10:00 presentation. The morning appeal is distinct from the surrender announcement broadcast later."
+      },
+      "learning": {
+        "title": {
+          "vi": "Đọc đúng buổi sáng 30/4",
+          "en": "Read the morning of 30 April"
+        },
+        "context": {
+          "vi": "Phân biệt một sự kiện đã xảy ra với một lịch trình dự kiến.",
+          "en": "Distinguish an event that occurred from a planned appointment."
+        },
+        "asset": "cabinet",
+        "caption": {
+          "vi": "Bàn họp hiện tại; các mốc được trình bày riêng trong thẻ tư liệu.",
+          "en": "The table today; the times are supplied separately in the records."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dinh-doc-lap-trong-nhung-ngay-cuoi-cung-cua-che-do-viet-nam-cong-hoa/",
+        "cards": [
+          {
+            "title": {
+              "vi": "9:30 · Đã phát",
+              "en": "9:30 · Broadcast"
+            },
+            "text": {
+              "vi": "Lời kêu gọi buông súng của Dương Văn Minh trên Đài Phát thanh Sài Gòn.",
+              "en": "Dương Văn Minh's appeal to lay down arms on Saigon Radio."
+            }
+          },
+          {
+            "title": {
+              "vi": "10:00 · Dự kiến",
+              "en": "10:00 · Planned"
+            },
+            "text": {
+              "vi": "Giờ dự kiến trình diện nội các mới do Vũ Văn Mẫu đứng đầu.",
+              "en": "Planned presentation of the new cabinet headed by Vũ Văn Mẫu."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rooftop-learning-1",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "rooftop",
+      "sourceId": "xlsx-row-27",
+      "sourceIds": [
+        "xlsx-row-27",
+        "xlsx-row-30",
+        "xlsx-row-31"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Dựa vào cánh quạt và hình dáng, hiện vật trên mái thuộc loại nào?",
+        "en": "Based on the rotor and shape, which aircraft is displayed on the roof?"
+      },
+      "answers": {
+        "vi": [
+          "F-5E · Máy bay phản lực",
+          "UH-1 · Trực thăng"
+        ],
+        "en": [
+          "F-5E · Jet aircraft",
+          "UH-1 · Helicopter"
+        ]
+      },
+      "hint": {
+        "vi": "Đối chiếu cánh quạt trên thân với hai ảnh hướng dẫn.",
+        "en": "Compare the rotor above the body with the two reference images."
+      },
+      "explanation": {
+        "vi": "Đây là UH-1, gắn với hoạt động di chuyển của Nguyễn Văn Thiệu.",
+        "en": "This is the UH-1, associated with Nguyễn Văn Thiệu's transport."
+      },
+      "learning": {
+        "title": {
+          "vi": "Nhận diện chiếc máy bay",
+          "en": "Identify the aircraft"
+        },
+        "context": {
+          "vi": "Hai ảnh có tên giúp bạn đối chiếu. Ảnh F-5E là hiện vật đồng dạng trưng bày trong khuôn viên.",
+          "en": "Use the labelled images. The F-5E photograph shows a same-type exhibit in the Palace grounds."
+        },
+        "asset": "roof",
+        "caption": {
+          "vi": "UH-1 trên sân thượng; hai dấu đỏ nằm trên mặt sân.",
+          "en": "The rooftop UH-1; two red markings are visible on the paving."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dau-tich-su-kien-nem-bom-dinh-doc-lap-ngay-08-04-1975/",
+        "choiceAssets": [
+          "f5e",
+          "roof"
+        ]
+      }
+    },
+    {
+      "id": "rooftop-learning-2",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "rooftop",
+      "sourceId": "xlsx-row-26",
+      "sourceIds": [
+        "xlsx-row-26",
+        "xlsx-row-32"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Có bao nhiêu vòng tròn đỏ đánh dấu trên mặt sân trong ảnh?",
+        "en": "How many red marking circles can you see on the paving?"
+      },
+      "answers": {
+        "vi": [
+          "Một",
+          "Hai",
+          "Ba"
+        ],
+        "en": [
+          "One",
+          "Two",
+          "Three"
+        ]
+      },
+      "hint": {
+        "vi": "Nhìn cả góc trái và phía trước bên phải của ảnh; có thể phóng to.",
+        "en": "Look at the left and the front-right areas; you can enlarge the image."
+      },
+      "explanation": {
+        "vi": "Hai vòng đỏ đánh dấu vị trí bom rơi. Sự kiện ngày 8/4/1975 gắn với Nguyễn Thành Trung và F-5E.",
+        "en": "Two red circles mark bomb impact locations. The event on 8 April 1975 involved Nguyễn Thành Trung and an F-5E."
+      },
+      "learning": {
+        "title": {
+          "vi": "Nhìn xuống mặt sân",
+          "en": "Look down at the paving"
+        },
+        "context": {
+          "vi": "Tạm rời mắt khỏi trực thăng. Quan sát trọn mặt sân, giữ nguyên cả hai vùng đánh dấu.",
+          "en": "Look beyond the helicopter. Inspect the full paving area, keeping both markings in view."
+        },
+        "asset": "roof",
+        "caption": {
+          "vi": "Ảnh toàn cảnh có đủ hai vòng đánh dấu đỏ.",
+          "en": "The wide photograph includes both red marking circles."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dau-tich-su-kien-nem-bom-dinh-doc-lap-ngay-08-04-1975/",
+        "reveal": {
+          "kind": "roof",
+          "title": {
+            "vi": "Dấu tích nằm ngay dưới chân",
+            "en": "The traces beneath your feet"
+          },
+          "text": {
+            "vi": "UH-1 là trực thăng trưng bày. Cuộc không kích 8/4/1975 được thực hiện bằng F-5E. Hai câu chuyện gặp nhau trên sân mái.",
+            "en": "The UH-1 is the displayed helicopter. The 8 April 1975 raid used an F-5E. Two different stories meet on this roof."
+          }
+        }
+      }
+    },
+    {
+      "id": "rooftop-learning-3",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "rooftop",
+      "sourceId": "xlsx-row-29",
+      "sourceIds": [
+        "xlsx-row-29"
+      ],
+      "kind": "order",
+      "question": {
+        "vi": "Sắp xếp các thẻ để kể lại diễn biến cuộc không kích.",
+        "en": "Arrange the cards to recount the air raid."
+      },
+      "answers": {
+        "vi": [
+          "Một số quả bom phát nổ, gây hư hại công trình.",
+          "Nguyễn Thành Trung điều khiển F-5E thực hiện cuộc không kích.",
+          "Phi công bay về vùng giải phóng.",
+          "Bom được thả xuống Dinh."
+        ],
+        "en": [
+          "Some bombs explode and damage the building.",
+          "Nguyễn Thành Trung pilots an F-5E in the raid.",
+          "The pilot flies to the liberated area.",
+          "Bombs are released over the Palace."
+        ]
+      },
+      "hint": {
+        "vi": "Tách việc điều khiển máy bay, thả bom, tác động và rời đi.",
+        "en": "Separate flying, releasing bombs, their impact and departure."
+      },
+      "explanation": {
+        "vi": "Bạn đã nối hành động với tác động và trình tự rời đi, thay vì chỉ ghi nhớ một ngày tháng.",
+        "en": "You connected actions, consequences and departure, rather than recalling only a date."
+      },
+      "learning": {
+        "title": {
+          "vi": "Khôi phục diễn biến",
+          "en": "Reconstruct the sequence"
+        },
+        "context": {
+          "vi": "Cuộc không kích diễn ra ngày 8/4/1975. Dùng mối liên hệ trước–sau giữa các thẻ để kể lại sự kiện.",
+          "en": "The raid took place on 8 April 1975. Use the before-and-after relationships between the cards."
+        },
+        "asset": "roof",
+        "caption": {
+          "vi": "Sân thượng hôm nay; thẻ tư liệu mô tả diễn biến quá khứ.",
+          "en": "The roof today; the cards describe the historical sequence."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dau-tich-su-kien-nem-bom-dinh-doc-lap-ngay-08-04-1975/"
+      }
+    },
+    {
+      "id": "rooftop-learning-4",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "rooftop",
+      "sourceId": "xlsx-row-26",
+      "sourceIds": [
+        "xlsx-row-26",
+        "xlsx-row-27",
+        "xlsx-row-30",
+        "xlsx-row-31",
+        "xlsx-row-32"
+      ],
+      "kind": "match",
+      "question": {
+        "vi": "Hoàn thiện chú giải cho ba hiện vật và dấu tích.",
+        "en": "Complete the annotations for these three objects and traces."
+      },
+      "answers": {
+        "vi": [
+          "Loại máy bay thực hiện cuộc không kích.",
+          "Dấu đánh dấu vị trí bom rơi trên sân.",
+          "Hiện vật gắn với hoạt động di chuyển của Nguyễn Văn Thiệu."
+        ],
+        "en": [
+          "Aircraft type used in the raid.",
+          "Markers of bomb impact locations.",
+          "Exhibit associated with Nguyễn Văn Thiệu's transport."
+        ]
+      },
+      "hint": {
+        "vi": "Xem lại hai loại máy bay và phần chú giải ở câu trước.",
+        "en": "Review the two aircraft types and the previous annotation."
+      },
+      "explanation": {
+        "vi": "Bạn đã phân biệt phương tiện trong sự kiện, hiện vật trưng bày và dấu tích tại địa điểm.",
+        "en": "You distinguished an aircraft involved in an event, a displayed exhibit and traces at the site."
+      },
+      "learning": {
+        "title": {
+          "vi": "Hai câu chuyện trên một sân thượng",
+          "en": "Two stories on one rooftop"
+        },
+        "context": {
+          "vi": "Dùng những gì vừa khám phá. Có thể xem lại ảnh F-5E và UH-1 trong thẻ tư liệu.",
+          "en": "Use what you have just learned. The F-5E and UH-1 reference images are available below."
+        },
+        "asset": "roof",
+        "caption": {
+          "vi": "Nhìn hiện vật cùng tư liệu để đọc đúng vai trò.",
+          "en": "Read each object's role alongside the historical record."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/dau-tich-su-kien-nem-bom-dinh-doc-lap-ngay-08-04-1975/",
+        "cards": [
+          {
+            "title": {
+              "vi": "F-5E",
+              "en": "F-5E"
+            },
+            "text": {
+              "vi": "Máy bay phản lực; ảnh hiện vật đồng dạng trong khuôn viên.",
+              "en": "Jet aircraft; a same-type exhibit in the grounds."
+            },
+            "asset": "f5e"
+          },
+          {
+            "title": {
+              "vi": "UH-1",
+              "en": "UH-1"
+            },
+            "text": {
+              "vi": "Trực thăng trên sân mái.",
+              "en": "The helicopter on the roof."
+            },
+            "asset": "roof"
+          }
+        ]
+      },
+      "prompts": {
+        "vi": [
+          "UH-1",
+          "F-5E",
+          "Hai vòng đỏ"
+        ],
+        "en": [
+          "UH-1",
+          "F-5E",
+          "Two red circles"
+        ]
+      }
+    },
+    {
+      "id": "bunker-learning-1",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "bunker",
+      "sourceId": "xlsx-row-33",
+      "sourceIds": [
+        "xlsx-row-33",
+        "xlsx-row-34"
+      ],
+      "kind": "single",
+      "question": {
+        "vi": "Đặc điểm nào phù hợp với việc bảo vệ và duy trì hoạt động dưới hầm?",
+        "en": "Which feature supports protection and continued work in the bunker?"
+      },
+      "answers": {
+        "vi": [
+          "Không gian mở để nhìn ra thành phố.",
+          "Sân rộng để máy bay tiếp cận.",
+          "Không gian khép kín, kết cấu bảo vệ và phòng làm việc bên trong."
+        ],
+        "en": [
+          "An open space overlooking the city.",
+          "An open aircraft landing area.",
+          "Enclosed spaces, protective construction and internal workrooms."
+        ]
+      },
+      "hint": {
+        "vi": "So sánh độ khép kín và kết cấu trong hai ảnh.",
+        "en": "Compare the enclosure and construction shown in the two photographs."
+      },
+      "explanation": {
+        "vi": "Thiết kế khu hầm gắn với bảo vệ con người và duy trì hoạt động điều hành, liên lạc.",
+        "en": "The bunker combines protection with spaces for command and communications work."
+      },
+      "learning": {
+        "title": {
+          "vi": "Từ bầu trời xuống lòng đất",
+          "en": "From the roof to underground"
+        },
+        "context": {
+          "vi": "So sánh khu hầm với sân thượng vừa khám phá.",
+          "en": "Compare the bunker with the rooftop you just explored."
+        },
+        "asset": "bunker",
+        "caption": {
+          "vi": "Phòng thông tin và hành lang trong khu hầm.",
+          "en": "A communications room and corridor in the bunker."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+        "cards": [
+          {
+            "title": {
+              "vi": "Trên mái",
+              "en": "On the roof"
+            },
+            "text": {
+              "vi": "Không gian mở, sân đáp.",
+              "en": "An open space and landing area."
+            },
+            "asset": "roof"
+          },
+          {
+            "title": {
+              "vi": "Dưới hầm",
+              "en": "Underground"
+            },
+            "text": {
+              "vi": "Lối đi khép kín và các phòng làm việc.",
+              "en": "Enclosed passages and workrooms."
+            },
+            "asset": "bunker"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bunker-learning-2",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "bunker",
+      "sourceId": "xlsx-row-34",
+      "sourceIds": [
+        "xlsx-row-34",
+        "xlsx-row-35",
+        "xlsx-row-36"
+      ],
+      "kind": "match",
+      "question": {
+        "vi": "Ghép mỗi thành phần của khu hầm với công việc phù hợp.",
+        "en": "Match each bunker component to its role."
+      },
+      "answers": {
+        "vi": [
+          "Theo dõi và tổng hợp tình hình.",
+          "Bảo vệ con người và hoạt động bên trong.",
+          "Truyền và nhận thông tin."
+        ],
+        "en": [
+          "Monitoring and summarising the situation.",
+          "Protecting people and the work inside.",
+          "Sending and receiving information."
+        ]
+      },
+      "hint": {
+        "vi": "Phân biệt công cụ liên lạc, công cụ theo dõi và kết cấu bảo vệ.",
+        "en": "Distinguish communication tools, monitoring tools and protective construction."
+      },
+      "explanation": {
+        "vi": "Thiết bị, bản đồ và kết cấu hầm phục vụ những vai trò bổ sung cho nhau.",
+        "en": "Equipment, maps and protective construction serve complementary roles."
+      },
+      "learning": {
+        "title": {
+          "vi": "Mỗi thành phần có một công việc",
+          "en": "Each part has a role"
+        },
+        "context": {
+          "vi": "Thẻ chức năng: điện thoại/vô tuyến truyền nhận thông tin; bản đồ giúp theo dõi tình hình; kết cấu hầm bảo vệ người và hoạt động. Các thành phần thuộc khu hầm, không nhất thiết cùng phòng trên ảnh.",
+          "en": "Function guide: telephones/radios carry information; maps support monitoring; bunker construction protects people and operations. These belong to the bunker area, not necessarily the same photographed room."
+        },
+        "asset": "bunker",
+        "caption": {
+          "vi": "Ảnh phòng thông tin; các câu hỏi mở rộng ra chức năng của khu hầm.",
+          "en": "The communications room; the task also covers the wider bunker's functions."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/"
+      },
+      "prompts": {
+        "vi": [
+          "Điện thoại, máy vô tuyến",
+          "Bản đồ tác chiến",
+          "Không gian hầm kiên cố"
+        ],
+        "en": [
+          "Telephones and radios",
+          "Operations maps",
+          "Protective bunker structure"
+        ]
+      }
+    },
+    {
+      "id": "bunker-learning-3",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "bunker",
+      "sourceId": "xlsx-row-34",
+      "sourceIds": [
+        "xlsx-row-34",
+        "xlsx-row-35",
+        "xlsx-row-37"
+      ],
+      "kind": "order",
+      "question": {
+        "vi": "Sắp xếp chuỗi công việc minh họa để thông tin đến đúng nơi.",
+        "en": "Arrange this illustrative workflow so information reaches the right place."
+      },
+      "answers": {
+        "vi": [
+          "Người phụ trách xem xét tình hình.",
+          "Báo cáo được gửi đến.",
+          "Chỉ đạo được truyền đến nơi thực hiện.",
+          "Bộ phận thông tin tiếp nhận và chuyển nội dung."
+        ],
+        "en": [
+          "The responsible officer reviews the situation.",
+          "A report arrives.",
+          "Instructions are passed to those carrying them out.",
+          "Communications staff receive and pass on the report."
+        ]
+      },
+      "hint": {
+        "vi": "Thông tin cần được tiếp nhận trước khi xem xét; chỉ đạo được truyền đi sau đó.",
+        "en": "Information must be received before review; instructions are passed on afterwards."
+      },
+      "explanation": {
+        "vi": "Bạn đã nối được vai trò của các bộ phận. Đây là mô phỏng giáo dục đơn giản hóa, không phải một bức điện hay quy trình nguyên bản.",
+        "en": "You connected the roles of different teams. This is a simplified educational illustration, not an original message or documented procedure."
+      },
+      "learning": {
+        "title": {
+          "vi": "Theo đường đi của một báo cáo",
+          "en": "Follow a report"
+        },
+        "context": {
+          "vi": "MÔ PHỎNG GIÁO DỤC · Một báo cáo cần đến người phụ trách điều hành. Các thẻ minh họa mối liên hệ chức năng, không tái hiện một sự kiện cụ thể.",
+          "en": "EDUCATIONAL ILLUSTRATION · A report must reach the responsible officer. The cards illustrate functional relationships, not a particular historical event."
+        },
+        "asset": "bunker",
+        "caption": {
+          "vi": "Ảnh thật của khu hầm; sơ đồ mở sau đáp án là minh họa chức năng.",
+          "en": "An actual bunker photograph; the unlocked diagram illustrates functions."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+        "reveal": {
+          "kind": "signal",
+          "title": {
+            "vi": "Căn hầm vẫn kết nối với bên ngoài",
+            "en": "Connections beneath the Palace"
+          },
+          "text": {
+            "vi": "Báo cáo → tiếp nhận → xem xét → truyền chỉ đạo. Sơ đồ minh họa chức năng, không phải mặt bằng hay tuyến dây thực tế.",
+            "en": "Report → receive → review → relay instructions. A functional illustration, not a floor plan or actual wiring."
+          }
+        }
+      }
+    },
+    {
+      "id": "bunker-learning-4",
+      "bankVersion": "palace-learning-v3",
+      "checkpointId": "bunker",
+      "sourceId": "xlsx-row-8",
+      "sourceIds": [
+        "xlsx-row-8",
+        "xlsx-row-16",
+        "xlsx-row-25",
+        "xlsx-row-32",
+        "xlsx-row-37"
+      ],
+      "kind": "match",
+      "question": {
+        "vi": "Ghép mỗi nơi với điều bạn vừa khám phá.",
+        "en": "Match each place to what you discovered there."
+      },
+      "answers": {
+        "vi": [
+          "Hiện vật UH-1 và dấu tích cuộc không kích bằng F-5E.",
+          "Nghi lễ, sự kiện chính trị và tác phẩm nghệ thuật.",
+          "Bảo vệ, thông tin liên lạc và điều hành.",
+          "Quá trình xây dựng và biểu tượng kiến trúc.",
+          "Hội họp và bối cảnh chuyển giao quyền lực."
+        ],
+        "en": [
+          "The UH-1 exhibit and traces of the F-5E raid.",
+          "Ceremonies, political events and a work of art.",
+          "Protection, communications and command.",
+          "Reconstruction and architectural symbolism.",
+          "Meetings and the context of political transition."
+        ]
+      },
+      "hint": {
+        "vi": "Xem lại năm thẻ tóm tắt dưới ảnh; chúng giữ những điều bạn đã học.",
+        "en": "Review the five summary cards below the photograph."
+      },
+      "explanation": {
+        "vi": "Bạn đã kết nối năm không gian thành một hành trình về công trình, con người và biến động lịch sử.",
+        "en": "You connected five spaces into a journey through architecture, people and historical change."
+      },
+      "learning": {
+        "title": {
+          "vi": "Nối trọn năm điểm dừng",
+          "en": "Connect all five stops"
+        },
+        "context": {
+          "vi": "Nhiệm vụ cuối: kết nối toàn hành trình. Năm thẻ dưới đây giúp bạn ôn lại.",
+          "en": "Final task: connect the whole journey. The five cards below let you review."
+        },
+        "asset": "bunker",
+        "caption": {
+          "vi": "Năm checkpoint được kết nối bằng kiến thức vừa khám phá.",
+          "en": "Five checkpoints connected by what you learned."
+        },
+        "sourceUrl": "https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/",
+        "cards": [
+          {
+            "title": {
+              "vi": "Mặt tiền",
+              "en": "Façade"
+            },
+            "text": {
+              "vi": "Tái thiết và chữ trong kiến trúc.",
+              "en": "Reconstruction and architectural symbols."
+            },
+            "asset": "facade"
+          },
+          {
+            "title": {
+              "vi": "Khánh tiết",
+              "en": "Reception"
+            },
+            "text": {
+              "vi": "Nghi lễ, chính trị và bức tranh.",
+              "en": "Ceremonies, politics and the painting."
+            },
+            "asset": "reception"
+          },
+          {
+            "title": {
+              "vi": "Nội các",
+              "en": "Cabinet"
+            },
+            "text": {
+              "vi": "Hội họp và chuyển giao quyền lực.",
+              "en": "Meetings and political transition."
+            },
+            "asset": "cabinet"
+          },
+          {
+            "title": {
+              "vi": "Sân thượng",
+              "en": "Rooftop"
+            },
+            "text": {
+              "vi": "Phân biệt UH-1, F-5E và dấu đỏ.",
+              "en": "Distinguishing UH-1, F-5E and red markings."
+            },
+            "asset": "roof"
+          },
+          {
+            "title": {
+              "vi": "Khu hầm",
+              "en": "Bunker"
+            },
+            "text": {
+              "vi": "Bảo vệ và thông tin điều hành.",
+              "en": "Protection and command communications."
+            },
+            "asset": "bunker"
+          }
+        ]
+      },
+      "prompts": {
+        "vi": [
+          "Mặt tiền",
+          "Khánh tiết",
+          "Nội các",
+          "Sân thượng",
+          "Khu hầm"
+        ],
+        "en": [
+          "Façade",
+          "Reception Hall",
+          "Cabinet Room",
+          "Rooftop",
+          "Bunker"
+        ]
+      }
+    }
+  ],
+  "review": [
+    {
+      "sourceId": "xlsx-row-11",
+      "reason": "Ceremony order is illustrative and adds little historical learning."
+    },
+    {
+      "sourceId": "xlsx-row-12",
+      "reason": "Painting dimensions differ across sources; not graded."
+    },
+    {
+      "sourceId": "xlsx-row-13",
+      "reason": "Calculation is not evidence of a measured room area."
+    },
+    {
+      "sourceId": "xlsx-row-18",
+      "reason": "Seating logic lacks a unique calibrated diagram."
+    },
+    {
+      "sourceId": "xlsx-row-23",
+      "reason": "Weekly meeting time is optional background, not a recall gate."
+    },
+    {
+      "sourceId": "xlsx-row-28",
+      "reason": "Planned bomb allocation and actual total are supplementary, not a numeric guessing task."
+    }
+  ],
+  "editorialNotes": [
+    "One canonical learning image per checkpoint with credited supporting images; uploaded photos only identify the checkpoint.",
+    "All dates and necessary clues are available before answering.",
+    "Tank 390: main gate; morning broadcast 9:30 precedes planned 10:00 presentation.",
+    "Historical equipment/photo matching does not claim object-level AI recognition.",
+    "Signal workflow is explicitly a simplified educational illustration."
+  ]
+}

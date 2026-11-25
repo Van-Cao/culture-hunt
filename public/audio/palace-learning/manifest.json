@@ -1,0 +1,96 @@
+{
+  "version": "palace-stories-v3-learning",
+  "provider": "Demo narration; see each track for provider",
+  "tracks": {
+    "facade": {
+      "vi": {
+        "src": "/audio/palace-learning/facade-vi.mp3",
+        "voice": "vi-VN-HoaiMyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 27.77,
+        "bytes": 166608,
+        "textSha256": "2759c96f0e2062f0b440b5965a5f5c6e2fa42a1398343b111ba0e192c5b0fc72"
+      },
+      "en": {
+        "src": "/audio/palace-learning/facade-en.mp3",
+        "voice": "en-US-JennyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 34.78,
+        "bytes": 208656,
+        "textSha256": "99e4e86fd3669cfc6f3461ccdb6250ea4123786ceb3fcfa15ad467bb623856cb"
+      }
+    },
+    "reception": {
+      "vi": {
+        "src": "/audio/palace-learning/reception-vi.mp3",
+        "voice": "Google Vietnamese",
+        "provider": "Google Translate TTS (demo; not Cloud Chirp)",
+        "duration": 28.32,
+        "bytes": 226560,
+        "textSha256": "9ea289ef7a3d9e714946a02627406bdbd09b7540d23a9c2376c318c7b130c01b"
+      },
+      "en": {
+        "src": "/audio/palace-learning/reception-en.mp3",
+        "voice": "en-US-JennyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 30.98,
+        "bytes": 185904,
+        "textSha256": "e0e975fe8c5150db64c3c6c9ae68c40929aeff69c99c4e523f254e453f9198c6"
+      }
+    },
+    "cabinet": {
+      "vi": {
+        "src": "/audio/palace-learning/cabinet-vi.mp3",
+        "voice": "vi-VN-HoaiMyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 26.26,
+        "bytes": 157536,
+        "textSha256": "e64fae77509783169a4cfd14669f4cb40bf668c2cae78bb8aa770558066b5c17"
+      },
+      "en": {
+        "src": "/audio/palace-learning/cabinet-en.mp3",
+        "voice": "en-US-JennyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 34.08,
+        "bytes": 204480,
+        "textSha256": "66c0df7793a644c9246ec1dad5468f25b99b1737e8b0d76bc6178def0aae4e83"
+      }
+    },
+    "rooftop": {
+      "vi": {
+        "src": "/audio/palace-learning/rooftop-vi.mp3",
+        "voice": "vi-VN-HoaiMyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 26.4,
+        "bytes": 158400,
+        "textSha256": "1a2e1a94732d72a17e94c69139c682cd526cb84ae66da4319592738ce4ddf76c"
+      },
+      "en": {
+        "src": "/audio/palace-learning/rooftop-en.mp3",
+        "voice": "en-US-JennyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 32.62,
+        "bytes": 195696,
+        "textSha256": "3762d8113e1106b081b5f873aacbcf5d497b8e383742ebe2f4ff93dcb67794e5"
+      }
+    },
+    "bunker": {
+      "vi": {
+        "src": "/audio/palace-learning/bunker-vi.mp3",
+        "voice": "vi-VN-HoaiMyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 23.86,
+        "bytes": 143136,
+        "textSha256": "656aa3cd773c2c23c8d1dd5dfedc3816a6dbd62764e97ba3773bbb0c82fa3f06"
+      },
+      "en": {
+        "src": "/audio/palace-learning/bunker-en.mp3",
+        "voice": "en-US-JennyNeural",
+        "provider": "Microsoft Edge online TTS (demo)",
+        "duration": 34.87,
+        "bytes": 209232,
+        "textSha256": "982654f62de265b2e7bcf12c714eca81adce0c738322a7a11d0c4707c142cc7d"
+      }
+    }
+  }
+}

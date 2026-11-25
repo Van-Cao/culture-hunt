@@ -1,0 +1,59 @@
+{
+  "version": "palace-stories-v3-learning",
+  "voices": {
+    "vi": "vi-VN-HoaiMyNeural",
+    "en": "en-US-JennyNeural"
+  },
+  "stories": {
+    "facade": {
+      "vi": {
+        "title": "Những lớp lịch sử trước mặt bạn",
+        "text": "Trước tòa Dinh bạn đang nhìn thấy là một công trình có diện mạo khác. Biến cố năm 1962 mở ra quá trình xây dựng lại, để kiến trúc của Ngô Viết Thụ xuất hiện trên nền đất cũ. Trong những đường ngang và lớp rèm đốt trúc, công trình mang theo những ý nghĩa văn hóa. Rồi ngày 30 tháng 4 năm 1975, nơi đây chứng kiến một bước ngoặt của đất nước. Những cuộc gặp sau đó tiếp tục ghi thêm lịch sử vào chính địa điểm này."
+      },
+      "en": {
+        "title": "Layers of history before you",
+        "text": "Before the Palace you see today, a different building stood on this site. The bombing in 1962 led to reconstruction and the architecture of Ngô Viết Thụ. Its horizontal lines and bamboo-inspired screens carry cultural meaning within a modern design. On the thirtieth of April, 1975, this place witnessed a turning point in the country's history. Meetings held afterwards added further chapters. As you look back at the façade, the building now holds a sequence of stories you can begin to read."
+      }
+    },
+    "reception": {
+      "vi": {
+        "title": "Một căn phòng, những lớp ký ức",
+        "text": "Bố cục cân đối dẫn mắt bạn về trung tâm căn phòng, nơi từng diễn ra những hoạt động chính trị quan trọng. Hãy dành thêm một ánh nhìn cho bức tranh. Trong đó, Hùng Vương cầm bút viết hai chữ Văn Lang. Tác phẩm ấy còn gắn với một lựa chọn của họa sĩ Trọng Nội: trao tặng mà không nhận thù lao. Căn phòng lưu giữ cả dấu mốc lịch sử lẫn câu chuyện của những người góp phần tạo nên nó."
+      },
+      "en": {
+        "title": "One room, layers of memory",
+        "text": "The balanced arrangement leads your eyes towards the centre of the hall, a setting for significant political events. Now give the painting another look. Hùng Vương holds a brush to write Văn Lang. The work also carries a personal story: artist Trọng Nội chose to donate it without accepting a fee. The room preserves both historical moments and the decisions of people who helped create it. A table, a picture and a small gesture can each open a different way into the past."
+      }
+    },
+    "cabinet": {
+      "vi": {
+        "title": "Quanh chiếc bàn trước bước ngoặt",
+        "text": "Chiếc bàn và những micro giúp bạn hình dung hoạt động hội họp từng diễn ra tại đây. Ảnh tư liệu đưa những chiếc ghế trống trở lại một thời có người ngồi quanh bàn. Đến cuối tháng tư năm 1975, các cuộc chuyển giao quyền lực diễn ra dồn dập. Trong buổi sáng cuối cùng ấy, lịch trình trình diện nội các mới tồn tại giữa những sự kiện đang thay đổi rất nhanh. Những mốc thời gian giúp chúng ta đọc rõ hơn bước ngoặt đó."
+      },
+      "en": {
+        "title": "Around the table before a turning point",
+        "text": "The table and microphones help you imagine the meetings once held here. An archival photograph brings the empty chairs back to a time when people sat around them. In late April 1975, political power changed hands rapidly. On that final morning, a planned presentation of the new cabinet stood alongside events unfolding outside its schedule. Dates and times help distinguish plans from what actually happened. Looking at the room through these records gives its quiet present a much fuller historical context."
+      }
+    },
+    "rooftop": {
+      "vi": {
+        "title": "Hai câu chuyện trên cùng một sân mái",
+        "text": "Bạn có thể đến sân thượng vì chiếc UH-1, rồi rời đi với câu chuyện của những dấu đỏ dưới chân. Chiếc trực thăng gắn với hoạt động di chuyển; còn cuộc không kích ngày 8 tháng 4 năm 1975 được thực hiện bằng F-5E do Nguyễn Thành Trung điều khiển. Những dấu đánh dấu trên mái giúp sự kiện ấy có một vị trí cụ thể trong không gian hôm nay. Một sân thượng, hai câu chuyện, và mỗi hiện vật cần được hiểu đúng vai trò."
+      },
+      "en": {
+        "title": "Two stories on one rooftop",
+        "text": "You may come to the rooftop for the U H one helicopter and leave remembering the red markings beneath your feet. The helicopter is associated with transport. The air raid on the eighth of April, 1975, used an F five E piloted by Nguyễn Thành Trung. The markings give that event a specific location in the space you see today. Two stories meet on this rooftop. Each aircraft, photograph and trace helps you understand a different role when you read it alongside the records."
+      }
+    },
+    "bunker": {
+      "vi": {
+        "title": "Những kết nối dưới lòng Dinh",
+        "text": "Rời sân thượng xuống đây, bạn đã đi từ một khoảng trời rộng đến những căn phòng khép kín. Trong khu hầm, thiết bị liên lạc và bản đồ phục vụ việc tiếp nhận thông tin, theo dõi tình hình và điều hành. Những hiện vật đang yên lặng hôm nay giúp bạn hình dung công việc từng diễn ra phía dưới tòa Dinh. Khi trở lại ánh sáng bên ngoài, bạn đã có thêm những mối nối để đọc hiểu các không gian vừa đi qua."
+      },
+      "en": {
+        "title": "Connections beneath the Palace",
+        "text": "From the rooftop to the bunker, you have moved from open sky to enclosed rooms. Communications equipment and maps supported the receipt of reports, the monitoring of events and command work. The silent objects help you picture activity beneath the Palace. Your diagram was a simplified illustration of these functions. As you return to the daylight, you can connect the spaces you explored: the façade, the ceremonial hall, the meeting room, the roof and the bunker. Each now holds a detail and a story to remember."
+      }
+    }
+  }
+}

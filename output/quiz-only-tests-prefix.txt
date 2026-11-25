@@ -1,0 +1,137 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { mkdtempSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { randomUUID } from "node:crypto";
+import { DatabaseSync } from "node:sqlite";
+import sharp from "sharp";
+import workbook from "../content/palace/question-bank-v2.source.json";
+import { getCheckpointQuestions, questionReview } from "../lib/palace/questions";
+import { isCorrectQuestionAnswer, isValidQuestionAnswer } from "../lib/palace/question-response";
+import { answerCheckpoint, readState, recordRecognition, requireAvailable, startRun, GameError } from "../lib/palace/store";
+import { checkpointIds, getCheckpoints } from "../lib/palace/checkpoints";
+import { identifyPhoto } from "../lib/palace/recognition";
+
+process.env.CULTURE_HUNT_DATA_DIR = mkdtempSync(join(tmpdir(), "culture-hunt-quiz-only-"));
+delete process.env.OPENAI_API_KEY;
+const legacyOwner = randomUUID(), legacyRun = randomUUID();
+const completedOwner = randomUUID(), completedRun = randomUUID();
+const old = new DatabaseSync(join(process.env.CULTURE_HUNT_DATA_DIR, "palace.sqlite"));
+old.exec(`
+ CREATE TABLE runs (id TEXT PRIMARY KEY, owner TEXT NOT NULL, started_at TEXT NOT NULL, completed_at TEXT, status TEXT NOT NULL);
+ CREATE TABLE visits (run_id TEXT NOT NULL, checkpoint_id TEXT NOT NULL, recognized_at TEXT NOT NULL, mode TEXT NOT NULL, completed_at TEXT, quiz_json TEXT, challenge_json TEXT, PRIMARY KEY(run_id, checkpoint_id));
+ CREATE TABLE attempts (id INTEGER PRIMARY KEY, run_id TEXT NOT NULL, checkpoint_id TEXT NOT NULL, at TEXT NOT NULL, answer INTEGER NOT NULL, correct INTEGER NOT NULL);
+ CREATE TABLE awards (owner TEXT NOT NULL, checkpoint_id TEXT NOT NULL, awarded_at TEXT NOT NULL, PRIMARY KEY(owner, checkpoint_id));
+`);
+old.prepare("INSERT INTO runs VALUES (?, ?, '2026-11-01', NULL, 'active')").run(legacyRun, legacyOwner);
+old.prepare("INSERT INTO visits VALUES (?, 'facade', '2026-11-01', 'sample', NULL, NULL, ?)").run(legacyRun, JSON.stringify({progress:{moves:3}}));
+old.prepare("INSERT INTO attempts(run_id,checkpoint_id,at,answer,correct) VALUES (?, 'facade', '2026-11-01', 1, 0)").run(legacyRun);
+const retiredSnapshot = [{id:"retired-question",bankVersion:"retired-v1",sourceId:"archived",question:{vi:"Archived",en:"Archived"},answers:{vi:["A","B"],en:["A","B"]},correct:0,hint:{vi:"",en:""},explanation:{vi:"",en:""}}];
+old.prepare("INSERT INTO runs VALUES (?, ?, '2026-11-01', '2026-11-01', 'completed')").run(completedRun, completedOwner);
+old.prepare("INSERT INTO visits VALUES (?, 'facade', '2026-11-01', 'sample', '2026-11-01', ?, ?)").run(completedRun, JSON.stringify(retiredSnapshot), JSON.stringify({progress:{moves:7}}));
+old.prepare("INSERT INTO awards VALUES (?, 'facade', '2026-11-01')").run(completedOwner);
+old.close();
+
+const answerFor = (id: typeof checkpointIds[number]) => getCheckpointQuestions(id).map(q => ({id:q.id, answer:q.solution ?? q.correct}));
+function solve(owner: string, runId: string, id: typeof checkpointIds[number]) {
+  for (const q of answerFor(id)) answerCheckpoint(owner,runId,id,q.answer,q.id);
+}
+
+test("unfinished legacy visits immediately use the workbook while old attempts and recognition survive", () => {
+  const state=readState(legacyOwner), visit=state.runs[0].visits.facade!;
+  assert.equal(visit.quiz.length,6);
+  assert.ok(visit.quiz.every(q=>q.bankVersion==="palace-bank-v2-xlsx"));
+  assert.equal(visit.recognizedAt,"2026-11-01");
+  assert.equal(visit.attempts.length,1);
+  assert.equal(visit.attempts[0].questionId,"facade-legacy-1");
+  assert.equal("challenge" in visit,false);
+  assert.equal(state.xp,0);
+  solve(legacyOwner,legacyRun,"facade");
+  assert.equal(readState(legacyOwner).xp,150);
+});
+
+test("completed visits preserve their historical bank, old game record and lifetime awards; the retired bank cannot be played", () => {
+  const state=readState(completedOwner), visit=state.runs[0].visits.facade!;
+  assert.equal(state.xp,150);
+  assert.equal(visit.completedAt,"2026-11-01");
+  assert.equal(visit.quiz[0].bankVersion,"retired-v1");
+  assert.equal(visit.legacyGameMoves,7);
+  assert.throws(()=>answerCheckpoint(completedOwner,completedRun,"facade",0,"retired-question"),GameError);
+});
+
+test("profiles, order and recognition gate every quiz", () => {
+  const owner=randomUUID(), runId=startRun(owner).activeRunId!;
+  assert.equal(startRun(owner).activeRunId,runId);
+  assert.equal(readState(randomUUID()).runs.length,0);
+  assert.throws(()=>requireAvailable(owner,runId,"reception"),GameError);
+  assert.throws(()=>requireAvailable(randomUUID(),runId,"facade"),GameError);
+  assert.throws(()=>answerCheckpoint(owner,runId,"facade",[0],"facade-xlsx-3"),GameError);
+  recordRecognition(owner,runId,"facade","sample","mismatch","reception");
+  assert.equal(readState(owner).runs[0].visits.facade,undefined);
+});
+
+test("new recognition opens only the new quiz, wrong attempts persist, and only the final correct answer unlocks the checkpoint", () => {
+  const owner=randomUUID(), runId=startRun(owner).activeRunId!;
+  recordRecognition(owner,runId,"facade","sample","matched","facade");
+  const questions=answerFor("facade"), first=questions[0];
+  assert.equal("challenge" in readState(owner).runs[0].visits.facade!,false);
+  for(const bad of [0,[0,0],[8],[],"0"])
+    assert.throws(()=>answerCheckpoint(owner,runId,"facade",bad,first.id),GameError);
+  assert.throws(()=>answerCheckpoint(owner,runId,"facade",questions[1].answer,questions[1].id),GameError);
+  assert.throws(()=>answerCheckpoint(owner,runId,"facade",[0],"forged"),GameError);
+  assert.throws(()=>answerCheckpoint(randomUUID(),runId,"facade",first.answer,first.id),GameError);
+  assert.equal(answerCheckpoint(owner,runId,"facade",[6,7],first.id).correct,false);
+  assert.deepEqual(readState(owner).runs[0].visits.facade!.attempts[0].answer,[6,7]);
+  for(const q of questions.slice(0,-1)) {
+    answerCheckpoint(owner,runId,"facade",q.answer,q.id);
+    assert.equal(readState(owner).xp,0);
+    assert.equal(readState(owner).runs[0].visits.facade!.completedAt,null);
+    assert.throws(()=>requireAvailable(owner,runId,"reception"),GameError);
+  }
+  const last=questions.at(-1)!;
+  const done=answerCheckpoint(owner,runId,"facade",last.answer,last.id);
+  assert.equal(done.state.xp,150);
+  assert.ok(done.state.runs[0].visits.facade!.completedAt);
+  answerCheckpoint(owner,runId,"facade",last.answer,last.id);
+  assert.equal(readState(owner).runs[0].visits.facade!.attempts.length,7);
+  requireAvailable(owner,runId,"reception");
+});
+
+test("partial quizzes resume and recognition does not replace answers; new runs retain history without XP farming", () => {
+  const owner=randomUUID();
+  let firstRun="";
+  for(let round=0;round<2;round++) {
+    const runId=startRun(owner).activeRunId!;
+    if(!round) firstRun=runId;
+    for(const id of checkpointIds) {
+      recordRecognition(owner,runId,id,"sample","matched",id);
+      const first=answerFor(id)[0];
+      answerCheckpoint(owner,runId,id,first.answer,first.id);
+      const partial=readState(owner).runs[0].visits[id]!;
+      assert.equal("correct" in partial.quiz[0],false);
+      assert.equal("solution" in partial.quiz[0],false);
+      recordRecognition(owner,runId,id,"reference","matched",id);
+      assert.deepEqual(readState(owner).runs[0].visits[id]!.attempts,partial.attempts);
+      solve(owner,runId,id);
+    }
+    const done=readState(owner);
+    assert.equal(done.xp,750);assert.equal(done.discovered.length,5);
+    assert.equal(done.activeRunId,null);assert.equal(done.runs[0].status,"completed");
+  }
+  const state=readState(owner);
+  assert.equal(state.runs.length,2);
+  assert.ok(state.runs.find(run=>run.id===firstRun));
+  for(const run of state.runs) for(const id of checkpointIds)
+    assert.equal(run.visits[id]!.attempts.length,getCheckpointQuestions(id).length);
+});
+
+test("starting over archives an unfinished run rather than deleting it", () => {
+  const owner=randomUUID(), runId=startRun(owner).activeRunId!;
+  recordRecognition(owner,runId,"facade","sample","matched","facade");
+  const next=startRun(owner,true);
+  assert.equal(next.runs.length,2);
+  assert.equal(next.runs.find(run=>run.id===runId)!.status,"abandoned");
+  assert.ok(next.runs.find(run=>run.id===runId)!.visits.facade);
+});

@@ -1,0 +1,975 @@
+{
+  "version": "palace-bank-v2-xlsx",
+  "source": "CultureHunt.xlsx",
+  "questions": [
+    {
+      "id": "facade-xlsx-3",
+      "sourceId": "xlsx-row-3",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "multi",
+      "question": {
+        "vi": "Hãy nhìn toàn bộ tòa nhà trước mắt bạn, mặt tiền Dinh - kiến trúc sư Ngô Viết Thụ đã khéo léo thiết kế thành những chữ Hán mang thông điệp văn hóa Á Đông. Những chữ Hán nào được lồng ghép trong kiến trúc này?",
+        "en": "Which Chinese characters are incorporated into the Palace façade? Select every correct character."
+      },
+      "answers": {
+        "vi": [
+          "Khẩu (口)",
+          "Trung (中)",
+          "Tam (三)",
+          "Vương (王)",
+          "Chủ (主)",
+          "Hưng (興)",
+          "Cát (吉)",
+          "An (安)"
+        ],
+        "en": [
+          "Khẩu (口)",
+          "Trung (中)",
+          "Tam (三)",
+          "Vương (王)",
+          "Chủ (主)",
+          "Hưng (興)",
+          "Cát (吉)",
+          "An (安)"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "\"Cẩn thận kẻo dính bẫy nhé! Có những đáp án cài vào các chữ nghe rất hợp lý nhưng thực chất không nằm trên mặt tiền này đâu.\"\n\"Hãy nhìn vào khối lầu phía trên, trục giữa và toàn bộ mặt tiền để tìm thêm chữ nhé!\"",
+        "en": "Distinguish the front elevation from the overall ground plan."
+      },
+      "explanation": {
+        "vi": "Chuẩn xác! Bạn đã rất khéo léo khi nhận ra 6 chữ Khẩu (口) – Trung (中) – Tam (三) – Vương (王) – Chủ (主) – Hưng (興). Ngoài ra, kiến trúc sư Ngô Viết Thụ cũng đã khéo léo lồng ghép chữ Cát (吉) vào mặt bằng tổng thể nhưng không nằm trong mặt tiền của Dinh.",
+        "en": "The façade incorporates Khẩu, Trung, Tam, Vương, Chủ and Hưng. Cát describes the overall plan rather than the façade."
+      },
+      "solution": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "facade-xlsx-4",
+      "sourceId": "xlsx-row-4",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "single",
+      "question": {
+        "vi": "Nếu zoom sát vào phần rèm chắn nắng chạy dọc mặt tiền, bạn sẽ thấy những thanh dọc xếp đều nhau như đốt cây tre. Đố bạn những thanh rèm này được làm từ chất liệu gì và nặng khoảng bao nhiêu mỗi thanh?",
+        "en": "What material forms the bamboo-shaped screen elements, and approximately how much does each weigh?"
+      },
+      "answers": {
+        "vi": [
+          "Gỗ lim nguyên khối, nặng khoảng 150 kg",
+          "Bê tông đúc tạo hình đốt trúc, nặng khoảng 400 kg",
+          "Hợp kim nhôm đúc rỗng, nặng khoảng 50 kg",
+          "Đá hoa cương nguyên tấm, nặng khoảng 800 kg"
+        ],
+        "en": [
+          "Solid ironwood, about 150 kg",
+          "Moulded concrete, about 400 kg",
+          "Hollow aluminium alloy, about 50 kg",
+          "Solid granite, about 800 kg"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Nghe tên 'rèm hoa đá' hay nhìn giống tre sẽ dễ bị hiểu lầm lắm, nhưng đây lại là một vật liệu xây dựng quen thuộc được đúc tạo hình khéo léo và có sức nặng khá đáng nể đấy! Hãy thử lại nào!",
+        "en": "A light-looking architectural form need not be made from a light material."
+      },
+      "explanation": {
+        "vi": "Không ngờ đúng không! Nhìn thanh thoát và mềm mại như những đốt trúc vậy thôi, nhưng mỗi thanh rèm hoa đá này thực chất là bê tông nặng tới khoảng 400 ký đấy!",
+        "en": "The supplied bank identifies moulded concrete elements weighing about 400 kg each, despite their delicate appearance."
+      }
+    },
+    {
+      "id": "facade-xlsx-5",
+      "sourceId": "xlsx-row-5",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "single",
+      "question": {
+        "vi": "Ngay trước mặt tiền Dinh là bãi cỏ hình oval rộng lớn với đài phun nước ở tâm. Ngoài việc tạo khoảng mở thoáng đãng cho mặt tiền đồ sộ, khoảng không gian mở trước công trình còn đóng vai trò gì trong triết lý kiến trúc truyền thống?",
+        "en": "Beyond opening up the view, what role does the landscaped space in front of the Palace play?"
+      },
+      "answers": {
+        "vi": [
+          "Tạo khoảng đệm đón gió, ánh sáng và cân bằng sự uy nghiêm của khối nhà",
+          "Làm đường băng dự phòng cho trực thăng hạ cánh khẩn cấp",
+          "Che khuất hoàn toàn tầng hầm bên dưới mặt đất",
+          "Phân chia ranh giới giữa khu hành chính và khu nhà ở dân sự"
+        ],
+        "en": [
+          "Admitting air and light while softening the monumental building",
+          "Providing an emergency helicopter runway",
+          "Completely concealing the basement",
+          "Separating a civilian housing zone"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Gợi ý nhé: hãy nghĩ xem khi một tòa nhà lớn nằm giữa trời nắng phương Nam, một khoảng mở rộng có cỏ và nước phía trước sẽ giúp không gian dễ chịu hơn thế nào. Chọn lại thử xem!",
+        "en": "Think about air, greenery and the visitor’s sense of scale."
+      },
+      "explanation": {
+        "vi": "Chính xác! Khoảng sân rộng mở với thảm cỏ và làn nước trước mặt giúp công trình 'thở' cùng thiên nhiên Sài Gòn, làm dịu đi sự bề thế của khối kiến trúc chính.",
+        "en": "The lawn, water and open space soften the scale of the building and create a transition into it."
+      }
+    },
+    {
+      "id": "facade-xlsx-6",
+      "sourceId": "xlsx-row-6",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "order",
+      "question": {
+        "vi": "Sắp xếp các mốc sau từ sớm đến muộn.",
+        "en": "Arrange these milestones from earliest to latest."
+      },
+      "answers": {
+        "vi": [
+          "Khởi công Dinh Norodom",
+          "Khánh thành Dinh mới theo thiết kế Ngô Viết Thụ",
+          "Cuộc ném bom làm hư hại Dinh cũ năm 1962",
+          "Xe tăng tiến vào Dinh ngày 30/4/1975",
+          "Hội nghị Hiệp thương thống nhất cuối năm 1975",
+          "Mở cửa đón khách tham quan di sản"
+        ],
+        "en": [
+          "Construction of Norodom Palace begins",
+          "The new Palace is inaugurated",
+          "The old Palace is damaged in the 1962 bombing",
+          "Tanks enter on 30 April 1975",
+          "The late-1975 political consultative conference",
+          "The heritage site opens to visitors"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Chưa chuẩn hẳn rồi! Mẹo nhỏ cho bạn: hãy tách ra làm hai nhóm trước — những cột mốc trước ngày ba mươi tháng tư năm một nghìn chín trăm bảy mươi lăm, và những cột mốc sau ngày lịch sử đó. Thử xếp lại xem nào!",
+        "en": "Separate events before April 1975 from those afterwards."
+      },
+      "explanation": {
+        "vi": "Bạn vừa nối lại hành trình: Dinh Norodom → biến cố năm 1962 → khánh thành Dinh mới năm 1966 → ngày 30/4/1975 → Hội nghị Hiệp thương → mở cửa tham quan.",
+        "en": "The sequence runs from the Norodom era through 1962, the 1966 inauguration, April 1975, the consultative conference and heritage visits."
+      },
+      "solution": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": "facade-xlsx-7",
+      "sourceId": "xlsx-row-7",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "match",
+      "question": {
+        "vi": "Điền hai mảnh thông tin: trưa ngày nào, xe tăng số hiệu bao nhiêu đã húc đổ cổng chính Dinh Độc Lập?",
+        "en": "Complete the clues: on which date did tank 390 break through the Palace’s main gate?"
+      },
+      "answers": {
+        "vi": [
+          "30/4/1975",
+          "390",
+          "19/5/1975",
+          "101"
+        ],
+        "en": [
+          "30/4/1975",
+          "390",
+          "19/5/1975",
+          "101"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Gần đúng rồi đấy! Hãy kiểm tra lại ngày tháng lịch sử và con số quen thuộc gắn với khoảnh khắc tiến vào Dinh trưa hôm đó nhé.",
+        "en": "Match the date and tank number; distinguish the main and side gates."
+      },
+      "explanation": {
+        "vi": "Chính xác! Ngày 30/4/1975, xe tăng 390 húc đổ cổng chính. Xe tăng 843 gắn với cổng phụ; đừng nhầm hai chi tiết này nhé.",
+        "en": "On 30 April 1975, tank 390 broke through the main gate. Tank 843 is associated with the side gate."
+      },
+      "solution": [
+        0,
+        1
+      ],
+      "prompts": {
+        "vi": [
+          "Ngày diễn ra sự kiện",
+          "Số hiệu xe tăng húc cổng chính"
+        ],
+        "en": [
+          "Date of the event",
+          "Tank that broke through the main gate"
+        ]
+      }
+    },
+    {
+      "id": "facade-xlsx-8",
+      "sourceId": "xlsx-row-8",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "facade",
+      "kind": "match",
+      "question": {
+        "vi": "Ghép mỗi dấu mốc hoặc danh xưng với ý nghĩa tương ứng.",
+        "en": "Match each milestone or name with its meaning."
+      },
+      "answers": {
+        "vi": [
+          "Hội nghị chính trị đặt nền móng cho thống nhất về mặt nhà nước",
+          "Tên gọi gắn với vai trò và các sự kiện sau năm 1975",
+          "Bước ngoặt lịch sử ngày 30/4/1975"
+        ],
+        "en": [
+          "The political conference preparing state reunification",
+          "The name associated with the site’s post-1975 role",
+          "The historic transition on 30 April 1975"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Có vài mảnh ghép chưa đúng cặp rồi! Hãy để ý xem mốc nào gắn với thời điểm chuyển giao trưa tháng Tư, mốc nào gắn với bàn bạc thống nhất hai miền. Thử ghép lại nhé!",
+        "en": "Distinguish the April transition, the conference and the later name."
+      },
+      "explanation": {
+        "vi": "Bạn vừa ghép nối thành công những dấu mốc làm nên chiều sâu lịch sử của nơi này.",
+        "en": "The events and the site’s later name describe different layers of its history."
+      },
+      "solution": [
+        2,
+        0,
+        1
+      ],
+      "prompts": {
+        "vi": [
+          "Trưa 30/4/1975",
+          "Hội nghị Hiệp thương thống nhất cuối năm 1975",
+          "Danh xưng Hội trường Thống Nhất"
+        ],
+        "en": [
+          "Midday, 30 April 1975",
+          "The late-1975 consultative conference",
+          "The name Reunification Hall"
+        ]
+      }
+    },
+    {
+      "id": "reception-xlsx-10",
+      "sourceId": "xlsx-row-10",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "reception",
+      "kind": "single",
+      "question": {
+        "vi": "Quan sát Phòng Khánh tiết: cách mô tả nào phù hợp nhất với bố cục bàn ghế, ánh sáng và điểm nhấn thị giác của không gian này?",
+        "en": "Which description best captures the Reception Hall’s formal spatial arrangement?"
+      },
+      "answers": {
+        "vi": [
+          "Tạo trục đối xứng trang nghiêm hướng thẳng về trung tâm lễ nghi, kết hợp gam màu trầm ấm và họa tiết truyền thống để giữ sự uy nghi nhưng vẫn hiếu khách",
+          "Sắp xếp bàn ghế theo cụm tròn bất đối xứng như phòng trà nghệ thuật để phá vỡ khoảng cách cấp bậc và khuyến khích trò chuyện tự do",
+          "Dồn toàn bộ nguồn sáng nhân tạo vào một bục cao duy nhất ở góc phòng nhằm tạo hiệu ứng sân khấu kịch tính cho người phát biểu",
+          "Tiết chế tối đa các tác phẩm hội họa và chi tiết văn hóa bản địa để giữ không gian mang tính trung lập tuyệt đối theo chuẩn tối giản phương Tây"
+        ],
+        "en": [
+          "A balanced ceremonial axis with warm colours and cultural details",
+          "Asymmetrical clusters like an informal tea room",
+          "All light concentrated on a stage in one corner",
+          "No local art or cultural details"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Câu này bẫy hơi sâu đúng không? Thử ngước mắt nhìn quanh căn phòng bạn vừa chụp xem: bố cục bàn ghế đang xếp đối xứng hay cụm tròn, ánh sáng trải đều hay dồn vào một góc, và trên tường có treo tác phẩm đậm chất Việt Nam không? Đối chiếu thật là ra ngay!",
+        "en": "Compare symmetry, lighting and decorative details in the reference image."
+      },
+      "explanation": {
+        "vi": "Bạn quá tinh tế khi đã quan sát và nhận ra được ý đồ của kiến trúc sư!",
+        "en": "A balanced arrangement and a strong visual axis give the room its formal character."
+      }
+    },
+    {
+      "id": "reception-xlsx-11",
+      "sourceId": "xlsx-row-11",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "reception",
+      "kind": "order",
+      "question": {
+        "vi": "Sắp xếp các bước trong tình huống nghi lễ minh họa tại Phòng Khánh tiết.",
+        "en": "Put these stages of an illustrative ceremony in order."
+      },
+      "answers": {
+        "vi": [
+          "Các bên thực hiện phần nghi thức và phát biểu theo quy trình chính thức tại khu vực trung tâm",
+          "Đoàn đại biểu tiến vào khu vực tiếp đón bên trong sau khi đi qua các không gian dẫn lối",
+          "Sự kiện khép lại và ghi nhận giá trị lịch sử gắn với không gian tổ chức",
+          "Hệ thống bài trí mang tính biểu tượng thiết lập sắc thái trang trọng cho toàn bộ không gian tiếp đón"
+        ],
+        "en": [
+          "The formal ceremony and speeches take place",
+          "The delegation enters the space",
+          "The event concludes",
+          "The arrangement establishes a formal atmosphere"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Phân biệt bước tiến vào không gian, cảm nhận bài trí, phần nghi thức chính và thời điểm kết thúc.",
+        "en": "Start with arrival and finish with the conclusion."
+      },
+      "explanation": {
+        "vi": "Đúng thứ tự: tiến vào → cảm nhận sắc thái bài trí → thực hiện nghi thức → khép lại. Đây là tình huống minh họa trong game, không phải quy trình nghi lễ lịch sử được tái dựng.",
+        "en": "Entry precedes experiencing the setting, the formal proceedings and the conclusion. This is illustrative, not a historical protocol."
+      },
+      "solution": [
+        1,
+        3,
+        0,
+        2
+      ]
+    },
+    {
+      "id": "reception-xlsx-12",
+      "sourceId": "xlsx-row-12",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "reception",
+      "kind": "single",
+      "question": {
+        "vi": "Theo ngân hàng câu hỏi, bức tranh “Việt Nam Quốc Tổ” tại Phòng Khánh tiết có kích thước bao nhiêu?",
+        "en": "According to the supplied bank, what are the dimensions of the painting “Việt Nam Quốc Tổ”?"
+      },
+      "answers": {
+        "vi": [
+          "540 × 234 × 5 cm",
+          "420 × 180 × 3 cm",
+          "600 × 250 × 10 cm",
+          "320 × 140 × 5 cm"
+        ],
+        "en": [
+          "540 × 234 × 5 cm",
+          "420 × 180 × 3 cm",
+          "600 × 250 × 10 cm",
+          "320 × 140 × 5 cm"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Sai rồi. Hãy ước lượng lại kích thước bức ảnh",
+        "en": "Compare the width, height and thickness in each option."
+      },
+      "explanation": {
+        "vi": "Chính xác! Kích thước ghi trong ngân hàng câu hỏi là 540 × 234 × 5 cm.",
+        "en": "The supplied bank records 540 × 234 × 5 cm."
+      }
+    },
+    {
+      "id": "reception-xlsx-13",
+      "sourceId": "xlsx-row-13",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "reception",
+      "kind": "single",
+      "question": {
+        "vi": "Bài toán minh họa: một căn phòng dài 32 m, rộng bằng một nửa chiều dài trừ 2 m. Diện tích là bao nhiêu?",
+        "en": "In this calculation, a room is 32 m long. Its width is half its length minus 2 m. What is its area?"
+      },
+      "answers": {
+        "vi": [
+          "448 m²",
+          "480 m²",
+          "384 m²",
+          "512 m²"
+        ],
+        "en": [
+          "448 m²",
+          "480 m²",
+          "384 m²",
+          "512 m²"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Tiếc quá. Bạn đã nhẩm sai đâu đó rồi. Hãy nhẩm lại nhé",
+        "en": "Find the width before multiplying by the length."
+      },
+      "explanation": {
+        "vi": "Rộng = 32 ÷ 2 − 2 = 14 m. Diện tích = 32 × 14 = 448 m². Đây là bài toán theo dữ kiện cho sẵn, không phải kết quả đo đạc căn phòng.",
+        "en": "Width = 32 ÷ 2 − 2 = 14 m. Area = 32 × 14 = 448 m². This is an exercise, not a room survey."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-17",
+      "sourceId": "xlsx-row-17",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "number",
+      "question": {
+        "vi": "Theo câu hỏi quan sát của trạm Nội các, trên bàn có bao nhiêu chiếc micro cố định?",
+        "en": "According to this checkpoint’s question bank, how many fixed microphones are on the Cabinet Room table?"
+      },
+      "answers": {
+        "vi": [],
+        "en": []
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Đếm kĩ thêm bạn nhé",
+        "en": "Count microphones separately from seats."
+      },
+      "explanation": {
+        "vi": "Đáp án của ngân hàng là 10 micro. Hãy phân biệt số micro với số ghế quanh bàn.",
+        "en": "The supplied answer is 10 microphones. This does not imply one microphone for every chair."
+      },
+      "solution": "10"
+    },
+    {
+      "id": "cabinet-xlsx-19",
+      "sourceId": "xlsx-row-19",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Khi bước vào một phòng họp cấp cao, cách sắp xếp chỗ ngồi quanh bàn thường phản ánh điều gì?",
+        "en": "In a formal meeting room, what does the seating arrangement usually reflect?"
+      },
+      "answers": {
+        "vi": [
+          "Thứ bậc, vai trò tham gia và cách điều phối cuộc thảo luận",
+          "Chiều cao cân nặng của từng thành viên tham dự",
+          "Thứ tự theo bảng chữ cái tên của các bộ",
+          "Số năm làm việc tại tòa nhà của từng người"
+        ],
+        "en": [
+          "Roles, hierarchy and the organisation of discussion",
+          "Participants’ height and weight",
+          "Alphabetical order of ministry names",
+          "Years spent working in the building"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Chưa đúng. Thử nhìn tổng thể cách kê bàn ghế trước mặt và nghĩ xem người điều hành sẽ nhìn về đâu.",
+        "en": "Think about the chairperson and the participants."
+      },
+      "explanation": {
+        "vi": "Đúng. Trong các cuộc họp chính thức, vị trí ngồi luôn có quy ước riêng để giữ trật tự và điều phối.",
+        "en": "Seating conventions can help establish roles and organise discussion."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-20",
+      "sourceId": "xlsx-row-20",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Trong phòng Nội các kê một chiếc bàn hình bầu dục lớn với bao nhiêu ghế đặt xung quanh, và cách bày trí này nhằm tạo ra điều gì giữa những người dự họp?",
+        "en": "According to the bank, how many seats surround the oval table, and what was the intended benefit?"
+      },
+      "answers": {
+        "vi": [
+          "36 ghế — nhằm tạo sự hiểu biết lẫn nhau giữa các thành viên tham gia dự họp",
+          "24 ghế — nhằm phân chia rõ ranh giới giữa phe dân sự và quân đội",
+          "48 ghế — nhằm phục vụ cả phóng viên báo chí ngồi dự thính quanh bàn",
+          "12 ghế — nhằm chỉ dành riêng cho các thành viên thường trực Nội các"
+        ],
+        "en": [
+          "36 seats — understanding among participants",
+          "24 seats — separating civilian and military groups",
+          "48 seats — including press observers",
+          "12 seats — permanent members only"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Hãy đếm lại số ghế trong phòng nhé!",
+        "en": "Distinguish the chair count from the microphone count."
+      },
+      "explanation": {
+        "vi": "Chính xác!",
+        "en": "The bank identifies 36 seats and an intention to support understanding among participants."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-21",
+      "sourceId": "xlsx-row-21",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Trước năm 1975, ngoài việc là nơi họp của Hội đồng Nội các và Hội đồng Tổng trưởng, căn phòng này còn giữ chức năng nào dưới đây?",
+        "en": "Beyond cabinet and ministerial council meetings, what other function did this room serve before 1975?"
+      },
+      "answers": {
+        "vi": [
+          "Là nơi trình diện Hội đồng nội các mới và tổ chức các cuộc họp quan trọng khác do Tổng thống làm chủ tọa",
+          "Là nơi tiếp đón phái đoàn ngoại giao nước ngoài trình quốc thư",
+          "Là phòng lưu trữ hồ sơ mật và bản đồ quân sự của toàn miền",
+          "Là nơi ở thường trực của gia đình Tổng thống và Thủ tướng"
+        ],
+        "en": [
+          "New cabinet presentations and important meetings chaired by the President",
+          "Diplomatic credential ceremonies",
+          "Storage of all classified military maps",
+          "The permanent residence of the President’s family"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Chưa dúng rồi! Hãy suy nghĩ lại nhé!",
+        "en": "Look for a function related to meetings rather than residence or storage."
+      },
+      "explanation": {
+        "vi": "Chuẩn luôn! Đây vừa là nơi họp của Hội đồng Nội các, Hội đồng Tổng trưởng, vừa là nơi trình diện nội các mới và họp dưới sự chủ tọa của Tổng thống.",
+        "en": "It also hosted cabinet presentations and other important meetings chaired by the President."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-22",
+      "sourceId": "xlsx-row-22",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Theo ngân hàng câu hỏi, Nội các của Vũ Văn Mẫu dự định trình diện lúc mấy giờ sáng 30/4/1975, gắn với một lời kêu gọi được phát trên đài?",
+        "en": "According to the bank, when was Vũ Văn Mẫu’s cabinet due to meet the President on 30 April 1975, and what broadcast coincided with it?"
+      },
+      "answers": {
+        "vi": [
+          "10 giờ sáng — gắn với lời kêu gọi trên đài của Dương Văn Minh",
+          "8 giờ sáng — thông qua kế hoạch phòng thủ mới",
+          "10 giờ sáng — bàn giao tòa nhà cho chính quyền mới",
+          "12 giờ trưa — kết thúc phiên họp đầu tiên"
+        ],
+        "en": [
+          "10 a.m. — a broadcast appeal by Dương Văn Minh",
+          "8 a.m. — a new defence plan",
+          "10 a.m. — the building handover",
+          "Noon — the first cabinet meeting ended"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Chưa đúng rồi. Lật lại mốc giờ 10h sáng ngày 30/4/1975 và sự kiện phát đi trên đài phát thanh lúc đó nhé!",
+        "en": "Focus on the scheduled presentation, not later events around midday."
+      },
+      "explanation": {
+        "vi": "Ngân hàng ghi mốc dự định trình diện là 10 giờ sáng, gắn với một lời kêu gọi trên đài. Cần phân biệt mốc này với lời tuyên bố đầu hàng vô điều kiện sau đó.",
+        "en": "The bank links the planned 10 a.m. presentation with a broadcast appeal. Distinguish this from the later unconditional surrender announcement."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-23",
+      "sourceId": "xlsx-row-23",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Theo ngân hàng câu hỏi, các cuộc họp Nội các thường được tổ chức vào thời điểm nào?",
+        "en": "According to the bank, when were cabinet meetings usually held?"
+      },
+      "answers": {
+        "vi": [
+          "Sáng thứ Hai hằng tuần",
+          "Sáng thứ Tư hằng tuần",
+          "Chiều thứ Sáu hằng tuần",
+          "Sáng Chủ nhật hằng tuần"
+        ],
+        "en": [
+          "Monday morning",
+          "Wednesday morning",
+          "Friday afternoon",
+          "Sunday morning"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Tiếc quá hãy chọn lại nhé!",
+        "en": "The answer is a weekday morning."
+      },
+      "explanation": {
+        "vi": "Theo đáp án được cung cấp, các cuộc họp diễn ra vào sáng thứ Tư hằng tuần.",
+        "en": "The supplied answer is Wednesday morning."
+      }
+    },
+    {
+      "id": "cabinet-xlsx-24",
+      "sourceId": "xlsx-row-24",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "cabinet",
+      "kind": "single",
+      "question": {
+        "vi": "Ai là người đứng đầu Nội các cuối cùng của Việt Nam Cộng hòa, được thành lập ngày 29/4/1975?",
+        "en": "Who headed the final cabinet of the Republic of Vietnam, formed in late April 1975?"
+      },
+      "answers": {
+        "vi": [
+          "Trần Thiện Khiêm",
+          "Vũ Văn Mẫu",
+          "Nguyễn Cao Kỳ",
+          "Trần Văn Hương"
+        ],
+        "en": [
+          "Trần Thiện Khiêm",
+          "Vũ Văn Mẫu",
+          "Nguyễn Cao Kỳ",
+          "Trần Văn Hương"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Tiếc quá! Bạn hãy chọn lại nhé",
+        "en": "His name also appears in the question about the planned presentation."
+      },
+      "explanation": {
+        "vi": "Quá chuẩn! Vũ Văn Mẫu được bổ nhiệm làm Thủ tướng trong ngày 29/4/1975, khi tình hình tại Sài Gòn đang ở thời điểm đặc biệt căng thẳng.",
+        "en": "Vũ Văn Mẫu headed the final cabinet, formed in the closing days of April 1975."
+      }
+    },
+    {
+      "id": "rooftop-xlsx-26",
+      "sourceId": "xlsx-row-26",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "single",
+      "question": {
+        "vi": "Hãy nhìn vào hình tròn đỏ ngay dưới nền, ngày 8/4/1975, ai là người thực hiện cuộc ném bom Dinh Độc Lập?",
+        "en": "Who carried out the air raid on the Palace on 8 April 1975?"
+      },
+      "answers": {
+        "vi": [
+          "Nguyễn Văn Thiệu",
+          "Nguyễn Thành Trung",
+          "Dương Văn Minh",
+          "Trần Thiện Khiêm"
+        ],
+        "en": [
+          "Nguyễn Văn Thiệu",
+          "Nguyễn Thành Trung",
+          "Dương Văn Minh",
+          "Trần Thiện Khiêm"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Hãy đọc kĩ lại chữ dưới nền nhá!",
+        "en": "Distinguish the pilot from the political figures."
+      },
+      "explanation": {
+        "vi": "Bạn đã chính xác! Nguyễn Thành Trung là phi công hoạt động bí mật cho cách mạng trong lực lượng không quân Việt Nam Cộng hòa.",
+        "en": "Pilot Nguyễn Thành Trung carried out the raid in an F-5E. The displayed UH-1 is a different aircraft."
+      }
+    },
+    {
+      "id": "rooftop-xlsx-27",
+      "sourceId": "xlsx-row-27",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "single",
+      "question": {
+        "vi": "Đứng ngay trên sân đáp trực thăng ở tầng cao nhất của Dinh Độc Lập, hiện vật máy bay trực thăng trưng bày tại đây thuộc dòng nào và từng gắn với hoạt động nào trước đây?",
+        "en": "What helicopter is displayed on the rooftop, and what role does the bank associate with it?"
+      },
+      "answers": {
+        "vi": [
+          "Trực thăng UH-1 — từng phục vụ việc di chuyển của Tổng thống Việt Nam Cộng hòa",
+          "Máy bay chiến đấu phản lực — từng cất cánh từ sân thượng để tuần tra bờ biển",
+          "Trực thăng dân dụng chở khách du lịch tham quan Sài Gòn từ năm 1954",
+          "Máy bay vận tải cỡ lớn hạ cánh suốt thời kỳ Dinh Norodom"
+        ],
+        "en": [
+          "UH-1 — presidential transport",
+          "A jet fighter launching from the rooftop",
+          "A tourist helicopter operating since 1954",
+          "A large transport aircraft from the Norodom era"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Sai tè le rồi nhé. Nhìn lại chiếc trực thăng trên sân đáp và nghĩ tới mục đích di chuyển cấp cao gắn với tòa nhà này trước năm 1975 nhé!",
+        "en": "It is a helicopter, not the F-5E used in the air raid."
+      },
+      "explanation": {
+        "vi": "Chuẩn xác! Trên sân đáp trực thăng hiện trưng bày chiếc UH-1 từng phục vụ việc di chuyển của Tổng thống Việt Nam Cộng hòa.",
+        "en": "The rooftop displays a UH-1, associated in the bank with presidential transport."
+      }
+    },
+    {
+      "id": "rooftop-xlsx-28",
+      "sourceId": "xlsx-row-28",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "number",
+      "question": {
+        "vi": "Theo kế hoạch ban đầu được mô tả trong ngân hàng câu hỏi, có bao nhiêu quả bom dự định dành riêng để tấn công Dinh?",
+        "en": "In the initial plan described by the bank, how many bombs were intended specifically for the Palace?"
+      },
+      "answers": {
+        "vi": [],
+        "en": []
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Phân biệt số dự định dành riêng cho Dinh với tổng số mang theo hoặc thực tế đã thả.",
+        "en": "Distinguish the initial allocation from the total carried or dropped."
+      },
+      "explanation": {
+        "vi": "Theo nội dung nhóm cung cấp: kế hoạch ban đầu dành 2 quả cho Dinh; phần giải thích phân biệt với tổng 4 quả được thả sau đó.",
+        "en": "The bank distinguishes the initial allocation of two bombs for the Palace from four eventually dropped there."
+      },
+      "solution": "2"
+    },
+    {
+      "id": "rooftop-xlsx-29",
+      "sourceId": "xlsx-row-29",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "order",
+      "question": {
+        "vi": "Sắp xếp diễn biến cuộc không kích ngày 8/4/1975.",
+        "en": "Arrange the stages of the 8 April 1975 air raid in order."
+      },
+      "answers": {
+        "vi": [
+          "Nguyễn Thành Trung điều khiển F-5E thực hiện cuộc không kích",
+          "Bom được thả xuống Dinh",
+          "Một số quả bom phát nổ, gây hư hại công trình",
+          "Nguyễn Thành Trung bay về vùng giải phóng"
+        ],
+        "en": [
+          "Nguyễn Thành Trung approaches in an F-5E",
+          "Bombs are released over the Palace",
+          "Explosions damage the building",
+          "The pilot flies to the liberated area"
+        ]
+      },
+      "correct": -1,
+      "hint": {
+        "vi": "Có một chút lỗi sai nhỏ! Hãy tưởng tượng bạn là 1 phi công đang không kích thì bạn sẽ làm thứ tự như nào nhé!",
+        "en": "Separate the approach, the release, the effect and the departure."
+      },
+      "explanation": {
+        "vi": "Quá chính xác! Bạn đã xuất sắc tìm ra được quá trình phi công Nguyễn Thành Trung thực hiện ném bom vào Dinh Độc Lập và đã được ghi dấu ở trên nóc nơi bạn đứng đó!",
+        "en": "The sequence moves from approach to release, impact and departure."
+      },
+      "solution": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "rooftop-xlsx-30",
+      "sourceId": "xlsx-row-30",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "single",
+      "question": {
+        "vi": "Chiếc máy bay được trưng bày trên sân thượng Dinh Độc Lập thuộc loại nào?",
+        "en": "Which aircraft is displayed on the Palace rooftop?"
+      },
+      "answers": {
+        "vi": [
+          "F-5E Tiger II",
+          "UH-1 Huey",
+          "MiG-21",
+          "B-52"
+        ],
+        "en": [
+          "F-5E Tiger II",
+          "UH-1 Huey",
+          "MiG-21",
+          "B-52"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Hãy chọn lại nhé!",
+        "en": "Observe the main rotor and landing skids."
+      },
+      "explanation": {
+        "vi": "Chính xác!",
+        "en": "The exhibit is a UH-1 Huey, distinct from the F-5E involved in the raid."
+      }
+    },
+    {
+      "id": "rooftop-xlsx-31",
+      "sourceId": "xlsx-row-31",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "rooftop",
+      "kind": "single",
+      "question": {
+        "vi": "Chiếc trực thăng UH-1 trên nóc Dinh Độc Lập mang ý nghĩa lịch sử gì?",
+        "en": "What historical role is associated with the rooftop UH-1 in the bank?"
+      },
+      "answers": {
+        "vi": [
+          "Từng được sử dụng trong cuộc không kích ngày 8/4/1975.",
+          "Từng phục vụ Tổng thống Nguyễn Văn Thiệu và gắn với phương án sơ tán khẩn cấp.",
+          "Từng được sử dụng để vận chuyển vũ khí trong chiến dịch 30/4/1975.",
+          "Là máy bay chiến đấu bảo vệ Dinh Độc Lập."
+        ],
+        "en": [
+          "It conducted the 8 April air raid",
+          "Presidential transport and evacuation planning",
+          "Weapons transport on 30 April",
+          "A fighter defending the Palace"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Phân biệt vai trò di chuyển của trực thăng UH-1 với cuộc không kích do máy bay F-5E thực hiện.",
+        "en": "Distinguish a transport helicopter from the F-5E jet."
+      },
+      "explanation": {
+        "vi": "Chính xác! Chiếc UH-1 từng phục vụ Tổng thống Nguyễn Văn Thiệu. Sân đáp trên nóc Dinh còn gắn với phương án di chuyển, sơ tán trong tình huống khẩn cấp, trở thành dấu tích về những ngày cuối cùng của chính quyền Việt Nam Cộng hòa.",
+        "en": "The bank connects the UH-1 and landing area with presidential transport and evacuation planning."
+      }
+    },
+    {
+      "id": "bunker-xlsx-33",
+      "sourceId": "xlsx-row-33",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "bunker",
+      "kind": "single",
+      "question": {
+        "vi": "Vừa rời sân thượng lộng gió xuống khu vực tầng hầm, sự khác biệt rõ rệt nhất về không gian và mục đích sử dụng giữa hai nơi này là gì?",
+        "en": "What is the clearest difference between the rooftop and the bunker?"
+      },
+      "answers": {
+        "vi": [
+          "Tầng hầm khép kín, kiên cố hơn và phù hợp cho hoạt động điều hành, thông tin/liên lạc hoặc trú ẩn an toàn hơn là không gian mở đón gió trên mái",
+          "Tầng hầm dùng để đón ánh nắng trực tiếp và làm sân đáp trực thăng dự phòng",
+          "Tầng hầm là khu vực tiếp khách ngoại giao có ban công nhìn ra đường phố",
+          "Tầng hầm không có hệ thống thông gió hay chiếu sáng nên chỉ dùng chứa đồ phế liệu"
+        ],
+        "en": [
+          "An enclosed, protected command and communications space rather than an open rooftop",
+          "A sunlit backup helicopter pad",
+          "A diplomatic reception room with balconies",
+          "A scrap-storage room without ventilation"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Chưa đúng rồi. Nhìn lại xung quanh xem căn hầm này kín đáo hay mở thoáng, và phù hợp với chức năng bảo vệ, điều hành hay tiếp khách nhé!",
+        "en": "Compare openness and protection, then consider the equipment."
+      },
+      "explanation": {
+        "vi": "Chuẩn xác! Từ không gian mở đón gió trên mái xuống tới lòng đất khép kín, mọi thiết kế ở tầng hầm đều ưu tiên sự kiên cố, an toàn và vận hành điều hành.",
+        "en": "The contrast is between an open rooftop and enclosed space for protection, command and communications."
+      }
+    },
+    {
+      "id": "bunker-xlsx-34",
+      "sourceId": "xlsx-row-34",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "bunker",
+      "kind": "single",
+      "question": {
+        "vi": "Căn hầm Dinh Độc Lập được thiết kế chủ yếu để phục vụ mục đích gì?",
+        "en": "What was the bunker primarily designed to support?"
+      },
+      "answers": {
+        "vi": [
+          "Làm nơi tổ chức các cuộc họp ngoại giao bí mật.",
+          "Làm trung tâm chỉ huy, liên lạc và theo dõi tình hình quân sự.",
+          "Làm nơi lưu trữ tài liệu và hiện vật lịch sử.",
+          "Làm nơi sinh hoạt riêng của Tổng thống."
+        ],
+        "en": [
+          "Secret diplomatic receptions",
+          "Command, communications and military situation monitoring",
+          "A historical archive",
+          "Private presidential family life"
+        ]
+      },
+      "correct": 1,
+      "hint": {
+        "vi": "Chưa trúng trọng tâm rồi. Không phải phòng tiếp khách ngoại giao hay khu sinh hoạt riêng đâu — hãy nghĩ tới vai trò chỉ huy và nắm bắt tình hình quân sự từ dưới lòng đất.",
+        "en": "Think about command work and communications."
+      },
+      "explanation": {
+        "vi": "Chính xác! Đây chính là 'bộ não' chỉ huy, liên lạc và theo dõi tình hình quân sự được bảo vệ kiên cố ngay bên dưới tòa dinh.",
+        "en": "It supported command, communications and monitoring in a protected setting."
+      }
+    },
+    {
+      "id": "bunker-xlsx-35",
+      "sourceId": "xlsx-row-35",
+      "bankVersion": "palace-bank-v2-xlsx",
+      "checkpointId": "bunker",
+      "kind": "single",
+      "question": {
+        "vi": "Tháng 4/1975, hệ thống liên lạc trong Dinh Độc Lập đang phải hoạt động liên tục. Một đường truyền quan trọng vừa bị gián đoạn. Thiết bị nào dưới đây từng được sử dụng trong hệ thống thông tin liên lạc dưới hầm Dinh Độc Lập?",
+        "en": "Which equipment belongs to the bunker’s historical communications setting?"
+      },
+      "answers": {
+        "vi": [
+          "Máy điện thoại quân sự và máy vô tuyến điện.",
+          "Máy fax và máy in laser.",
+          "Máy tính cá nhân và Internet.",
+          "Điện thoại thông minh và vệ tinh GPS."
+        ],
+        "en": [
+          "Military telephones and radio equipment",
+          "Fax machines and laser printers",
+          "Personal computers and the Internet",
+          "Smartphones and GPS devices"
+        ]
+      },
+      "correct": 0,
+      "hint": {
+        "vi": "Đối chiếu bối cảnh và thiết bị trưng bày: chọn điện thoại quân sự, vô tuyến điện thay vì các phương án gây nhiễu.",
+        "en": "Choose equipment appropriate to the period and exhibit."
+      },
+      "explanation": {
+        "vi": "Đúng rồi: điện thoại quân sự và máy vô tuyến điện. Đường truyền gián đoạn là tình huống minh họa trong game, không phải một sự kiện được xác nhận tại thời điểm cụ thể.",
+        "en": "Military telephones and radios fit this setting. The interrupted connection is a fictional game scenario."
+      }
+    }
+  ],
+  "review": [
+    {
+      "sourceId": "xlsx-row-14",
+      "status": "needs-verification",
+      "reason": "Dates, people and supplied pairs disagree: 24/4 is unmatched; 28/4 is paired with Trần Văn Hương without specifying the event. Needs a complete event-based key."
+    },
+    {
+      "sourceId": "xlsx-row-15",
+      "status": "needs-reference",
+      "reason": "Painting detail capture needs a credited close-up, calibrated targets and object-specific recognition. A full-room photo cannot verify these details."
+    },
+    {
+      "sourceId": "xlsx-row-18",
+      "status": "needs-verification",
+      "reason": "The six-seat logic puzzle needs an explicit clockwise diagram and consistent opposite/adjacent relations to uniquely grade answer C."
+    },
+    {
+      "sourceId": "xlsx-row-36",
+      "status": "needs-recognition",
+      "reason": "A radio photograph is supplied, but the current classifier identifies checkpoint rooms rather than individual radios. Do not claim automatic object verification."
+    }
+  ],
+  "editorialNotes": {
+    "xlsx-row-6": "The seven-event source has a six-item answer key. Omitted the undated naming event from the playable adaptation; the source retains all seven.",
+    "xlsx-row-7": "Corrected side gate to main gate, retaining 390; corroborated by the official Palace historical introduction.",
+    "xlsx-row-10": "Removed diplomatic-credentials premise to avoid confusing the Reception Hall and the separate Credentials Room.",
+    "xlsx-row-11": "Repaired shifted success/failure cells; clearly labelled an illustrative sequence rather than historical protocol.",
+    "xlsx-row-13": "Calculation is illustrative, not authentication of physical room dimensions.",
+    "xlsx-row-22": "Distinguished the 10 a.m. appeal in the bank from the later unconditional surrender announcement.",
+    "xlsx-row-24": "Recovered answer B from the explicit success script; raw answer cell remains empty.",
+    "xlsx-row-28": "Clarified initial allocation specifically for the Palace versus total bombs.",
+    "xlsx-row-31": "Removed the incorrect implication that Nguyễn Văn Thiệu was the last President.",
+    "xlsx-row-35": "Removed blanket technology-date claims and labelled the interruption scenario illustrative."
+  }
+}

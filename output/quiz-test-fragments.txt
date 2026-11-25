@@ -1,0 +1,66 @@
+test("the workbook retains 30 source tasks and 5 story drafts; 26 reviewed tasks cover all five checkpoints", () => {
+  assert.equal(workbook.questions.length, 30);
+  assert.equal(workbook.scripts.length, 5);
+  const active = checkpointIds.flatMap(id => getCheckpointQuestions(id));
+  assert.deepEqual(checkpointIds.map(id => getCheckpointQuestions(id).length), [6, 4, 7, 6, 3]);
+  assert.deepEqual([...active.map(q => q.sourceId), ...questionReview.map(q => q.sourceId)].sort(), workbook.questions.map(q => q.id).sort());
+  const kinds = new Set(active.map(q => q.kind));
+  assert.deepEqual([...kinds].sort(), ["match", "multi", "number", "order", "single"]);
+  for (const q of active) {
+    assert.equal(q.answers.vi.length, q.answers.en.length);
+    assert.ok(q.question.vi && q.question.en && q.hint.vi && q.hint.en && q.explanation.vi && q.explanation.en);
+    assert.ok(isValidQuestionAnswer(q, q.solution ?? q.correct), q.id);
+  }
+});
+
+test("workbook tasks validate response shapes and grade complete sets, sequences, pairs and numbers", () => {
+  const all = checkpointIds.flatMap(id => getCheckpointQuestions(id));
+  const find = (row: number) => all.find(q => q.sourceId === `xlsx-row-${row}`)!;
+  const multi = find(3), order = find(6), pairs = find(8), number = find(17);
+  assert.equal(isCorrectQuestionAnswer(multi, [5, 4, 3, 2, 1, 0]), true);
+  assert.equal(isCorrectQuestionAnswer(multi, [0, 1, 2, 3, 4]), false);
+  assert.equal(isCorrectQuestionAnswer(multi, [0, 1, 2, 3, 4, 5, 6]), false);
+  assert.equal(isValidQuestionAnswer(multi, [0, 0, 1]), false);
+  assert.equal(isValidQuestionAnswer(multi, 0), false);
+  assert.equal(isValidQuestionAnswer(multi, [99]), false);
+  assert.equal(isCorrectQuestionAnswer(order, [0, 2, 1, 3, 4, 5]), true);
+  assert.equal(isCorrectQuestionAnswer(order, [0, 1, 2, 3, 4, 5]), false);
+  assert.equal(isValidQuestionAnswer(order, [0, 2, 1]), false);
+  assert.equal(isCorrectQuestionAnswer(pairs, [2, 0, 1]), true);
+  assert.equal(isCorrectQuestionAnswer(pairs, [0, 1, 2]), false);
+  assert.equal(isValidQuestionAnswer(pairs, [2, -1, 1]), false);
+  assert.equal(isCorrectQuestionAnswer(number, "10"), true);
+  assert.equal(isCorrectQuestionAnswer(number, "010"), true);
+  assert.equal(isCorrectQuestionAnswer(number, "11"), false);
+  assert.equal(isValidQuestionAnswer(number, 10), false);
+  assert.equal(isValidQuestionAnswer(number, "10 cats"), false);
+  assert.equal(isValidQuestionAnswer(find(4), 7), false);
+});
+
+
+test("all five real reference photographs can be uploaded and identified without a model", async () => {
+  for (const checkpoint of getCheckpoints()) {
+    const photo = await readFile(
+      join(process.cwd(), "public", checkpoint.photo),
+    );
+    const result = await identifyPhoto(photo);
+    assert.equal(result.checkpointId, checkpoint.id);
+    assert.equal(result.status, "matched");
+    assert.equal(result.mode, "reference");
+  }
+});
+
+test("resized and re-encoded reference remains identifiable; unrelated or broken uploads do not unlock", async () => {
+  const source = await readFile("public/images/palace/cabinet.webp");
+  const jpeg = await sharp(source).resize(720).jpeg({ quality: 75 }).toBuffer();
+  assert.equal((await identifyPhoto(jpeg)).checkpointId, "cabinet");
+  const unrelated = await identifyPhoto(
+    await readFile("public/images/hcmus-campus.webp"),
+  );
+  assert.equal(unrelated.status, "unknown");
+  assert.equal(unrelated.checkpointId, null);
+  await assert.rejects(
+    () => identifyPhoto(Buffer.from("not an image")),
+    GameError,
+  );
+});

@@ -1,6 +1,6 @@
 import type { Locale } from "@/components/UI/LanguageProvider";
 import type { Mission } from "@/components/UI/game-data";
-import { getCheckpointQuestions, publicQuestion } from "./questions";
+import { getPublicCheckpointQuestions } from "./learning-content";
 
 export const checkpointIds = [
   "facade",
@@ -24,7 +24,7 @@ type Entry = {
   y: number;
   photo: string;
   recognition: string;
-  mission: { vi: Mission; en: Mission };
+  mission: { vi: Pick<Mission, "title" | "subtitle" | "storyTitle" | "story" | "fact">; en: Pick<Mission, "title" | "subtitle" | "storyTitle" | "story" | "fact"> };
 };
 
 const catalog: Entry[] = [
@@ -52,16 +52,6 @@ const catalog: Entry[] = [
         storyTitle: "Đọc câu chuyện trên mặt tiền.",
         story:
           "Hãy quan sát những đường ngang và lớp rèm đá. Kiến trúc sư Ngô Viết Thụ đã tạo nên diện mạo Dinh Độc Lập hiện nay. Bạn đã tìm được trang đầu của hành trình.",
-        question: "Ai thiết kế Dinh Độc Lập hiện nay?",
-        answers: [
-          "Ngô Viết Thụ",
-          "Gustave Eiffel",
-          "Nguyễn An",
-          "Ernest Hébrard",
-        ],
-        correct: 0,
-        hint: "Tên của vị kiến trúc sư bắt đầu bằng họ Ngô.",
-        explanation: "Đúng rồi, đó là kiến trúc sư Ngô Viết Thụ.",
         fact: "Quan sát · Đường nét và ánh sáng",
       },
       en: {
@@ -70,16 +60,6 @@ const catalog: Entry[] = [
         storyTitle: "Read the façade.",
         story:
           "Follow the horizontal lines and stone screens. Architect Ngô Viết Thụ designed the Palace you see today. You have found the first page of your journey.",
-        question: "Who designed the current Independence Palace?",
-        answers: [
-          "Ngô Viết Thụ",
-          "Gustave Eiffel",
-          "Nguyễn An",
-          "Ernest Hébrard",
-        ],
-        correct: 0,
-        hint: "The architect's family name is Ngô.",
-        explanation: "Exactly: architect Ngô Viết Thụ.",
         fact: "Observation · Lines and light",
       },
     },
@@ -108,16 +88,6 @@ const catalog: Entry[] = [
         storyTitle: "Một căn phòng, một vai trò.",
         story:
           "Thảm đỏ phủ rộng nền phòng, rèm đỏ phía cuối sảnh, ghế hoa văn đối xứng và đèn chùm là những dấu hiệu của phòng Khánh tiết. Đây là không gian hội họp và đón tiếp với sức chứa khoảng 500 người. Phòng Đại yến là một phòng khác trong Dinh.",
-        question: "Không gian bạn vừa nhận diện có tên là gì?",
-        answers: [
-          "Phòng Nội các",
-          "Phòng Khánh tiết",
-          "Phòng thông tin",
-          "Sân thượng",
-        ],
-        correct: 1,
-        hint: "Tên phòng đã xuất hiện ở đầu câu chuyện.",
-        explanation: "Bạn đã ghi nhận phòng Khánh tiết.",
         fact: "Quan sát · Trục đối xứng",
       },
       en: {
@@ -126,16 +96,6 @@ const catalog: Entry[] = [
         storyTitle: "Every room has a role.",
         story:
           "Red patterned carpet, red stage curtains, symmetrical seating and chandeliers identify the Reception Hall. This meeting and reception space accommodates about 500 people. The State Banqueting Hall is a different room.",
-        question: "Which space did you just identify?",
-        answers: [
-          "The Cabinet Room",
-          "The Reception Hall",
-          "The communications room",
-          "The rooftop",
-        ],
-        correct: 1,
-        hint: "Its name appears at the start of the story.",
-        explanation: "You have recorded the Reception Hall.",
         fact: "Observation · Symmetry",
       },
     },
@@ -164,16 +124,6 @@ const catalog: Entry[] = [
         storyTitle: "Dấu vết của một cuộc họp.",
         story:
           "Đây là phòng Nội các, nơi từng diễn ra các cuộc họp. Điểm nhận biết là chiếc bàn oval có khoảng rỗng ở giữa, micro đặt quanh bàn, các ghế da xanh sẫm và rèm xanh vàng. Hãy đọc công năng của căn phòng qua cách các ghế hướng về không gian chung.",
-        question: "Bố cục căn phòng chủ yếu phục vụ hoạt động nào?",
-        answers: [
-          "Biểu diễn âm nhạc",
-          "Nghỉ ngơi",
-          "Họp và thảo luận",
-          "Cất giữ phương tiện",
-        ],
-        correct: 2,
-        hint: "Quan sát chiếc bàn và các ghế hướng về nhau.",
-        explanation: "Chính xác, đây là không gian họp và thảo luận.",
         fact: "Quan sát · Bố cục và công năng",
       },
       en: {
@@ -182,16 +132,6 @@ const catalog: Entry[] = [
         storyTitle: "Traces of a meeting.",
         story:
           "This is the Cabinet Room, once used for meetings. Look for its open-centred oval table, desk microphones, dark green leather chairs and yellow-green curtains. Read its purpose through the way the seats face a shared space.",
-        question: "What activity does this layout primarily support?",
-        answers: [
-          "Music performances",
-          "Resting",
-          "Meetings and discussion",
-          "Vehicle storage",
-        ],
-        correct: 2,
-        hint: "Notice the table and seats facing one another.",
-        explanation: "Correct: meetings and discussion.",
         fact: "Observation · Layout and purpose",
       },
     },
@@ -220,16 +160,6 @@ const catalog: Entry[] = [
         storyTitle: "Một khoảng trời khác.",
         story:
           "Trên sân thượng, chiếc UH-1 tạo nên một điểm dừng khác hẳn những căn phòng bên dưới. Quan sát cánh quạt và dáng thân máy: bạn đang nhận diện một hiện vật được trưng bày.",
-        question: "Hiện vật trên sân thượng là loại phương tiện nào?",
-        answers: [
-          "Xe jeep",
-          "Máy bay cánh bằng",
-          "Tàu thủy",
-          "Trực thăng UH-1",
-        ],
-        correct: 3,
-        hint: "Hãy nhìn cánh quạt nằm phía trên thân máy.",
-        explanation: "Đúng, đó là trực thăng UH-1.",
         fact: "Quan sát · Hình dáng hiện vật",
       },
       en: {
@@ -238,16 +168,6 @@ const catalog: Entry[] = [
         storyTitle: "A different patch of sky.",
         story:
           "On the rooftop, the UH-1 offers a stop unlike the rooms below. Look at the rotor and fuselage: you are identifying a displayed artifact.",
-        question: "What vehicle is displayed on the rooftop?",
-        answers: [
-          "A jeep",
-          "A fixed-wing aircraft",
-          "A boat",
-          "A UH-1 helicopter",
-        ],
-        correct: 3,
-        hint: "Look at the rotor above the fuselage.",
-        explanation: "Yes: a UH-1 helicopter.",
         fact: "Observation · Artifact shapes",
       },
     },
@@ -276,11 +196,6 @@ const catalog: Entry[] = [
         storyTitle: "Lắng nghe một thời chưa có smartphone.",
         story:
           "Ảnh chụp phòng thông tin cho thấy các máy điện báo để bàn, tường nâu đỏ, ghế kim loại và nền gạch hoa đen trắng; bên cạnh là hành lang bê tông hẹp. Các câu hỏi ở trạm này mở rộng ra chức năng bảo vệ và phòng tham mưu tác chiến trong cùng khu hầm, không phải mọi hiện vật đều nằm trong căn phòng trên ảnh.",
-        question: "Nhóm thiết bị ở điểm này gắn với hoạt động nào?",
-        answers: ["Thông tin liên lạc", "Nấu ăn", "Chiếu phim", "Chăm sóc cây"],
-        correct: 0,
-        hint: "Nghĩ đến việc gửi và nhận tín hiệu.",
-        explanation: "Chính xác! Bạn đã nối trọn năm dấu ấn của hành trình.",
         fact: "Quan sát · Công nghệ và ký ức",
       },
       en: {
@@ -289,11 +204,6 @@ const catalog: Entry[] = [
         storyTitle: "Before the smartphone.",
         story:
           "The communications photo shows desk-mounted teletypes, red-brown walls, metal chairs and black-and-white patterned tiles beside a narrow concrete corridor. This stop’s questions also explore the bunker’s protective structure and operations room; these are not all exhibits inside the photographed room.",
-        question: "What activity is this equipment associated with?",
-        answers: ["Communications", "Cooking", "Film screening", "Gardening"],
-        correct: 0,
-        hint: "Think of sending and receiving signals.",
-        explanation: "Exactly! You have connected all five discoveries.",
         fact: "Observation · Technology and memory",
       },
     },
@@ -309,17 +219,20 @@ const features: Record<CheckpointId, { vi: string[]; en: string[] }> = {
 };
 
 export function getCheckpoints(locale: Locale = "vi") {
-  return catalog.map((entry) => ({
+  return catalog.map((entry) => {
+    const questions = getPublicCheckpointQuestions(entry.id);
+    const question = questions.find(q => q.kind === "single")!;
+    return ({
     ...entry,
     name: entry.name[locale],
     floor: entry.floor[locale],
     clue: entry.clue[locale],
     detail: entry.detail[locale],
-    mission: entry.mission[locale],
-    questions: getCheckpointQuestions(entry.id).map(publicQuestion),
+    mission: { ...entry.mission[locale], question: question.question[locale], answers: question.answers[locale], correct: 0, hint: question.hint[locale], explanation: question.explanation[locale] },
+    questions,
     features: features[entry.id][locale],
     source: PALACE_SOURCE,
-  }));
+  }); });
 }
 export type Checkpoint = ReturnType<typeof getCheckpoints>[number];
 export function isCheckpointId(value: unknown): value is CheckpointId {

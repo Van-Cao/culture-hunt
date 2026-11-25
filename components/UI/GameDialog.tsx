@@ -11,12 +11,14 @@ export default function GameDialog({
   label,
   wide = false,
   animateEntry = true,
+  className = "",
 }: {
   children: ReactNode;
   onClose: () => void;
   label: string;
   wide?: boolean;
   animateEntry?: boolean;
+  className?: string;
 }) {
   const { t } = useLanguage();
   const panel = useRef<HTMLDivElement>(null);
@@ -30,11 +32,16 @@ export default function GameDialog({
     document.body.style.overflow = "hidden";
     panel.current?.focus();
     const keydown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeRef.current();
+      if (event.key === "Escape") {
+        // A native photo viewer owns Escape even if its React handler has just closed it.
+        if (event.target instanceof Element && event.target.closest("dialog")) return;
+        closeRef.current();
+      }
       if (event.key !== "Tab") return;
-      const focusable = panel.current?.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), a[href], input:not([disabled]), [tabindex="0"]',
-      );
+      const focusRoot = panel.current?.querySelector<HTMLDialogElement>("dialog[open]") || panel.current;
+      const focusable = Array.from(focusRoot?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]',
+      ) || []).filter(element => element.getClientRects().length > 0 && !element.closest("[inert]"));
       if (!focusable?.length) {
         event.preventDefault();
         return;
@@ -78,7 +85,7 @@ export default function GameDialog({
         aria-modal="true"
         aria-label={label}
         tabIndex={-1}
-        className={`game-dialog ${wide ? "dialog-wide" : ""}`}
+        className={`game-dialog ${wide ? "dialog-wide" : ""} ${className}`}
         onClick={(event) => event.stopPropagation()}
         initial={animateEntry ? { y: 70, opacity: 0, scale: 0.97 } : false}
         animate={{ y: 0, opacity: 1, scale: 1 }}

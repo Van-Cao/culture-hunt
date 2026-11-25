@@ -2,11 +2,11 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
-import { getCheckpointQuestions, publicQuestion, type ScoredQuestion } from "./questions";
-import { applyChallengeMove, createChallenge, CHALLENGE_VERSION, type ChallengeSession } from "./challenges";
+import { getCheckpointQuestions, publicQuestion, QUESTION_BANK_VERSION, type ScoredQuestion } from "./questions";
+import { isCorrectQuestionAnswer, isValidQuestionAnswer } from "./question-response";
+import type { QuestionAnswer } from "./question-types";
 import {
   checkpointIds,
-  getCheckpoints,
   PALACE_XP,
   type CheckpointId,
 } from "./checkpoints";
@@ -65,18 +65,29 @@ function db() {
   const attemptColumns = database.prepare("PRAGMA table_info(attempts)").all();
   if (!attemptColumns.some(column => column.name === "question_id"))
     database.exec("ALTER TABLE attempts ADD COLUMN question_id TEXT");
+  if (!attemptColumns.some(column => column.name === "answer_json"))
+    database.exec("ALTER TABLE attempts ADD COLUMN answer_json TEXT");
+  // Replace unfinished active banks immediately. Keep completed/abandoned visits,
+  // attempts, recognition events and lifetime awards as historical records.
+  const unfinished = database.prepare("SELECT v.run_id, v.checkpoint_id, v.quiz_json FROM visits v JOIN runs r ON r.id = v.run_id WHERE r.status = 'active' AND v.completed_at IS NULL").all();
+  database.exec("BEGIN IMMEDIATE");
+  try {
+    for (const visit of unfinished) {
+      const questions = typeof visit.quiz_json === "string" ? JSON.parse(visit.quiz_json) as ScoredQuestion[] : [];
+      if (!questions.length || questions.some(q => q.bankVersion !== QUESTION_BANK_VERSION))
+        database.prepare("UPDATE visits SET quiz_json = ? WHERE run_id = ? AND checkpoint_id = ?")
+          .run(JSON.stringify(getCheckpointQuestions(visit.checkpoint_id as CheckpointId)), visit.run_id, visit.checkpoint_id);
+    }
+    database.exec("COMMIT");
+  } catch (error) { database.exec("ROLLBACK"); throw error; }
   return database;
 }
 
 function visitQuestions(checkpointId: CheckpointId, snapshot: unknown): ScoredQuestion[] {
   if (typeof snapshot === "string") return JSON.parse(snapshot) as ScoredQuestion[];
-  // Legacy visits retain the old question and answer ordering, including retries.
-  const vi = getCheckpoints("vi").find(c => c.id === checkpointId)!.mission;
-  const en = getCheckpoints("en").find(c => c.id === checkpointId)!.mission;
-  return [{ id: `${checkpointId}-legacy-1`, bankVersion: "legacy-v1", sourceId: "legacy-demo",
-    question: { vi: vi.question, en: en.question }, answers: { vi: vi.answers, en: en.answers },
-    correct: vi.correct, hint: { vi: vi.hint, en: en.hint }, explanation: { vi: vi.explanation, en: en.explanation },
-  }];
+  // Pre-bank completed history has attempts but no retained question snapshot.
+  void checkpointId;
+  return [];
 }
 
 export class GameError extends Error {
@@ -123,16 +134,16 @@ export function readState(owner: string): PalaceState {
         const quiz = visitQuestions(checkpointId, v.quiz_json);
         const attempts = db()
           .prepare(
-            "SELECT at, answer, correct, question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? ORDER BY id",
+            "SELECT at, answer, answer_json, correct, question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? ORDER BY id",
           )
           .all(row.id, v.checkpoint_id)
           .map(
             (a) =>
               ({
                 at: String(a.at),
-                answer: Number(a.answer),
+                answer: typeof a.answer_json === "string" ? JSON.parse(a.answer_json) as QuestionAnswer : Number(a.answer),
                 correct: Boolean(a.correct),
-                questionId: a.question_id ? String(a.question_id) : quiz[0].id,
+                questionId: a.question_id ? String(a.question_id) : `${checkpointId}-legacy-1`,
               }) satisfies Attempt,
           );
         visits[checkpointId] = {
@@ -142,7 +153,7 @@ export function readState(owner: string): PalaceState {
           completedAt: v.completed_at ? String(v.completed_at) : null,
           attempts,
           quiz: quiz.map(publicQuestion),
-          ...(typeof v.challenge_json === "string" ? { challenge: JSON.parse(v.challenge_json) as ChallengeSession } : {}),
+          ...(v.completed_at && typeof v.challenge_json === "string" ? { legacyGameMoves: Number(JSON.parse(v.challenge_json).progress?.moves) || 0 } : {}),
         } satisfies Visit;
       }
       return {
@@ -232,9 +243,9 @@ export function recordRecognition(
     if (result === "matched" && candidate === checkpointId) {
       db()
         .prepare(
-          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode, quiz_json, challenge_json) VALUES(?, ?, ?, ?, ?, ?)",
+          "INSERT OR IGNORE INTO visits(run_id, checkpoint_id, recognized_at, mode, quiz_json) VALUES(?, ?, ?, ?, ?)",
         )
-        .run(runId, checkpointId, at, mode, JSON.stringify(getCheckpointQuestions(checkpointId)), JSON.stringify(createChallenge(checkpointId)));
+        .run(runId, checkpointId, at, mode, JSON.stringify(getCheckpointQuestions(checkpointId)));
     }
   });
   return readState(owner);
@@ -244,7 +255,7 @@ export function answerCheckpoint(
   owner: string,
   runId: string,
   checkpointId: CheckpointId,
-  answer: number,
+  answer: QuestionAnswer,
   questionId?: string,
 ) {
   const correct = transaction(() => {
@@ -257,32 +268,30 @@ export function answerCheckpoint(
         "Nhận diện địa điểm trước khi trả lời. / Identify the checkpoint first.",
         409,
       );
-    // New journeys unlock stories through mini games. Their question bank is
-    // optional afterwards; the legacy answer endpoint cannot bypass the game.
-    if (visit.challenge_json && !visit.completed_at)
-      throw new GameError("Hoàn thành mini game trước để mở câu chuyện. / Complete the mini game to unlock the story.", 409);
     const quiz = visitQuestions(checkpointId, visit.quiz_json);
-    const submittedId = questionId || (visit.quiz_json ? undefined : quiz[0].id);
+    const submittedId = questionId;
     const question = quiz.find(q => q.id === submittedId);
-    if (!question || !Number.isInteger(answer) || answer < 0 || answer > 3)
+    if (!question || !isValidQuestionAnswer(question, answer))
       throw new GameError("Câu hỏi không hợp lệ. / Invalid question.", 409);
-    const passed = new Set(db().prepare("SELECT question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? AND correct = 1").all(runId, checkpointId).map(a => a.question_id ? String(a.question_id) : quiz[0].id));
+    if (question.bankVersion !== QUESTION_BANK_VERSION)
+      throw new GameError("Bộ câu hỏi cũ đã ngừng sử dụng. Bắt đầu lượt mới. / The old question bank has been retired. Start a new run.", 409);
+    const passed = new Set(db().prepare("SELECT question_id FROM attempts WHERE run_id = ? AND checkpoint_id = ? AND correct = 1").all(runId, checkpointId).map(a => String(a.question_id)));
     // A duplicate passed question is idempotent, even after completing a run.
     if (passed.has(question.id)) return true;
-    if (run.status !== "active" && !visit.challenge_json)
+    if (run.status !== "active" || visit.completed_at)
       throw new GameError("Lượt chơi đã kết thúc. / This run has ended.", 409);
-    if (!visit.challenge_json) requireAvailable(owner, runId, checkpointId);
+    requireAvailable(owner, runId, checkpointId);
     if (quiz.find(q => !passed.has(q.id))?.id !== question.id)
       throw new GameError("Hoàn thành câu trước để tiếp tục. / Complete the previous question first.", 409);
-    const success = answer === question.correct;
+    const success = isCorrectQuestionAnswer(question, answer);
     const at = new Date().toISOString();
     db()
       .prepare(
-        "INSERT INTO attempts(run_id, checkpoint_id, at, answer, correct, question_id) VALUES(?, ?, ?, ?, ?, ?)",
+        "INSERT INTO attempts(run_id, checkpoint_id, at, answer, answer_json, correct, question_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
       )
-      .run(runId, checkpointId, at, answer, success ? 1 : 0, question.id);
+      .run(runId, checkpointId, at, typeof answer === "number" ? answer : -1, JSON.stringify(answer), success ? 1 : 0, question.id);
     if (success) passed.add(question.id);
-    if (!visit.challenge_json && quiz.every(q => passed.has(q.id))) {
+    if (quiz.every(q => passed.has(q.id))) {
       db()
         .prepare(
           "UPDATE visits SET completed_at = ? WHERE run_id = ? AND checkpoint_id = ?",
@@ -308,47 +317,4 @@ export function answerCheckpoint(
     return success;
   });
   return { correct, state: readState(owner) };
-}
-
-export function startChallenge(owner: string, runId: string, checkpointId: CheckpointId) {
-  transaction(() => {
-    requireAvailable(owner, runId, checkpointId);
-    const visit = db().prepare("SELECT * FROM visits WHERE run_id = ? AND checkpoint_id = ?").get(runId, checkpointId);
-    if (!visit) throw new GameError("Nhận diện địa điểm trước. / Identify the checkpoint first.", 409);
-    if (!visit.challenge_json && !visit.completed_at)
-      db().prepare("UPDATE visits SET challenge_json = ? WHERE run_id = ? AND checkpoint_id = ?")
-        .run(JSON.stringify(createChallenge(checkpointId)), runId, checkpointId);
-  });
-  return { state: readState(owner) };
-}
-
-export function moveChallenge(owner: string, runId: string, checkpointId: CheckpointId, version: string, move: unknown) {
-  const result = transaction(() => {
-    ownedRun(owner, runId);
-    const visit = db().prepare("SELECT * FROM visits WHERE run_id = ? AND checkpoint_id = ?").get(runId, checkpointId);
-    if (!visit || typeof visit.challenge_json !== "string")
-      throw new GameError("Nhận diện địa điểm và bắt đầu mini game trước. / Identify the checkpoint and start its mini game first.", 409);
-    const challenge = JSON.parse(visit.challenge_json) as ChallengeSession;
-    if (version !== challenge.definition.version || version !== CHALLENGE_VERSION)
-      throw new GameError("Phiên bản thử thách đã thay đổi. Tải lại trang. / Challenge version changed. Reload the page.", 409);
-    if (visit.completed_at) return { accepted: true, solved: true };
-    requireAvailable(owner, runId, checkpointId);
-    let next: ReturnType<typeof applyChallengeMove>;
-    try { next = applyChallengeMove(challenge, move); }
-    catch { throw new GameError("Thao tác mini game không hợp lệ. / Invalid mini game move."); }
-    const at = new Date().toISOString();
-    db().prepare("UPDATE visits SET challenge_json = ? WHERE run_id = ? AND checkpoint_id = ?")
-      .run(JSON.stringify(next.session), runId, checkpointId);
-    db().prepare("INSERT INTO game_attempts(run_id, checkpoint_id, at, move_json, accepted, solved) VALUES(?, ?, ?, ?, ?, ?)")
-      .run(runId, checkpointId, at, JSON.stringify(move), Number(next.accepted), Number(next.session.progress.solved));
-    if (next.session.progress.solved) {
-      db().prepare("UPDATE visits SET completed_at = ? WHERE run_id = ? AND checkpoint_id = ?").run(at, runId, checkpointId);
-      db().prepare("INSERT OR IGNORE INTO awards(owner, checkpoint_id, awarded_at) VALUES(?, ?, ?)").run(owner, checkpointId, at);
-      const count = db().prepare("SELECT COUNT(*) AS n FROM visits WHERE run_id = ? AND completed_at IS NOT NULL").get(runId)!;
-      if (Number(count.n) === checkpointIds.length)
-        db().prepare("UPDATE runs SET status = 'completed', completed_at = ? WHERE id = ?").run(at, runId);
-    }
-    return { accepted: next.accepted, solved: next.session.progress.solved };
-  });
-  return { ...result, state: readState(owner) };
 }

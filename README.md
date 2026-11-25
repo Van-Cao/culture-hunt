@@ -17,7 +17,8 @@ Open [the Palace journey](http://localhost:3000/?play=1&place=palace&view=journe
 
 1. Start at **Mặt tiền Dinh**, the only available checkpoint. The map can be dragged and zoomed; the explorer represents game progress.
 2. Select **Khám phá điểm này**, then **Dùng ảnh mẫu của điểm này** and **Nhận diện địa điểm**. No AI key is needed for the sample kit.
-3. Read or listen to the curated story, then solve every question at that checkpoint. New visits use the supplied question bank: 2 / 2 / 1 / 2 / 2 questions across the five stops. Recognition or passing just the first of two questions does not complete a checkpoint. A wrong answer records an attempt and offers a retry; reload resumes the remaining questions.
+3. Solve four evidence-led tasks at each checkpoint to unlock its written/audio story and record the discovery. The reviewed journey contains 20 bilingual tasks and five photograph-based reveals. Wrong answers can be retried; reload resumes the next unanswered question. Earlier banks and photo/puzzle/circuit mini games are retired.
+
 4. Claim the discovery. The checkpoint and route illuminate, the explorer moves, and the next checkpoint opens. Continue through **Phòng Khánh tiết**, **Phòng Nội các**, **Trực thăng trên mái**, and **Thông tin dưới hầm**.
 5. After all five, open **Dấu ấn** to see the complete discovery atlas, Palace Explorer badge, dated visits, recognition method, and answer attempts. Filter the map by run or view all lifetime discoveries.
 6. **Chơi lượt mới** retains earlier visits and starts a fresh route. Each checkpoint awards 150 lifetime XP once; replay cannot farm XP. Reloading resumes the current run.
@@ -32,11 +33,11 @@ The original architectural atlas and the complete working demo are preserved in 
 
 Room dioramas now follow the visible features of the official photographs: patterned red carpet and ceremonial seating; an open-centred oval conference table, microphones and dark leather chairs; the camouflaged rooftop UH-1; and desk-mounted teletypes beside a concrete corridor. Selecting an available stage opens a side-by-side diorama/photo study. These are cutaway illustrations rather than measured architectural reconstructions.
 
-### Supplied question bank
+### Supplied question banks
 
-[Original extracted text](content/palace/question-bank.source.json) preserves all 10 questions, options, answers and stories from `CultureHunt_NganHangCauHoi_DinhDocLap.docx`. Nine questions are adapted in Vietnamese and English for play. One question about a screen/bronze drum behind the Cabinet Room chair is retained for verification and excluded from grading because it could not be corroborated against the official room photo. [Editorial notes and sources](content/palace/README.md) explain the adaptations.
+[Current workbook source](content/palace/question-bank-v2.source.json) preserves 30 tasks and five story drafts from `CultureHunt.xlsx`. [Reviewed bilingual learning journey](content/palace/question-bank-v3.json) publishes 20 tasks with visible clues, source photographs and one reveal per checkpoint. The workbook originals and earlier review remain archived. [Editorial notes and sources](content/palace/README.md) document these decisions. The previous bank is retired. Unfinished active visits update automatically; completed history remains saved.
 
-The server snapshots each visit's question set on recognition, validates question order and awards checkpoint XP only after every question is solved. Passed questions and duplicate submissions do not add attempts or XP. Existing pre-bank visits retain their original single-question quiz and earlier attempts; new visits use the new bank. Start a new run to experience the entire new bank without replacing old history.
+The server snapshots the workbook at recognition and awards unique XP only after every question is correct. Unfinished active visits automatically adopt the workbook. Earlier attempts, completed/abandoned history and lifetime awards are preserved. Removed mini game endpoints cannot complete checkpoints.
 
 ## Persistence and image recognition
 
@@ -76,7 +77,7 @@ npm run check:vision  # Optional live AI smoke check; requires valid credentials
 - `?lang=vi` / `?lang=en` also render the language on the server. Language selection, Start exploring and guest entry use native GET forms as a fallback while hydration scripts are loading. The existing streamed app shell still requires JavaScript to reveal its resolved content. The landing text stays visible without waiting for an animation; mobile text enlargement can grow the layout instead of covering the header.
 - Camera permission flow, photo upload, and a credited reference-photo kit. The Palace supports uploads up to 5 MB; the secondary sample scanner accepts up to 10 MB locally.
 - Animated scanner, spring-animated story cards, device text-to-speech in Vietnamese / English.
-- Five server-validated Palace checkpoint challenges with nine question-bank questions for new visits, plus three secondary sample quizzes, hints, retries, fireworks, XP, and badges.
+- Five server-validated Palace checkpoint challenges with 20 reviewed learning tasks for new visits, plus the secondary sample quizzes, hints, retries, fireworks, XP, and badges.
 - SQLite Palace history, localStorage secondary sample progress, native share / clipboard, and an exported PNG achievement card.
 - Responsive layouts, keyboard-accessible dialogs and reduced-motion support.
 
@@ -127,14 +128,13 @@ The four additional Palace photographs are downloaded from the official photo ar
 
 Development skills used: `frontend-design`, the installed OpenAI `playwright` skill, and the custom `culture-hunt-gameplay` skill (installed in the developer's Codex skills directory).
 
-## Palace mini games and narration
+## Palace quiz and narration
 
-The Palace demo now follows **identify a photo → complete a mini game → unlock a written/audio story**. Its five stops use photo-detail discovery, two six-piece photo puzzles, object matching, and a rotating-tile signal circuit. Every move is validated and saved on the server. The supplied quiz bank remains optional after the story unlocks. Existing maps, checkpoint IDs, history and unique lifetime XP are retained.
+The Palace demo follows **identify a photo -> complete four evidence-led tasks -> unlock written/audio storytelling**. Old detail-finding, picture-puzzle and circuit mini games are removed from the interface and API. Learning interactions include single/multiple selection, ordering and matching, supported by credited high-resolution photographs and contextual records.
 
-- [Game definitions and rules](lib/palace/challenges.ts)
-- [Mini game interface](components/palace/PalaceMiniGame.tsx)
-- [Bilingual story scripts](content/palace/stories.json)
-- [Ten generated narration files and voice provenance](public/audio/palace/README.md)
-- [Generation script](scripts/generate-palace-audio.py)
+- [Reviewed learning script](content/palace/question-bank-v3.json)
+- [Quiz interface](components/palace/PalaceQuestionInput.tsx)
+- [Bilingual story scripts](content/palace/stories-v3.json)
+- [Narration provenance](public/audio/palace-learning/manifest.json)
 
-The saved audio preview uses HoaiMy/Jenny through Microsoft Edge online TTS and clearly labeled Google demo fallbacks for two Vietnamese tracks. It is not an Azure Speech API subscription integration. Visitors play local MP3 assets; API credentials are not required for narration playback. `npm test` covers mini game validation, legacy migration, replay/XP and script/audio consistency.
+Saved MP3 previews remain consistent with their transcripts. Tests cover active-bank migration, quiz gates, replay and unique XP.

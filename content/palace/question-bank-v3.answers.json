@@ -1,0 +1,116 @@
+{
+  "facade-learning-1": {
+    "correct": 1,
+    "solution": null
+  },
+  "facade-learning-2": {
+    "correct": 0,
+    "solution": null
+  },
+  "facade-learning-3": {
+    "correct": 2,
+    "solution": null
+  },
+  "facade-learning-4": {
+    "correct": 0,
+    "solution": [
+      1,
+      0
+    ]
+  },
+  "reception-learning-1": {
+    "correct": 2,
+    "solution": null
+  },
+  "reception-learning-2": {
+    "correct": 1,
+    "solution": null
+  },
+  "reception-learning-3": {
+    "correct": 0,
+    "solution": null
+  },
+  "reception-learning-4": {
+    "correct": 1,
+    "solution": null
+  },
+  "cabinet-learning-1": {
+    "correct": 0,
+    "solution": [
+      0,
+      2
+    ]
+  },
+  "cabinet-learning-2": {
+    "correct": 1,
+    "solution": null
+  },
+  "cabinet-learning-3": {
+    "correct": 0,
+    "solution": [
+      1,
+      2,
+      0
+    ]
+  },
+  "cabinet-learning-4": {
+    "correct": 0,
+    "solution": null
+  },
+  "rooftop-learning-1": {
+    "correct": 1,
+    "solution": null
+  },
+  "rooftop-learning-2": {
+    "correct": 1,
+    "solution": null
+  },
+  "rooftop-learning-3": {
+    "correct": 0,
+    "solution": [
+      1,
+      3,
+      0,
+      2
+    ]
+  },
+  "rooftop-learning-4": {
+    "correct": 0,
+    "solution": [
+      2,
+      0,
+      1
+    ]
+  },
+  "bunker-learning-1": {
+    "correct": 2,
+    "solution": null
+  },
+  "bunker-learning-2": {
+    "correct": 0,
+    "solution": [
+      2,
+      0,
+      1
+    ]
+  },
+  "bunker-learning-3": {
+    "correct": 0,
+    "solution": [
+      1,
+      3,
+      0,
+      2
+    ]
+  },
+  "bunker-learning-4": {
+    "correct": 0,
+    "solution": [
+      3,
+      1,
+      4,
+      0,
+      2
+    ]
+  }
+}

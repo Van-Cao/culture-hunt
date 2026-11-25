@@ -31,9 +31,8 @@ import { useLanguage } from "@/components/UI/LanguageProvider";
 import JourneyHeader from "@/components/UI/JourneyHeader";
 import GameDialog from "@/components/UI/GameDialog";
 import CheckpointStory from "./CheckpointStory";
-import PalaceMiniGame from "./PalaceMiniGame";
-import type { ChallengeMove } from "@/lib/palace/challenges";
-import Fireworks from "@/components/UI/Fireworks";
+import PalaceLearningQuiz from "./PalaceLearningQuiz";
+import type { QuestionAnswer } from "@/lib/palace/question-types";
 import PalaceMap from "./PalaceMap";
 import PalaceRoomStudy from "./PalaceRoomStudy";
 import PalaceCapture from "./PalaceCapture";
@@ -43,10 +42,8 @@ import "./palace.css";
 type Stage =
   | "brief"
   | "capture"
-  | "minigame"
   | "story"
   | "quiz"
-  | "success"
   | "visit"
   | "restart"
   | null;
@@ -74,10 +71,6 @@ export default function PalaceExperience({
   const [recognition, setRecognition] = useState<RecognitionResult | null>(
     null,
   );
-  const [choice, setChoice] = useState<number | null>(null);
-  const [feedback, setFeedback] = useState<boolean | null>(null);
-  const [hint, setHint] = useState(false);
-  const [quizQuestionId, setQuizQuestionId] = useState<string | null>(null);
   const [journalRunId, setJournalRunId] = useState("all");
   const [storyReward, setStoryReward] = useState<number | null>(null);
   const checkpoints = getCheckpoints(locale);
@@ -97,10 +90,7 @@ export default function PalaceExperience({
       : completed;
   const actor = completed.at(-1) || "facade";
   const visit = currentRun?.visits[selectedId];
-  const quiz = visit?.quiz || checkpoint.questions;
-  const pendingQuestion = quiz.find(q => !visit?.attempts.some(a => a.correct && a.questionId === q.id));
-  const question = quiz.find(q => q.id === quizQuestionId) || pendingQuestion || quiz[quiz.length - 1];
-  const questionIndex = quiz.indexOf(question);
+  const quiz = visit?.quiz.length ? visit.quiz : checkpoint.questions;
   const isDone = Boolean(visit?.completedAt);
   const index = checkpointIds.indexOf(selectedId);
   const unlocked =
@@ -138,10 +128,6 @@ export default function PalaceExperience({
     setStoryReward(null);
     setRecognition(null);
     setNotice("");
-    setChoice(null);
-    setFeedback(null);
-    setHint(false);
-    setQuizQuestionId(null);
     setStage(
       mode === "journal" || currentRun?.visits[id]?.completedAt
         ? "visit"
@@ -161,11 +147,7 @@ export default function PalaceExperience({
     setRecognition(null);
     const activeVisit = activeRun?.visits[selectedId];
     if (activeVisit?.recognizedAt && !activeVisit.completedAt) {
-      if (!activeVisit.challenge) {
-        const response = await game.startChallenge(activeRun!.id, selectedId);
-        if (!response) return;
-      }
-      setStage("minigame");
+      setStage("quiz");
     } else setStage("capture");
   }
   async function analyze(photo: File | CheckpointId) {
@@ -173,24 +155,22 @@ export default function PalaceExperience({
     const response = await game.recognize(currentRun.id, selectedId, photo);
     if (!response) return;
     setRecognition(response.recognition);
-    if (response.recognition.status === "matched") setStage("minigame");
-  }
-  async function moveChallenge(move: ChallengeMove) {
-    if (!currentRun || !visit?.challenge) return null;
-    const response = await game.moveChallenge(currentRun.id, selectedId, visit.challenge.definition.version, move);
-    if (response?.solved) { setStoryReward(state?.discovered.includes(selectedId) ? 0 : PALACE_XP); setStage("story"); }
-    return response;
+    if (response.recognition.status === "matched") setStage("quiz");
   }
   function finishStory() {
     setStage(null);
     setStoryReward(null);
     if (mode !== "journal" && completed.length === 5) onJournal();
-    else if (mode !== "journal") { setPicked(nextId || selectedId); setFeedback(null); setChoice(null); }
+    else if (mode !== "journal") { setPicked(nextId || selectedId); }
   }
-  async function submit() {
-    if (!currentRun || choice === null || game.busy) return;
-    const response = await game.answer(currentRun.id, selectedId, choice, question.id);
-    if (response) setFeedback(response.correct);
+  async function submit(answer: QuestionAnswer, questionId: string) {
+    if (!currentRun || game.busy) return null;
+    const response = await game.answer(currentRun.id, selectedId, answer, questionId);
+    if (response) {
+      if (response.correct && response.state.runs.find(run => run.id === currentRun.id)?.visits[selectedId]?.completedAt)
+        setStoryReward(state?.discovered.includes(selectedId) ? 0 : PALACE_XP);
+    }
+    return response?.correct ?? null;
   }
   async function replay() {
     const response = await game.start(true);
@@ -199,8 +179,6 @@ export default function PalaceExperience({
       setPicked("facade");
       setStage(null);
       setRecognition(null);
-      setChoice(null);
-      setFeedback(null);
       setNotice(
         t(
           "Lượt mới đã bắt đầu. Dấu ấn và lượt cũ vẫn được giữ.",
@@ -374,7 +352,7 @@ export default function PalaceExperience({
                 </span>
                 <span>
                   <Clock3 size={13} />
-                  {t("Mini game · 30–60 giây", "Mini game · 30–60 sec")}
+                  {checkpoint.questions.length} {t("nhiệm vụ khám phá", "discovery tasks")}
                 </span>
               </div>
               <button
@@ -392,7 +370,7 @@ export default function PalaceExperience({
                 {isDone
                   ? t("Xem dấu ấn", "View discovery")
                   : visit
-                    ? t("Tiếp tục thử thách", "Continue challenge")
+                    ? t("Tiếp tục bộ câu hỏi", "Continue quiz")
                     : t("Khám phá điểm này", "Explore this checkpoint")}
                 <ArrowRight size={16} />
               </button>
@@ -651,7 +629,8 @@ export default function PalaceExperience({
               ? t("Bắt đầu lượt mới", "Start a new run")
               : checkpoint.name
           }
-          wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit" || stage === "minigame"}
+          wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit" || stage === "quiz"}
+          className={stage === "quiz" ? "palace-dialog-quiz" : stage === "story" ? "palace-dialog-story" : ""}
         >
           <div className="palace-modal">
             {game.error && (
@@ -676,7 +655,7 @@ export default function PalaceExperience({
                   <ArrowRight size={13} />
                   <span>
                     <Trophy size={17} />
-                    {t("Mini game", "Mini game")}
+                    {t("Giải bộ câu hỏi", "Solve the quiz")}
                   </span>
                   <ArrowRight size={13} />
                   <span>
@@ -737,185 +716,22 @@ export default function PalaceExperience({
                 )}
               </>
             )}
-            {stage === "minigame" && visit?.challenge && <>
-              <p className="palace-recognition-success"><Check size={16} />{t("Đã nhận diện địa điểm", "Location identified")}<span>{visit.mode === "openai" ? "AI" : visit.mode === "sample" ? t("Ảnh mẫu", "Sample photo") : t("Ảnh tham chiếu", "Reference match")}</span></p>
-              <PalaceMiniGame key={`${currentRun?.id}-${selectedId}`} session={visit.challenge} busy={game.busy} onMove={moveChallenge} />
-            </>}
             {stage === "story" && <CheckpointStory
               key={`${selectedId}-${locale}`} checkpointId={selectedId}
               unlocked={isDone || state.discovered.includes(selectedId)} sound={sound}
               reviewing={mode === "journal"} onContinue={finishStory}
               reward={storyReward}
-              bonusComplete={!pendingQuestion}
-              onBonus={visit?.completedAt ? () => { setStage("quiz"); setChoice(null); setFeedback(null); setHint(false); setQuizQuestionId(pendingQuestion?.id || null); } : undefined}
+              summary={selectedId === "bunker" && completed.length === 5 && mode !== "journal" ? {
+                tasks: checkpointIds.reduce((sum, id) => sum + (currentRun?.visits[id]?.quiz.length || 0), 0),
+                demo: checkpointIds.some(id => currentRun?.visits[id]?.mode !== "openai"),
+              } : undefined}
             />}
-            {stage === "quiz" && (
-              <div className="palace-quiz">
-                <span className="palace-medal">
-                  <Sparkles size={28} />
-                </span>
-                <span className="palace-overline">
-                  {isDone ? t("KHÁM PHÁ THÊM", "EXPLORE MORE") : t("THỬ THÁCH TRI THỨC", "KNOWLEDGE CHALLENGE")} · {t("CÂU", "QUESTION")} {questionIndex + 1}/{quiz.length}
-                </span>
-                <div className="palace-question-progress" aria-label={`${questionIndex + 1} / ${quiz.length}`}>
-                  {quiz.map((q, i) => <span key={q.id} className={visit?.attempts.some(a => a.correct && a.questionId === q.id) ? "is-passed" : q.id === question.id ? "is-current" : ""}>{i + 1}</span>)}
-                </div>
-                <h2>{question.question[locale]}</h2>
-                <p>
-                  {t(
-                    "Một chút kiến thức mở rộng từ ngân hàng câu hỏi. Dấu ấn của bạn đã được lưu sau mini game.",
-                    "Optional questions from the question bank. Your discovery was saved after the mini game.",
-                  )}
-                </p>
-                <div
-                  className="palace-answer-list"
-                  role="group"
-                  aria-label={t("Chọn một đáp án", "Choose an answer")}
-                >
-                  {question.answers[locale].map((answer, i) => (
-                    <button
-                      key={answer}
-                      className={`${choice === i ? "is-selected" : ""} ${feedback !== null && choice === i ? (feedback ? "is-correct" : "is-wrong") : ""}`}
-                      aria-pressed={choice === i}
-                      disabled={feedback !== null || game.busy}
-                      onClick={() => setChoice(i)}
-                    >
-                      <span>{"ABCD"[i]}</span>
-                      {answer}
-                      {feedback !== null &&
-                        choice === i &&
-                        (feedback ? <Check size={18} /> : <X size={18} />)}
-                    </button>
-                  ))}
-                </div>
-                <div aria-live="polite">
-                  {feedback !== null ? (
-                    <p
-                      className={`palace-quiz-feedback ${feedback ? "is-correct" : "is-wrong"}`}
-                    >
-                      <strong>
-                        {feedback
-                          ? t(
-                              !pendingQuestion ? "Chính xác! Bạn đã giải trọn bộ câu hỏi." : "Chính xác! Tiếp tục giải mã câu tiếp theo.",
-                              !pendingQuestion ? "Correct! All questions are complete." : "Correct! Continue to the next question.",
-                            )
-                          : t(
-                              "Chưa đúng. Thử thêm một lần nhé!",
-                              "Not quite. Give it another try!",
-                            )}
-                      </strong>
-                      {feedback
-                        ? question.explanation[locale]
-                        : question.hint[locale]}
-                    </p>
-                  ) : hint ? (
-                    <p className="palace-inline-notice">
-                      {question.hint[locale]}
-                    </p>
-                  ) : null}
-                </div>
-                {feedback === true ? (
-                  <button
-                    className="palace-button"
-                    onClick={() => {
-                      if (!pendingQuestion) setStage("story");
-                      else {
-                        setQuizQuestionId(pendingQuestion?.id || null);
-                        setChoice(null); setFeedback(null); setHint(false);
-                      }
-                    }}
-                  >
-                    {!pendingQuestion ? t("Trở lại câu chuyện", "Back to story") : t("Câu tiếp theo", "Next question")}
-                    <ArrowRight size={17} />
-                  </button>
-                ) : feedback === false ? (
-                  <button
-                    className="palace-button"
-                    onClick={() => {
-                      setFeedback(null);
-                      setChoice(null);
-                    }}
-                  >
-                    <RotateCcw size={17} />
-                    {t("Thử lại", "Try again")}
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      className="palace-button"
-                      disabled={choice === null || game.busy}
-                      onClick={submit}
-                    >
-                      {game.busy ? (
-                        <LoaderCircle className="spin" size={17} />
-                      ) : (
-                        <Check size={17} />
-                      )}
-                      {t("Chốt đáp án", "Lock in answer")}
-                    </button>
-                    <button
-                      className="palace-text-button"
-                      onClick={() => setHint(!hint)}
-                      aria-expanded={hint}
-                    >
-                      {t("Một chút gợi ý", "A little hint")}
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-            {stage === "success" && (
-              <div className="palace-success">
-                <Fireworks />
-                <span className="palace-medal palace-medal-large">
-                  <Trophy size={44} strokeWidth={1.2} />
-                </span>
-                <span className="palace-overline">
-                  {completed.length === 5
-                    ? "HERITAGE EXPLORER / COMPLETE"
-                    : "A NEW STORY, A NEW DISCOVERY"}
-                </span>
-                <h2>
-                  {completed.length === 5
-                    ? t(
-                        "Bạn đã nối trọn hành trình.",
-                        "Your journey is complete.",
-                      )
-                    : t(
-                        "Một dấu ấn vừa sáng lên.",
-                        "A discovery comes to light.",
-                      )}
-                </h2>
-                <p>
-                  {checkpoint.name} · {completed.length}/5{" "}
-                  {t("điểm đã khai mở", "stops uncovered")}
-                </p>
-                <strong className="palace-success-xp">
-                  {state.xp} XP{" "}
-                  <span>{t("thành tích đã lưu", "saved to your profile")}</span>
-                </strong>
-                <button
-                  className="palace-button"
-                  onClick={() => {
-                    setStage(null);
-                    if (completed.length === 5) onJournal();
-                    else {
-                      setPicked(nextId || "facade");
-                      setFeedback(null);
-                      setChoice(null);
-                    }
-                  }}
-                >
-                  {completed.length === 5
-                    ? t("Xem bản đồ dấu ấn", "View my discovery atlas")
-                    : t(
-                        "Trở về bản đồ · Điểm tiếp theo",
-                        "Back to map · Next checkpoint",
-                      )}
-                  <ArrowRight size={17} />
-                </button>
-              </div>
-            )}
+            {stage === "quiz" && <PalaceLearningQuiz
+              key={`${currentRun?.id}-${selectedId}`}
+              checkpointId={selectedId} checkpointName={checkpoint.name} checkpointNumber={index + 1}
+              quiz={quiz} visit={visit} busy={game.busy} onAnswer={submit}
+              onStory={() => setStage("story")}
+            />}
             {stage === "visit" && (
               <div className="palace-visit">
                 <PalaceRoomStudy checkpoint={checkpoint} />
@@ -943,9 +759,9 @@ export default function PalaceExperience({
                         <small>
                           {t("Nhận diện: ", "Identified: ")}
                           {formatDate(entry.recognizedAt)} ·{" "}
-                          {entry.challenge ? `${entry.challenge.progress.moves} ${t("thao tác mini game", "mini game moves")} · ` : ""}{entry.attempts.length} {t("lần trả lời", "answers")}
+                          {entry.legacyGameMoves !== undefined ? `${entry.legacyGameMoves} ${t("thao tác ở lượt cũ", "legacy moves")} · ` : ""}{entry.attempts.length} {t("lần trả lời", "answers")}
                         </small>
-                        <small>{new Set(entry.attempts.filter(a => a.correct).map(a => a.questionId)).size}/{entry.quiz.length} {entry.challenge ? t("câu mở rộng · tùy chọn", "bonus questions · optional") : t("câu đã giải", "questions solved")}</small>
+                        <small>{entry.quiz.length ? `${new Set(entry.attempts.filter(a => a.correct && entry.quiz.some(q => q.id === a.questionId)).map(a => a.questionId)).size}/${entry.quiz.length} ${t("câu đã giải", "questions solved")}` : t("Lịch sử lượt chơi cũ", "Earlier visit history")}</small>
                         <small>
                           {entry.mode === "openai"
                             ? t("Nhận diện bằng AI", "AI recognition")

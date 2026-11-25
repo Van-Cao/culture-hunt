@@ -1,45 +1,34 @@
-# Palace question bank and visual references
+# Palace learning journey
 
-The supplied `CultureHunt_NganHangCauHoi_DinhDocLap.docx` was read directly as Word XML. [question-bank.source.json](./question-bank.source.json) retains all 10 source questions, four options, the supplied answer and the supplied story. It is not a claim that every source statement has been independently verified.
+The active journey is **recognition -> four evidence-led tasks per checkpoint -> visual reveal -> written/audio story -> recorded discovery**. There are 20 bilingual tasks. Necessary dates and clues are supplied before answering. XP and the next checkpoint unlock after all four correct answers; retries, reload/resume and replay remain supported. Existing map and recognition photographs are unchanged.
 
-Playable bilingual adaptations are in [questions.ts](../../lib/palace/questions.ts). Answer-letter ordering is retained, including when wording has been narrowed. There is no random client-side selection or client-only grading.
+## Current reviewed script v3
 
-| Source | Stage | Handling |
-| --- | --- | --- |
-| 1.1 | Façade | Bamboo-inspired stone screens; architectural introduction corroborates the subject. |
-| 1.2 | Façade | Character Cát (吉); corroborated by the architectural introduction. |
-| 2.1 | Reception | About 500 people. Wording omits the source's reference to state banquets, which risks confusing this room with the separate State Banqueting Hall. |
-| 2.2 | Reception | Patterned red carpet. The photograph establishes the appearance, not that the carpet is manufactured in one piece or its acoustic performance. |
-| 3.1 | Cabinet | Oval table; explanation follows visible furnishings rather than asserting psychological or power effects. |
-| 3.2 | Cabinet | **Needs verification; excluded from grading.** The supplied answer allows a screen or bronze drum depending on arrangement. Neither has been corroborated in the reference view. The original is retained, and the diorama does not invent an exhibit. |
-| 4.1 | Rooftop | UH-1 (Huey); visible aircraft and official photo caption. |
-| 4.2 | Rooftop | Rest/quiet contemplation in the supplied design interpretation. Reworded to distinguish Tứ phương vô sự lầu from the helipad itself. |
-| 5.1 | Bunker | Four tactical regions, retained as supplied historical content. The question explicitly concerns the operations room, whereas the recognition reference shows communications equipment. |
-| 5.2 | Bunker | Protective function retained from the supplied bank. Explanation avoids the source's absolute claim that corners eliminate blast pressure. No engineering performance claim is made. |
+[Authored source](./learning-journey.source.json) traces merged questions back to the workbook rows. Build with `python scripts/build-palace-learning-bank.py`: [public task metadata](./question-bank-v3.json) contains no grading keys; [server grading keys](./question-bank-v3.answers.json) are imported only by the persistence service. Incomplete visits migrate to v3 without losing recognition or earlier attempts. Completed and abandoned snapshots and lifetime XP remain unchanged.
 
-## Sources
+Five reveals: facade task 2 (Tam), reception task 3 (painting), cabinet task 2 (archival comparison), rooftop task 2 (red circles), bunker task 3 (illustrative information workflow). The bunker workflow is explicitly a simplified educational illustration, not a real message, floor plan or wiring route.
 
-- [Official architectural introduction](https://dinhdoclap.gov.vn/kien-truc-dinh-doc-lap/): architectural massing, stone screens, symbols and rooftop context.
-- [Official Palace photo article](https://dinhdoclap.gov.vn/anh-dinh-doc-lap-noi-luu-giu-dau-an-sau-50-nam-giai-phong/): the existing local reference photographs, room distinctions, rooftop aircraft and basement context.
-- [Vietnam News Agency / Báo Tin tức photo report](https://baotintuc.vn/chung-nhan-dinh-doc-lap-noi-trao-truyen-tiep-noi-mach-nguon-lich-su-post802427.html): Reception Hall capacity and function.
-- User-supplied question bank: exact original phrasing and narratives, including items whose wider interpretation needs further curatorial verification.
+[Photo manifest](./learning-assets.json) records dimensions, hashes, credits and source URLs. `python scripts/prepare-palace-learning-assets.py` prepares WebP photographs independently of the map/scanner photos. The 2017 wide Reception Hall photograph and high-resolution painting replace obstructed/low-resolution learning views. CSS crops preserve source detail; no generative reconstruction is used.
 
-## Visual treatment
+[New bilingual story scripts](./stories-v3.json) match the ten tracks in `public/audio/palace-learning/manifest.json`. Generate with `python scripts/generate-palace-audio.py --learning`. `--google-missing` fills only missing tracks while reusing matching cached tracks. Provider/voice, duration and transcript SHA-256 are recorded per track. The previous story/audio files are retained as archives.
 
-The room illustrations reproduce distinctive visible features rather than presenting a generic office: red-and-gold patterned carpet, red stage curtains, symmetrical upholstered seating and crystal chandeliers; an open-centred oval wooden table, desk microphones, dark leather armchairs and yellow-green curtains; camouflage and tail number 445 on the rooftop UH-1; desk-mounted teletype equipment, reddish wall lining, floral black-and-white floor tiles and a narrow concrete corridor.
+## Archived workbook review v2
 
-The perspective, number of simplified furniture items, dimensions and positions are authored for the game. They are not an inventory, measured survey, or physical navigation plan. Existing photograph credits remain in place.
+[Verbatim workbook export](./question-bank-v2.source.json) preserves all 30 tasks, the original answer/feedback cells, the five story drafts, sheet row numbers and workbook SHA-256. [Reviewed bilingual bank](./question-bank-v2.json) publishes **26 tasks**: façade 6, reception 4, cabinet 7, rooftop 6, bunker 3. The workbook replaces all earlier playable banks. Unfinished active visits update immediately, preserving recognition and earlier attempts. Completed/abandoned history and XP remain saved.
 
-## Saved-game compatibility
+Five response types are supported: single answer, multiple answers, ordered cards, numeric entry and matching pairs. All are graded on the server. Invalid shapes, duplicate multiple selections, incomplete sequences and out-of-range answers are rejected. Multi selections are order-independent; sequences and matching positions are order-sensitive. Numeric answers are integer strings. An additive `attempts.answer_json` column retains structured responses without changing old integer answers.
 
-New recognized visits store a versioned question snapshot in SQLite. Attempts record the question ID. Every question must be passed in order before the stage completes and its unique XP is awarded. A replay creates new visits and preserves previous records. Additive schema migration retains old runs and maps pre-bank attempts to their original single legacy question; already recognized legacy visits keep that quiz rather than silently receiving a different answer key.
+Four source tasks are retained for review and **not graded**:
 
-## Mini game journey (v2)
+| Excel row | Reason |
+| --- | --- |
+| 14 | The date/person matching key is incomplete and inconsistent; needs explicit events and a corrected key. |
+| 15 | Painting signature/detail capture needs a close-up and calibrated image targets. |
+| 18 | The six-seat reasoning task lacks a precise diagram needed to uniquely validate the supplied answer. |
+| 36 | A supplied radio photo is not an object-level recognition model; the current scanner identifies rooms/checkpoints. |
 
-New recognition now also stores a versioned mini game snapshot. The player identifies a checkpoint, completes its mini game, then unlocks the written story and prerecorded narration. The question bank remains an optional extension after completion and does not award extra XP.
+Editorial adaptations are recorded in the reviewed bank. Row 6 keeps six sortable events because the supplied seven-event prompt omits one event from its key. Row 7 corrects **390 → main gate**, corroborated by the [official Palace historical introduction](https://dinhdoclap.gov.vn/di-tich-lich-su-dinh-doc-lap/). Row 10 omits the credential-ceremony premise to avoid mixing up separate rooms. Row 11 repairs shifted feedback cells and labels its sequence illustrative. Row 13 is a calculation exercise rather than a measured room claim. Row 22 distinguishes the earlier broadcast appeal from the later surrender announcement. Row 24 recovers B from the workbook's explicit success script. Row 28 distinguishes the planned allocation for the Palace from the total bombs. Other supplied claims are retained as user-authored content, not represented as independently authenticated.
 
-The facade uses authored photo hotspots; Reception and Rooftop use six-piece swap puzzles; Cabinet uses object-to-photo matching; Bunker uses a rotating-tile circuit. Each action is validated and persisted by the server. The circuit is a fictional learning interaction, not an operating diagram of historical communications equipment. Games use curated reference photographs; hotspot coordinates do not claim to work on arbitrary uploaded photographs.
+The five supplied story drafts remain in the source export. The v3 scripts above supersede the earlier active narrations while retaining the earlier files.
 
-`visits.challenge_json` stores the game definition, version and progress. `game_attempts` records submitted actions and outcomes. Original visits, quiz snapshots and attempts are retained. An unfinished legacy visit can explicitly adopt the new game when the player continues it. The legacy quiz completion path remains compatible with pre-game saved records, while a new mini game visit cannot be completed through quiz answers. Lifetime rewards remain unique per checkpoint, including after replay or duplicate submissions.
-
-The map components and landmark models are unchanged by this gameplay update. They continue consuming the same completed checkpoint IDs and lifetime discoveries. [Narration scripts](./stories.json) and [audio provenance](../../public/audio/palace/README.md) document the VI/EN story assets.
+Rebuild the reviewed bank with `python scripts/import-palace-question-bank.py`. The app reads the generated JSON, so Python/openpyxl are not runtime dependencies. Earlier question modules and mini game endpoints are removed. Historical snapshots remain in SQLite and cannot be submitted as new challenges.

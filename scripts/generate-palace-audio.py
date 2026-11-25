@@ -17,8 +17,9 @@ import edge_tts
 from mutagen.mp3 import MP3
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = json.loads((ROOT / "content/palace/stories.json").read_text(encoding="utf-8"))
-DEST = ROOT / "public/audio/palace"
+LEARNING = "--learning" in sys.argv
+DATA = json.loads((ROOT / ("content/palace/stories-v3.json" if LEARNING else "content/palace/stories.json")).read_text(encoding="utf-8"))
+DEST = ROOT / ("public/audio/palace-learning" if LEARNING else "public/audio/palace")
 
 
 async def main():
@@ -86,7 +87,7 @@ async def main():
             if duration < 10 or path.stat().st_size < 10000:
                 raise RuntimeError(f"Invalid narration: {path.name}")
             manifest["tracks"][checkpoint][locale] = {
-                "src": f"/audio/palace/{path.name}", "voice": voice,
+                "src": f"/audio/{DEST.name}/{path.name}", "voice": voice,
                 "provider": provider,
                 "duration": duration, "bytes": path.stat().st_size,
                 "textSha256": digest,
