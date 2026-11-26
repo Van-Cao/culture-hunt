@@ -1,10 +1,11 @@
 {
-  "images_checked": 98,
+  "images_checked": 162,
   "cross_split_candidate_distance_max": 6,
   "possible_cross_split_near_duplicates": [],
   "notes": [
-    "Exact decoded-pixel duplicates are rejected by the trainer.",
-    "64-bit dHash is a screening aid; visual source/scene review also performed.",
-    "Related frames within one video are correlated and always stay in one split."
+    "Exact decoded-pixel duplicate checks also run during preparation.",
+    "64-bit dHash is a screening aid; visual source/scene review is still required.",
+    "Entire videos/events/user phone outing stay in one split; frames are correlated.",
+    "Legacy test sources were already evaluated in v2; new-source cohort is separately identified."
   ]
 }

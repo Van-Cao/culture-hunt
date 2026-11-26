@@ -106,7 +106,7 @@ def materialize(root, rows):
     manifest = dict(fingerprint=fingerprint, records=rows, independent_test_set=has_test,
                     counts={split: dict(Counter(row["label"] for row in rows if row["split"] == split))
                             for split in ("train", "val", "test")},
-                    note="Source-disjoint web data. Test is held out from training/epoch selection; this is not a field evaluation."
+                    note="Source-disjoint phone/public-web data. Test sources are excluded from training/epoch selection. Legacy regression and fresh-source cohorts must be reported separately; this is not a field evaluation."
                     if has_test else "Train/validation only; collect a separate source-disjoint test before claiming accuracy.")
     (folder / "split-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return folder
@@ -118,7 +118,14 @@ def main():
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--epochs", type=int, default=60)
     parser.add_argument("--name", default="hcmus-v1")
+    parser.add_argument("--initial-weights", type=Path, help="Optional previous HCMUS checkpoint for continued fine-tuning")
+    parser.add_argument("--learning-rate", type=float, default=0.0003)
+    parser.add_argument("--freeze", type=int, default=0, help="Number of early layers to freeze")
+    parser.add_argument("--class-weight-power", type=float, default=0.5,
+                        help="Inverse-frequency loss weight power; 1 balances class totals")
     args = parser.parse_args()
+    if args.epochs <= 0 or args.learning_rate <= 0 or args.freeze < 0 or not 0 <= args.class_weight_power <= 1:
+        parser.error("epochs/lr must be positive, freeze non-negative and class weight power within [0,1]")
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     try:
         root, rows, counts = load_data(config)
@@ -141,10 +148,13 @@ def main():
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA unavailable; configure a training device before continuing")
     torch.set_num_threads(4)
-    model = YOLO(str(ROOT / config["baseModel"]))
+    model = YOLO(str(args.initial_weights or ROOT / config["baseModel"]))
+    if args.initial_weights and set(model.names.values()) != {row["id"] for row in config["checkpoints"]} | {config["backgroundClass"]}:
+        raise ValueError("Initial HCMUS checkpoint has the wrong class catalog")
     model.train(trainer=shared.FullImageTrainer, data=str(folder), device=0, epochs=args.epochs,
                 patience=20, imgsz=config["imageSize"], batch=8, workers=0,
-                optimizer="AdamW", lr0=0.0003, warmup_epochs=0, cls_pw=0.5, freeze=0, dropout=0.2,
+                optimizer="AdamW", lr0=args.learning_rate, warmup_epochs=0,
+                cls_pw=args.class_weight_power, freeze=args.freeze, dropout=0.2,
                 seed=2026, deterministic=True, amp=False,
                 project=str(ROOT / config["outputDirectory"]), name=args.name)
     print("HCMUS model:", model.trainer.best, flush=True)

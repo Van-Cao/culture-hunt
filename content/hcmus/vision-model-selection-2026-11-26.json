@@ -1,0 +1,40 @@
+{
+  "selected_run": "hcmus-v3-drive",
+  "model_sha256": "7b0d817d4e98096372834814f33b53d80148f56015d180eed8aebfe73088bb52",
+  "dataset_fingerprint": "eee4ae8bd422",
+  "basis": "Original-file validation top-1, then checkpoint trainer validation loss",
+  "candidates": [
+    {
+      "run": "hcmus-v2",
+      "original_validation_correct": 6,
+      "original_validation_total": 10,
+      "checkpoint_trainer_validation_loss": 0.8591
+    },
+    {
+      "run": "hcmus-v3-drive",
+      "original_validation_correct": 7,
+      "original_validation_total": 10,
+      "checkpoint_trainer_validation_loss": 0.98781
+    },
+    {
+      "run": "hcmus-v4-drive-warmstart",
+      "original_validation_correct": 7,
+      "original_validation_total": 10,
+      "checkpoint_trainer_validation_loss": 1.23986
+    },
+    {
+      "run": "hcmus-v5-drive-balanced",
+      "original_validation_correct": 7,
+      "original_validation_total": 10,
+      "checkpoint_trainer_validation_loss": 1.08012
+    }
+  ],
+  "fixed_policy": {
+    "min_probability": 0.98,
+    "min_margin": 0.5
+  },
+  "note": "The balanced-layer-freezing run followed review of the expanded test. Final results are regression evidence; no blind accuracy claim. Test images were never used as training inputs. Selection uses validation top-1 then loss.",
+  "initial_selection_run": "hcmus-v3-drive",
+  "initial_selection_frozen_before_expanded_test": true,
+  "final_selection_after_expanded_regression_review": true
+}

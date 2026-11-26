@@ -9,9 +9,19 @@ config = json.loads((ROOT / "content/hcmus/vision-model.json").read_text(encodin
 weights = ROOT / config["weights"]
 if hashlib.sha256(weights.read_bytes()).hexdigest() != config["model_sha256"]:
     raise ValueError("HCMUS model/policy checksum mismatch")
+report = json.loads((ROOT / "content/hcmus/vision-training-report.json").read_text(encoding="utf-8"))
+if report["model_sha256"] != config["model_sha256"] or report["weights"] != config["weights"]:
+    raise ValueError("HCMUS report does not describe the selected model")
+comparison = json.loads((ROOT / "content/hcmus/vision-training-comparison.json").read_text(encoding="utf-8"))
+if comparison["candidate"]["model_sha256"] != config["model_sha256"]:
+    raise ValueError("HCMUS comparison does not describe the selected model")
+baseline_test = comparison["baseline"]["test"]
 config["weights"] = "models/hcmus.pt"
 target = ROOT / "output/yolo/hcmus-demo.zip"
-readme = """# Culture Hunt — experimental HCMUS classifier
+test = report["test"]
+cohorts = "\n".join(f"- {name}: {item['correct']}/{item['total']} raw top-1; {item['source_groups']} source groups."
+                    for name, item in test.get("cohorts", {}).items())
+readme = f"""# Culture Hunt — experimental HCMUS classifier
 
 Python 3.11+. CPU supported; NVIDIA GPU optional.
 1. Extract this ZIP.
@@ -20,8 +30,14 @@ Python 3.11+. CPU supported; NVIDIA GPU optional.
 
 Only checkpoints: Lecture Hall 1, buildings I, A and B, at Nguyen Van Cu.
 predicted is a raw candidate; checkpointId=null means the strict gate abstained.
-Raw held-out web result: 13/16 (81.25%). Very small correlated sample, not field accuracy.
-The fixed gate accepted 0/16 test images, so automatic recognition is not validated.
+Raw web test/regression result: {test['correct']}/{test['total']} ({test['accuracy']:.2%}).
+{cohorts}
+Very small correlated sample, not field accuracy. See report.json for missing cohort classes.
+Baseline v2 on the same test: {baseline_test['correct']}/{baseline_test['total']}.
+Overall accuracy improvement has not been demonstrated; see comparison.json.
+The fixed gate accepted {test['fixed_gate']['accepted']}/{test['total']} test images,
+with {test['fixed_gate']['false_acceptances']} false acceptances in this small sample.
+Automatic recognition is not validated. All user phone photos were training-only.
 No HTTP API or gameplay integration. See MODEL-CARD.md and report.json.
 """
 with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
@@ -31,8 +47,13 @@ with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.write(ROOT / "scripts" / filename, "scripts/" + filename)
     archive.write(ROOT / "scripts/requirements-vision-inference.txt", "requirements.txt")
     archive.write(ROOT / "content/hcmus/vision-training-report.json", "report.json")
+    archive.write(ROOT / "content/hcmus/vision-training-comparison.json", "comparison.json")
+    archive.write(ROOT / "content/hcmus/vision-model-selection-2026-11-26.json", "selection.json")
     archive.write(ROOT / "content/hcmus/VISION-DATASET.md", "MODEL-CARD.md")
     archive.write(ROOT / "content/hcmus/video-sources.json", "video-sources.json")
+    archive.write(ROOT / "content/hcmus/image-sources.json", "image-sources.json")
+    archive.write(ROOT / "content/hcmus/vision-data-audit.json", "data-audit.json")
+    archive.write(ROOT / "content/hcmus/drive-review-2026-11-26.json", "drive-review.json")
     archive.write(ROOT / "content/hcmus/vision-reviewed-images.json", "reviewed-images.json")
     archive.writestr("README.md", readme)
 print("Created:", target, "bytes:", target.stat().st_size)

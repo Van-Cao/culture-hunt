@@ -1,10 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "destinationId": "hcmus",
   "campusId": "nguyen-van-cu",
   "status": "experimental",
-  "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v2/weights/best.pt",
-  "model_sha256": "8c74e31e9d8126df1ecd8b0b84e394f879aad69c9c87255ef874bf080c7c83c9",
+  "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v3-drive/weights/best.pt",
+  "model_sha256": "7b0d817d4e98096372834814f33b53d80148f56015d180eed8aebfe73088bb52",
   "image_size": 320,
   "preprocessing": "RGB; resize entire image 320x320; float tensor [0,1]",
   "min_probability": 0.98,
@@ -18,6 +18,6 @@
   "enabled_in_gameplay": false,
   "automatic_acceptance_validated": false,
   "policy_frozen_before_test": true,
-  "dataset_fingerprint": "b3cf21de2ff5",
-  "intended_use": "Experimental CLI suggestions. Fixed strict gate abstains on all 16 held-out web photos; do not use raw top-1 predictions to unlock gameplay. Confidence is not calibrated correctness."
+  "dataset_fingerprint": "eee4ae8bd422",
+  "intended_use": "Experimental CLI candidate trained with user phone photos. Raw regression 16/22 is below v2 17/22. Fixed gate accepts 5/22 in this tiny sample; no field accuracy or automatic gameplay acceptance is validated."
 }

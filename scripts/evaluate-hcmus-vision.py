@@ -29,7 +29,8 @@ def evaluate(model, rows, device):
         confusion[row["label"]][predicted] += 1
         details.append(dict(id=row["id"], actual=row["label"], predicted=predicted,
                             confidence=confidence, margin=margin, accepted=accepted,
-                            correct=predicted == row["label"], source_group=row["split_group"], quality_reasons=quality))
+                            correct=predicted == row["label"], source_group=row["split_group"], quality_reasons=quality,
+                            evaluation_cohort=row.get("evaluation_cohort")))
     correct = sum(row["correct"] for row in details)
     accepted = [row for row in details if row["accepted"]]
     return dict(total=len(details), correct=correct, accuracy=correct/len(details),
@@ -47,11 +48,18 @@ def main():
     parser.add_argument("weights", type=Path)
     parser.add_argument("--split-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=ROOT / "content/hcmus/vision-training-report.json")
+    parser.add_argument("--splits", nargs="+", choices=("val", "test"), default=["val", "test"],
+                        help="Use --splits val for model selection before inspecting test predictions")
+    parser.add_argument("--post-regression-review", action="store_true",
+                        help="Mark evaluation as regression evidence after earlier expanded-test results were inspected")
     args = parser.parse_args()
     torch.set_num_threads(4)
     config = json.loads((ROOT / "content/hcmus/vision-training.json").read_text(encoding="utf-8"))
     manifest = json.loads(args.split_manifest.read_text(encoding="utf-8"))
     classes = {row["id"] for row in config["checkpoints"]} | {config["backgroundClass"]}
+    extra_test = [row for row in manifest["records"] if row["split"] == "test" and
+                  (row.get("evaluation_cohort") or "").startswith("new-source-")]
+    missing_extra_classes = sorted(classes - {row["label"] for row in extra_test})
     groups = {split: {row["split_group"] for row in manifest["records"] if row["split"] == split}
               for split in ("train", "val", "test")}
     if groups["train"] & groups["val"] or groups["train"] & groups["test"] or groups["val"] & groups["test"]:
@@ -69,16 +77,32 @@ def main():
                   split_groups={split: sorted(value) for split, value in groups.items()},
                   threshold_selection="Fixed before evaluation: probability 0.98 and margin 0.5; not tuned on test.",
                   field_validated=False, enabled_in_gameplay=False,
+                  expanded_test_used_in_prior_error_analysis=args.post_regression_review,
                   limitations=["Small public-web sample with correlated frames within each video.",
-                    "Validation selects the checkpoint epoch; test sources are held out from training and epoch selection.",
+                    "Validation selects the checkpoint epoch. Test images are not training inputs.",
+                    "Legacy test predictions were already seen in v2; they are regression evidence, not a fresh blind evaluation.",
+                    f"Additional source-disjoint test: {len(extra_test)} frames; missing classes: {', '.join(missing_extra_classes) or 'none'}. This small cohort does not establish field accuracy.",
+                    "All user phone photos are training-only, one outing; field accuracy on new phone photos remains unknown.",
                     "The test result is not expected real-world accuracy and must not be presented as such.",
                     "Older images and current phone photographs may differ in appearance and conditions."])
-    for split in ("val", "test"):
+    for split in dict.fromkeys(args.splits):
         rows = [row for row in manifest["records"] if row["split"] == split]
         if not rows or {row["label"] for row in rows} != classes:
             raise ValueError(f"Missing {split} coverage")
         report[split] = evaluate(model, rows, device)
         print(split, report[split]["correct"], "/", report[split]["total"], report[split]["fixed_gate"], flush=True)
+        if split == "test":
+            # Summarize existing predictions: never rerun or tune a threshold per cohort.
+            cohorts = {}
+            for name in sorted({r.get("evaluation_cohort") or "unspecified" for r in rows}):
+                details = [r for r in report[split]["details"] if (r["evaluation_cohort"] or "unspecified") == name]
+                accepted = [r for r in details if r["accepted"]]
+                cohorts[name] = dict(total=len(details), correct=sum(r["correct"] for r in details),
+                    accuracy=sum(r["correct"] for r in details)/len(details),
+                    classes=sorted({r["actual"] for r in details}),
+                    source_groups=len({r["source_group"] for r in details}),
+                    accepted=len(accepted), false_acceptances=sum(not r["correct"] for r in accepted))
+            report[split]["cohorts"] = cohorts
     experiments = []
     for folder in sorted(args.weights.parent.parent.parent.glob("hcmus-v*")):
         result_path = folder / "results.csv"
@@ -87,11 +111,20 @@ def main():
         with result_path.open(encoding="utf-8") as handle:
             epochs = list(csv.DictReader(handle))
         best = max(epochs, key=lambda epoch: float(epoch["metrics/accuracy_top1"]))
+        last_best = [epoch for epoch in epochs if float(epoch["metrics/accuracy_top1"]) == float(best["metrics/accuracy_top1"])][-1]
         experiments.append(dict(run=folder.name, epochs_completed=len(epochs),
-            best_validation_epoch=int(best["epoch"]),
+            first_maximum_validation_epoch=int(best["epoch"]),
+            last_maximum_validation_epoch=int(last_best["epoch"]),
+            checkpoint_validation_loss=float(last_best["val/loss"]),
             best_trainer_validation_accuracy=float(best["metrics/accuracy_top1"]),
             selected=folder == args.weights.parent.parent))
-    report["model_selection"] = dict(basis="Higher validation top-1 before looking at held-out test predictions.", experiments=experiments)
+    report["model_selection"] = dict(
+        basis=("Select by original-file validation top-1; break ties by checkpoint trainer validation loss. " +
+               ("A later balanced-training experiment followed expanded-test error analysis. Treat all test scores as regression evidence, not a blind final accuracy estimate."
+                if args.post_regression_review else
+                "Selection is frozen before expanded test predictions. Legacy v2 test history was already known.")),
+        epoch_note="Ultralytics overwrites best.pt on equal maximum fitness. First maximum epoch is not necessarily the epoch stored in best.pt.",
+        selected_checkpoint_validation_metrics=model.ckpt.get("train_metrics"), experiments=experiments)
     report["input_encoding_note"] = "Trainer validates canonical JPEG copies; this report evaluates the original reviewed files. A borderline prediction can change after JPEG re-encoding. See trainer validation and original-file validation separately."
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "destinationId": "hcmus",
   "campusId": "nguyen-van-cu",
   "campusAddress": "227 Nguyễn Văn Cừ, TP. HCM",
@@ -32,6 +32,7 @@
     "Building I uses the letter I; Lecture Hall 1 uses the numeral 1.",
     "Do not use the shared campus overview image as four differently labelled training images.",
     "Collect reviewed photos of this specific campus and group by photographer/session before splitting.",
-    "Experimental HCMUS weights are available locally; HCMUS recognition is not enabled in gameplay. Palace uses a separate model."
+    "Experimental HCMUS weights are available locally; HCMUS recognition is not enabled in gameplay. Palace uses a separate model.",
+    "2026-11-26: 164 user Drive uploads reviewed; 52 unique, informative phone photos added train-only as one outing. Six official-site images added to train. Prior splits preserved; six extra video frames are evaluation-only. See comparison/card for regression, not field accuracy."
   ]
 }
