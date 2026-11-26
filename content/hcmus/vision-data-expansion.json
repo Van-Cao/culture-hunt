@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-26",
+  "added_count": 27,
+  "counts": {
+    "building-i": 5,
+    "other": 21,
+    "building-a": 1
+  },
+  "reviewed_ids": [
+    "video-O7B9PMt-mH8-00000",
+    "video-O7B9PMt-mH8-00060",
+    "video-O7B9PMt-mH8-00100",
+    "video-O7B9PMt-mH8-00120",
+    "video-O7B9PMt-mH8-00140",
+    "video-O7B9PMt-mH8-00200",
+    "video-O7B9PMt-mH8-00220",
+    "video-O7B9PMt-mH8-00260",
+    "video-O7B9PMt-mH8-00280",
+    "video-O7B9PMt-mH8-00380",
+    "video-O7B9PMt-mH8-00560",
+    "video-O7B9PMt-mH8-00600",
+    "video-O7B9PMt-mH8-00640",
+    "video-O7B9PMt-mH8-00700",
+    "video-O59Cr6vZD0Y-00068",
+    "video-O59Cr6vZD0Y-00084",
+    "video-O59Cr6vZD0Y-00092",
+    "video-O59Cr6vZD0Y-00096",
+    "video-OPKa7SUlOYc-00024",
+    "video-OPKa7SUlOYc-00128",
+    "video-OPKa7SUlOYc-00136",
+    "video-OPKa7SUlOYc-00152",
+    "video-OPKa7SUlOYc-00184",
+    "video-OPKa7SUlOYc-00216",
+    "video-OPKa7SUlOYc-00272",
+    "video-OPKa7SUlOYc-00304",
+    "video-OPKa7SUlOYc-00312"
+  ],
+  "source_groups": [
+    "video-O59Cr6vZD0Y",
+    "video-O7B9PMt-mH8",
+    "video-OPKa7SUlOYc"
+  ],
+  "note": "Adds real reviewed source frames only; stochastic augmentation is applied at training time and does not inflate the photo count. Same 10 validation/22 regression images as v3."
+}

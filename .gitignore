@@ -5,6 +5,7 @@
 /.venv-yolo/
 /runs/
 /yolo26s-cls.pt
+/yolo26m-cls.pt
 /datasets/
 /output/yolo/
 __pycache__/

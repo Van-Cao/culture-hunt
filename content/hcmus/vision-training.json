@@ -1,12 +1,12 @@
 {
-  "version": 3,
+  "version": 4,
   "destinationId": "hcmus",
   "campusId": "nguyen-van-cu",
   "campusAddress": "227 Nguyễn Văn Cừ, TP. HCM",
   "status": "trained_experimental",
   "task": "classify",
-  "baseModel": "yolo26s-cls.pt",
-  "imageSize": 320,
+  "baseModel": "yolo26m-cls.pt",
+  "imageSize": 448,
   "datasetDirectory": "datasets/hcmus-nguyen-van-cu",
   "outputDirectory": "output/yolo/hcmus-nguyen-van-cu",
   "checkpoints": [
@@ -33,6 +33,6 @@
     "Do not use the shared campus overview image as four differently labelled training images.",
     "Collect reviewed photos of this specific campus and group by photographer/session before splitting.",
     "Experimental HCMUS weights are available locally; HCMUS recognition is not enabled in gameplay. Palace uses a separate model.",
-    "2026-11-26: 164 user Drive uploads reviewed; 52 unique, informative phone photos added train-only as one outing. Six official-site images added to train. Prior splits preserved; six extra video frames are evaluation-only. See comparison/card for regression, not field accuracy."
+    "2026-11-26: YOLO26m at 448px, geometric/light/occlusion augmentation, 157 train / 10 val / 22 regression images. Adds 27 reviewed training-only frames (21 other, 5 I, 1 A). All earlier validation/test labels/groups/pixels remain fixed. Regression target >80% passed at 19/22; field accuracy remains unvalidated."
   ]
 }

@@ -6,7 +6,7 @@ import sources from "../content/hcmus/image-sources.json";
 import modelConfig from "../content/hcmus/vision-model.json";
 import review from "../content/hcmus/vision-reviewed-images.json";
 import report from "../content/hcmus/vision-training-report.json";
-import previousReview from "../content/hcmus/history/v2/vision-reviewed-images.json";
+import previousReview from "../content/hcmus/evaluation-baseline.json";
 import driveReview from "../content/hcmus/drive-review-2026-11-26.json";
 import { getHcmusCheckpoints } from "../lib/hcmus/checkpoints";
 
@@ -59,5 +59,16 @@ test("Drive expansion preserves earlier holdouts and keeps the entire phone outi
   for (const row of selected) {
     assert.equal(row.split, "train");
     assert.equal(current.get(row.id)?.split, "train");
+  }
+});
+
+test("current HCMUS model exceeds the requested 80% raw regression target on every retained evaluation image", () => {
+  assert.equal(modelConfig.minimum_regression_accuracy, 0.8);
+  assert.ok(report.test.accuracy > modelConfig.minimum_regression_accuracy);
+  assert.equal(report.test.accuracy, report.test.correct / report.test.total);
+  assert.equal(report.regression_target.passed, true);
+  const measured = new Map(report.test.details.map(row => [row.id, row.actual]));
+  for (const frozen of previousReview.records.filter(row => row.split === "test")) {
+    assert.equal(measured.get(frozen.id), frozen.label);
   }
 });

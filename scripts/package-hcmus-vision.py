@@ -33,8 +33,8 @@ predicted is a raw candidate; checkpointId=null means the strict gate abstained.
 Raw web test/regression result: {test['correct']}/{test['total']} ({test['accuracy']:.2%}).
 {cohorts}
 Very small correlated sample, not field accuracy. See report.json for missing cohort classes.
-Baseline v2 on the same test: {baseline_test['correct']}/{baseline_test['total']}.
-Overall accuracy improvement has not been demonstrated; see comparison.json.
+Baseline {comparison['baseline']['run']} on the same test: {baseline_test['correct']}/{baseline_test['total']}.
+{comparison['conclusion']}
 The fixed gate accepted {test['fixed_gate']['accepted']}/{test['total']} test images,
 with {test['fixed_gate']['false_acceptances']} false acceptances in this small sample.
 Automatic recognition is not validated. All user phone photos were training-only.
@@ -53,6 +53,9 @@ with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
     archive.write(ROOT / "content/hcmus/video-sources.json", "video-sources.json")
     archive.write(ROOT / "content/hcmus/image-sources.json", "image-sources.json")
     archive.write(ROOT / "content/hcmus/vision-data-audit.json", "data-audit.json")
+    archive.write(ROOT / "content/hcmus/evaluation-baseline.json", "evaluation-baseline.json")
+    archive.write(ROOT / "content/hcmus/vision-data-expansion.json", "data-expansion.json")
+    archive.write(ROOT / "content/hcmus/vision-cleanup.json", "cleanup.json")
     archive.write(ROOT / "content/hcmus/drive-review-2026-11-26.json", "drive-review.json")
     archive.write(ROOT / "content/hcmus/vision-reviewed-images.json", "reviewed-images.json")
     archive.writestr("README.md", readme)

@@ -49,6 +49,22 @@ class DatasetTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "building-b: 0 photos"):
             training.load_data(self.config)
 
+    def test_frozen_labels_and_source_pixels_cannot_change_to_improve_the_score(self):
+        self.write()
+        _, rows, _ = training.load_data(self.config)
+        for row in rows:
+            row["split"] = "train" if row["split_group"] == "session-0" else "val"
+        contract = dict(records=[dict(row) for row in rows])
+        training.validate_frozen_records(rows, contract)
+        for key, value in [("pixel_sha256", "replaced-photo"), ("label", "other"), ("split", "train")]:
+            with self.subTest(key=key):
+                edited = [dict(row) for row in rows]
+                edited[1][key] = value
+                with self.assertRaisesRegex(ValueError, "Frozen reviewed image changed"):
+                    training.validate_frozen_records(edited, contract)
+        with self.assertRaisesRegex(ValueError, "missing"):
+            training.validate_frozen_records(rows[1:], contract)
+
     def test_reusing_a_campus_photo_for_two_buildings_is_rejected(self):
         self.rows[2]["local_path"] = self.rows[0]["local_path"]
         self.write()

@@ -2,7 +2,6 @@
 import argparse
 from collections import Counter
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 import random
@@ -93,6 +92,18 @@ def prepare(root, rows):
     return materialize(root, rows)
 
 
+def validate_frozen_records(rows, contract):
+    """Keep earlier labels, groups, splits and source pixels fixed during extensions."""
+    current = {row["id"]: row for row in rows}
+    for before in contract["records"]:
+        after = current.get(before["id"])
+        if after is None:
+            raise ValueError(f"Frozen reviewed image missing: {before['id']}")
+        for key in ("label", "split", "split_group", "pixel_sha256"):
+            if before[key] != after.get(key):
+                raise ValueError(f"Frozen reviewed image changed {key}: {before['id']}")
+
+
 def materialize(root, rows):
     fingerprint = hashlib.sha256(json.dumps([(r["id"], r["label"], r["pixel_sha256"], r["split"]) for r in rows]).encode()).hexdigest()[:12]
     folder = root / ("training-" + fingerprint)
@@ -123,12 +134,26 @@ def main():
     parser.add_argument("--freeze", type=int, default=0, help="Number of early layers to freeze")
     parser.add_argument("--class-weight-power", type=float, default=0.5,
                         help="Inverse-frequency loss weight power; 1 balances class totals")
+    parser.add_argument("--augmentation", choices=("basic", "geometric"), default="basic")
+    parser.add_argument("--image-size", type=int, help="Override training resolution")
+    parser.add_argument("--base-model", help="Pretrained classification backbone, used without initial weights")
     args = parser.parse_args()
     if args.epochs <= 0 or args.learning_rate <= 0 or args.freeze < 0 or not 0 <= args.class_weight_power <= 1:
         parser.error("epochs/lr must be positive, freeze non-negative and class weight power within [0,1]")
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    if args.base_model:
+        if args.initial_weights:
+            parser.error("Choose either base model or initial weights")
+        config["baseModel"] = args.base_model
+    if args.image_size:
+        if args.image_size < 64 or args.image_size % 32:
+            parser.error("image size must be a multiple of 32, at least 64")
+        config["imageSize"] = args.image_size
     try:
         root, rows, counts = load_data(config)
+        contract = ROOT / "content/hcmus/evaluation-baseline.json"
+        if contract.exists():
+            validate_frozen_records(rows, json.loads(contract.read_text(encoding="utf-8")))
         print("Reviewed HCMUS photos:", dict(counts), flush=True)
         if args.check_data:
             return
@@ -139,10 +164,7 @@ def main():
     print("Prepared:", folder, flush=True)
     if args.prepare_only:
         return
-    # Reuse the established whole-image preprocessing; weights/output stay separate.
-    spec = importlib.util.spec_from_file_location("palace_training", ROOT / "scripts/train-palace-vision.py")
-    shared = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(shared)
+    from hcmus_training import HcmusTrainer
     import torch
     from ultralytics import YOLO
     if not torch.cuda.is_available():
@@ -151,7 +173,20 @@ def main():
     model = YOLO(str(args.initial_weights or ROOT / config["baseModel"]))
     if args.initial_weights and set(model.names.values()) != {row["id"] for row in config["checkpoints"]} | {config["backgroundClass"]}:
         raise ValueError("Initial HCMUS checkpoint has the wrong class catalog")
-    model.train(trainer=shared.FullImageTrainer, data=str(folder), device=0, epochs=args.epochs,
+    HcmusTrainer.augmentation_profile = args.augmentation
+
+    def record_checkpoint(trainer):
+        if trainer.best_fitness == trainer.fitness:
+            metadata = dict(epoch=trainer.epoch+1, metrics=trainer.metrics,
+                            augmentation=args.augmentation, image_size=config["imageSize"],
+                            initialization=str(args.initial_weights or config["baseModel"]),
+                            learning_rate=args.learning_rate, class_weight_power=args.class_weight_power,
+                            freeze=args.freeze)
+            (trainer.save_dir / "selected-checkpoint.json").write_text(
+                json.dumps(metadata, indent=2)+"\n", encoding="utf-8")
+
+    model.add_callback("on_model_save", record_checkpoint)
+    model.train(trainer=HcmusTrainer, data=str(folder), device=0, epochs=args.epochs,
                 patience=20, imgsz=config["imageSize"], batch=8, workers=0,
                 optimizer="AdamW", lr0=args.learning_rate, warmup_epochs=0,
                 cls_pw=args.class_weight_power, freeze=args.freeze, dropout=0.2,

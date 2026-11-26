@@ -1,582 +1,9 @@
 {
   "date": "2026-11-26",
-  "basis": "Paired evaluation on the same 22 original reviewed files; source-disjoint from training but used for regression/error analysis. Not a blind field accuracy estimate.",
+  "basis": "Same 10 validation and 22 original regression images as v3. Old labels, split groups and decoded pixels are frozen by evaluation-baseline.json. These sources were used in prior error analysis; no blind field accuracy claim.",
   "baseline": {
-    "run": "hcmus-v2",
-    "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v2/weights/best.pt",
-    "model_sha256": "8c74e31e9d8126df1ecd8b0b84e394f879aad69c9c87255ef874bf080c7c83c9",
-    "original_training_fingerprint": "b3cf21de2ff5",
-    "original_training_images": 72,
-    "val": {
-      "total": 10,
-      "correct": 6,
-      "accuracy": 0.6,
-      "source_groups": 2,
-      "per_class": {
-        "building-a": {
-          "total": 2,
-          "correct": 2
-        },
-        "building-b": {
-          "total": 2,
-          "correct": 2
-        },
-        "building-i": {
-          "total": 2,
-          "correct": 0
-        },
-        "lecture-hall-1": {
-          "total": 2,
-          "correct": 2
-        },
-        "other": {
-          "total": 2,
-          "correct": 0
-        }
-      },
-      "confusion": {
-        "building-a": {
-          "building-a": 2,
-          "building-b": 0,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 0
-        },
-        "building-b": {
-          "building-a": 0,
-          "building-b": 2,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 0
-        },
-        "building-i": {
-          "building-a": 0,
-          "building-b": 2,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 0
-        },
-        "lecture-hall-1": {
-          "building-a": 0,
-          "building-b": 0,
-          "building-i": 0,
-          "lecture-hall-1": 2,
-          "other": 0
-        },
-        "other": {
-          "building-a": 1,
-          "building-b": 1,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 0
-        }
-      },
-      "fixed_gate": {
-        "min_probability": 0.98,
-        "min_margin": 0.5,
-        "accepted": 1,
-        "accepted_correct": 1,
-        "false_acceptances": 0,
-        "rejected": 9
-      },
-      "details": [
-        {
-          "id": "graduation-2018-568eb22c6911",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9779958724975586,
-          "margin": 0.9665435552597046,
-          "accepted": false,
-          "correct": true,
-          "source_group": "graduation-2018",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "graduation-2018-a2e9aa1d1886",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9945045113563538,
-          "margin": 0.9917888641357422,
-          "accepted": true,
-          "correct": true,
-          "source_group": "graduation-2018",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00060",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.8446396589279175,
-          "margin": 0.706562876701355,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00240",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9195923805236816,
-          "margin": 0.8512743711471558,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00040",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.550480306148529,
-          "margin": 0.339428186416626,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00250",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.8802365064620972,
-          "margin": 0.8137339949607849,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00260",
-          "actual": "building-i",
-          "predicted": "building-b",
-          "confidence": 0.4722316563129425,
-          "margin": 0.22916080057621002,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00350",
-          "actual": "building-i",
-          "predicted": "building-b",
-          "confidence": 0.4161619544029236,
-          "margin": 0.0013425052165985107,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00230",
-          "actual": "other",
-          "predicted": "building-a",
-          "confidence": 0.800412118434906,
-          "margin": 0.6250792741775513,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00340",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.6256765723228455,
-          "margin": 0.4953802824020386,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        }
-      ]
-    },
-    "test": {
-      "total": 22,
-      "correct": 17,
-      "accuracy": 0.7727272727272727,
-      "source_groups": 6,
-      "per_class": {
-        "building-a": {
-          "total": 4,
-          "correct": 3
-        },
-        "building-b": {
-          "total": 2,
-          "correct": 1
-        },
-        "building-i": {
-          "total": 5,
-          "correct": 4
-        },
-        "lecture-hall-1": {
-          "total": 2,
-          "correct": 2
-        },
-        "other": {
-          "total": 9,
-          "correct": 7
-        }
-      },
-      "confusion": {
-        "building-a": {
-          "building-a": 3,
-          "building-b": 0,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 1
-        },
-        "building-b": {
-          "building-a": 0,
-          "building-b": 1,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 1
-        },
-        "building-i": {
-          "building-a": 0,
-          "building-b": 0,
-          "building-i": 4,
-          "lecture-hall-1": 0,
-          "other": 1
-        },
-        "lecture-hall-1": {
-          "building-a": 0,
-          "building-b": 0,
-          "building-i": 0,
-          "lecture-hall-1": 2,
-          "other": 0
-        },
-        "other": {
-          "building-a": 0,
-          "building-b": 2,
-          "building-i": 0,
-          "lecture-hall-1": 0,
-          "other": 7
-        }
-      },
-      "fixed_gate": {
-        "min_probability": 0.98,
-        "min_margin": 0.5,
-        "accepted": 0,
-        "accepted_correct": 0,
-        "false_acceptances": 0,
-        "rejected": 22
-      },
-      "details": [
-        {
-          "id": "nobel-2023-5af04017f3f1",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.5367943048477173,
-          "margin": 0.2366149127483368,
-          "accepted": false,
-          "correct": true,
-          "source_group": "nobel-2023",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "nobel-2023-fdadd5cb9874",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.6484477519989014,
-          "margin": 0.32689619064331055,
-          "accepted": false,
-          "correct": true,
-          "source_group": "nobel-2023",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00170",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9578602910041809,
-          "margin": 0.9279284477233887,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00120",
-          "actual": "building-b",
-          "predicted": "other",
-          "confidence": 0.8078084588050842,
-          "margin": 0.7100429534912109,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00200",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.6623806953430176,
-          "margin": 0.390499085187912,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00280",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9752291440963745,
-          "margin": 0.9643810987472534,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00300",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9176300764083862,
-          "margin": 0.8656587600708008,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00310",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9793758988380432,
-          "margin": 0.9712680578231812,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00180",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.45789435505867004,
-          "margin": 0.14410990476608276,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-a5lRaVjg5WU-00030",
-          "actual": "building-a",
-          "predicted": "other",
-          "confidence": 0.4133371412754059,
-          "margin": 0.032638758420944214,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-a5lRaVjg5WU",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-a5lRaVjg5WU-00060",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.8343724608421326,
-          "margin": 0.7381861209869385,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-a5lRaVjg5WU",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00000",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.7852354049682617,
-          "margin": 0.6202048063278198,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00003",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.9051355719566345,
-          "margin": 0.8252761960029602,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00015",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.9070061445236206,
-          "margin": 0.8228321671485901,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00030",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.5064091682434082,
-          "margin": 0.17765840888023376,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00039",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.8731383085250854,
-          "margin": 0.7745163440704346,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00015",
-          "actual": "building-i",
-          "predicted": "other",
-          "confidence": 0.607445478439331,
-          "margin": 0.34708353877067566,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00030",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.6443062424659729,
-          "margin": 0.3800891637802124,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00045",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.8177043199539185,
-          "margin": 0.7386866211891174,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00000",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.2642333507537842,
-          "margin": 0.012649625539779663,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00180",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.5805933475494385,
-          "margin": 0.3525638282299042,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00375",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.959989607334137,
-          "margin": 0.9421090483665466,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        }
-      ],
-      "cohorts": {
-        "legacy-regression": {
-          "total": 16,
-          "correct": 13,
-          "accuracy": 0.8125,
-          "classes": [
-            "building-a",
-            "building-b",
-            "building-i",
-            "lecture-hall-1",
-            "other"
-          ],
-          "source_groups": 4,
-          "accepted": 0,
-          "false_acceptances": 0
-        },
-        "new-source-2026-11-26": {
-          "total": 6,
-          "correct": 4,
-          "accuracy": 0.6666666666666666,
-          "classes": [
-            "building-a",
-            "building-i",
-            "other"
-          ],
-          "source_groups": 2,
-          "accepted": 0,
-          "false_acceptances": 0
-        }
-      }
-    }
-  },
-  "candidate": {
     "run": "hcmus-v3-drive",
-    "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v3-drive/weights/best.pt",
     "model_sha256": "7b0d817d4e98096372834814f33b53d80148f56015d180eed8aebfe73088bb52",
-    "training_fingerprint": "eee4ae8bd422",
     "training_images": 130,
     "val": {
       "total": 10,
@@ -649,129 +76,7 @@
         "accepted_correct": 3,
         "false_acceptances": 0,
         "rejected": 7
-      },
-      "details": [
-        {
-          "id": "graduation-2018-568eb22c6911",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9991422891616821,
-          "margin": 0.998729944229126,
-          "accepted": true,
-          "correct": true,
-          "source_group": "graduation-2018",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "graduation-2018-a2e9aa1d1886",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9995507597923279,
-          "margin": 0.9993670582771301,
-          "accepted": true,
-          "correct": true,
-          "source_group": "graduation-2018",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00060",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9408288598060608,
-          "margin": 0.8997806310653687,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00240",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9944301247596741,
-          "margin": 0.9910750985145569,
-          "accepted": true,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00040",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.8116739988327026,
-          "margin": 0.6888202428817749,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00250",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.893107533454895,
-          "margin": 0.8490242958068848,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00260",
-          "actual": "building-i",
-          "predicted": "building-b",
-          "confidence": 0.4117821156978607,
-          "margin": 0.10062867403030396,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00350",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.6598098874092102,
-          "margin": 0.3818012773990631,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00230",
-          "actual": "other",
-          "predicted": "building-a",
-          "confidence": 0.7555850744247437,
-          "margin": 0.5328041315078735,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        },
-        {
-          "id": "video-5kqDpBh0XNg-00340",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.6640224456787109,
-          "margin": 0.45711827278137207,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-5kqDpBh0XNg",
-          "quality_reasons": [],
-          "evaluation_cohort": null
-        }
-      ]
+      }
     },
     "test": {
       "total": 22,
@@ -845,272 +150,6 @@
         "false_acceptances": 0,
         "rejected": 17
       },
-      "details": [
-        {
-          "id": "nobel-2023-5af04017f3f1",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9991464614868164,
-          "margin": 0.9986673593521118,
-          "accepted": true,
-          "correct": true,
-          "source_group": "nobel-2023",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "nobel-2023-fdadd5cb9874",
-          "actual": "lecture-hall-1",
-          "predicted": "lecture-hall-1",
-          "confidence": 0.9990473389625549,
-          "margin": 0.9981882572174072,
-          "accepted": true,
-          "correct": true,
-          "source_group": "nobel-2023",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00170",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9956875443458557,
-          "margin": 0.9941413998603821,
-          "accepted": true,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00120",
-          "actual": "building-b",
-          "predicted": "other",
-          "confidence": 0.5835866928100586,
-          "margin": 0.41050270199775696,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00200",
-          "actual": "building-b",
-          "predicted": "building-b",
-          "confidence": 0.6978162527084351,
-          "margin": 0.576724112033844,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00280",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9948680400848389,
-          "margin": 0.9911510348320007,
-          "accepted": true,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00300",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9622029066085815,
-          "margin": 0.9413836002349854,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00310",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9922990202903748,
-          "margin": 0.9875316619873047,
-          "accepted": true,
-          "correct": true,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-LRT97Flrcww-00180",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.6165649890899658,
-          "margin": 0.4495709538459778,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-LRT97Flrcww",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-a5lRaVjg5WU-00030",
-          "actual": "building-a",
-          "predicted": "other",
-          "confidence": 0.30985748767852783,
-          "margin": 0.0004603564739227295,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-a5lRaVjg5WU",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-a5lRaVjg5WU-00060",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9780453443527222,
-          "margin": 0.961837649345398,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-a5lRaVjg5WU",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00000",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.9093180298805237,
-          "margin": 0.8244275450706482,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00003",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.9496732354164124,
-          "margin": 0.9020328521728516,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00015",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.8561338782310486,
-          "margin": 0.7161638736724854,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00030",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.5505458116531372,
-          "margin": 0.17428156733512878,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-Zrlmfq6aIhw-00039",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.9455739259719849,
-          "margin": 0.893984854221344,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-Zrlmfq6aIhw",
-          "quality_reasons": [],
-          "evaluation_cohort": "legacy-regression"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00015",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.9255211353302002,
-          "margin": 0.8840054273605347,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00030",
-          "actual": "building-i",
-          "predicted": "building-i",
-          "confidence": 0.47279006242752075,
-          "margin": 0.062073081731796265,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-QbTPMSRYS_s-00045",
-          "actual": "building-a",
-          "predicted": "building-a",
-          "confidence": 0.9716663956642151,
-          "margin": 0.9587147235870361,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-QbTPMSRYS_s",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00000",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.7008740901947021,
-          "margin": 0.575758695602417,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00180",
-          "actual": "other",
-          "predicted": "building-b",
-          "confidence": 0.5108951330184937,
-          "margin": 0.12738129496574402,
-          "accepted": false,
-          "correct": false,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        },
-        {
-          "id": "video-qrB8TLXTGMU-00375",
-          "actual": "other",
-          "predicted": "other",
-          "confidence": 0.90761399269104,
-          "margin": 0.8558284044265747,
-          "accepted": false,
-          "correct": true,
-          "source_group": "video-qrB8TLXTGMU",
-          "quality_reasons": [],
-          "evaluation_cohort": "new-source-2026-11-26"
-        }
-      ],
       "cohorts": {
         "legacy-regression": {
           "total": 16,
@@ -1143,5 +182,225 @@
       }
     }
   },
-  "conclusion": "Candidate improves validation and I recognition, but raw overall test/regression accuracy is lower. Overall accuracy improvement has not been demonstrated. Keep recognition experimental; collect new phone sessions and harder negatives."
+  "candidate": {
+    "run": "hcmus-v8-medium",
+    "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v8-medium/weights/best.pt",
+    "model_sha256": "399a2baf45423d476e739fd9e26116561102d19293799f7e729e40bd5071bb0e",
+    "training_images": 157,
+    "val": {
+      "total": 10,
+      "correct": 8,
+      "accuracy": 0.8,
+      "source_groups": 2,
+      "per_class": {
+        "building-a": {
+          "total": 2,
+          "correct": 2
+        },
+        "building-b": {
+          "total": 2,
+          "correct": 2
+        },
+        "building-i": {
+          "total": 2,
+          "correct": 2
+        },
+        "lecture-hall-1": {
+          "total": 2,
+          "correct": 2
+        },
+        "other": {
+          "total": 2,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "building-a": {
+          "building-a": 2,
+          "building-b": 0,
+          "building-i": 0,
+          "lecture-hall-1": 0,
+          "other": 0
+        },
+        "building-b": {
+          "building-a": 0,
+          "building-b": 2,
+          "building-i": 0,
+          "lecture-hall-1": 0,
+          "other": 0
+        },
+        "building-i": {
+          "building-a": 0,
+          "building-b": 0,
+          "building-i": 2,
+          "lecture-hall-1": 0,
+          "other": 0
+        },
+        "lecture-hall-1": {
+          "building-a": 0,
+          "building-b": 0,
+          "building-i": 0,
+          "lecture-hall-1": 2,
+          "other": 0
+        },
+        "other": {
+          "building-a": 0,
+          "building-b": 1,
+          "building-i": 1,
+          "lecture-hall-1": 0,
+          "other": 0
+        }
+      },
+      "fixed_gate": {
+        "min_probability": 0.98,
+        "min_margin": 0.5,
+        "accepted": 4,
+        "accepted_correct": 4,
+        "false_acceptances": 0,
+        "rejected": 6
+      }
+    },
+    "test": {
+      "total": 22,
+      "correct": 19,
+      "accuracy": 0.8636363636363636,
+      "source_groups": 6,
+      "per_class": {
+        "building-a": {
+          "total": 4,
+          "correct": 4
+        },
+        "building-b": {
+          "total": 2,
+          "correct": 1
+        },
+        "building-i": {
+          "total": 5,
+          "correct": 4
+        },
+        "lecture-hall-1": {
+          "total": 2,
+          "correct": 2
+        },
+        "other": {
+          "total": 9,
+          "correct": 8
+        }
+      },
+      "confusion": {
+        "building-a": {
+          "building-a": 4,
+          "building-b": 0,
+          "building-i": 0,
+          "lecture-hall-1": 0,
+          "other": 0
+        },
+        "building-b": {
+          "building-a": 0,
+          "building-b": 1,
+          "building-i": 0,
+          "lecture-hall-1": 0,
+          "other": 1
+        },
+        "building-i": {
+          "building-a": 0,
+          "building-b": 0,
+          "building-i": 4,
+          "lecture-hall-1": 0,
+          "other": 1
+        },
+        "lecture-hall-1": {
+          "building-a": 0,
+          "building-b": 0,
+          "building-i": 0,
+          "lecture-hall-1": 2,
+          "other": 0
+        },
+        "other": {
+          "building-a": 0,
+          "building-b": 1,
+          "building-i": 0,
+          "lecture-hall-1": 0,
+          "other": 8
+        }
+      },
+      "fixed_gate": {
+        "min_probability": 0.98,
+        "min_margin": 0.5,
+        "accepted": 6,
+        "accepted_correct": 6,
+        "false_acceptances": 0,
+        "rejected": 16
+      },
+      "cohorts": {
+        "legacy-regression": {
+          "total": 16,
+          "correct": 15,
+          "accuracy": 0.9375,
+          "classes": [
+            "building-a",
+            "building-b",
+            "building-i",
+            "lecture-hall-1",
+            "other"
+          ],
+          "source_groups": 4,
+          "accepted": 5,
+          "false_acceptances": 0
+        },
+        "new-source-2026-11-26": {
+          "total": 6,
+          "correct": 4,
+          "accuracy": 0.6666666666666666,
+          "classes": [
+            "building-a",
+            "building-i",
+            "other"
+          ],
+          "source_groups": 2,
+          "accepted": 1,
+          "false_acceptances": 0
+        }
+      }
+    }
+  },
+  "older_v2_regression": {
+    "correct": 17,
+    "total": 22,
+    "accuracy": 0.7727272727272727,
+    "note": "Historical paired evaluation retained as statistics; obsolete weights removed after candidate validation."
+  },
+  "changed_predictions": [
+    {
+      "id": "video-LRT97Flrcww-00180",
+      "actual": "other",
+      "baseline": "building-b",
+      "candidate": "other"
+    },
+    {
+      "id": "video-a5lRaVjg5WU-00030",
+      "actual": "building-a",
+      "baseline": "other",
+      "candidate": "building-a"
+    },
+    {
+      "id": "video-Zrlmfq6aIhw-00030",
+      "actual": "other",
+      "baseline": "building-b",
+      "candidate": "other"
+    },
+    {
+      "id": "video-QbTPMSRYS_s-00030",
+      "actual": "building-i",
+      "baseline": "building-i",
+      "candidate": "other"
+    },
+    {
+      "id": "video-qrB8TLXTGMU-00000",
+      "actual": "other",
+      "baseline": "building-b",
+      "candidate": "other"
+    }
+  ],
+  "conclusion": "Raw regression improves from 16/22 (72.73%) to 19/22 (86.36%), exceeding 80% on this small fixed set. This is not a guarantee for new field photos."
 }

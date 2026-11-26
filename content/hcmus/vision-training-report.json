@@ -2,16 +2,17 @@
   "destinationId": "hcmus",
   "campusId": "nguyen-van-cu",
   "schema_version": 1,
-  "training_run": "hcmus-v3-drive",
-  "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v3-drive/weights/best.pt",
-  "model_sha256": "7b0d817d4e98096372834814f33b53d80148f56015d180eed8aebfe73088bb52",
-  "dataset_fingerprint": "eee4ae8bd422",
+  "training_run": "hcmus-v8-medium",
+  "weights": "output/yolo/hcmus-nguyen-van-cu/hcmus-v8-medium/weights/best.pt",
+  "model_sha256": "399a2baf45423d476e739fd9e26116561102d19293799f7e729e40bd5071bb0e",
+  "image_size": 448,
+  "dataset_fingerprint": "0845e4b332df",
   "split_counts": {
     "train": {
       "lecture-hall-1": 12,
-      "building-a": 17,
-      "building-i": 32,
-      "other": 20,
+      "building-a": 18,
+      "building-i": 37,
+      "other": 41,
       "building-b": 49
     },
     "val": {
@@ -38,6 +39,7 @@
       "official-library-physical-space",
       "user-drive-2026-11-25",
       "video-O59Cr6vZD0Y",
+      "video-O7B9PMt-mH8",
       "video-OPKa7SUlOYc"
     ],
     "val": [
@@ -68,8 +70,8 @@
   ],
   "val": {
     "total": 10,
-    "correct": 7,
-    "accuracy": 0.7,
+    "correct": 8,
+    "accuracy": 0.8,
     "source_groups": 2,
     "per_class": {
       "building-a": {
@@ -82,7 +84,7 @@
       },
       "building-i": {
         "total": 2,
-        "correct": 1
+        "correct": 2
       },
       "lecture-hall-1": {
         "total": 2,
@@ -110,8 +112,8 @@
       },
       "building-i": {
         "building-a": 0,
-        "building-b": 1,
-        "building-i": 1,
+        "building-b": 0,
+        "building-i": 2,
         "lecture-hall-1": 0,
         "other": 0
       },
@@ -123,9 +125,9 @@
         "other": 0
       },
       "other": {
-        "building-a": 1,
+        "building-a": 0,
         "building-b": 1,
-        "building-i": 0,
+        "building-i": 1,
         "lecture-hall-1": 0,
         "other": 0
       }
@@ -133,18 +135,18 @@
     "fixed_gate": {
       "min_probability": 0.98,
       "min_margin": 0.5,
-      "accepted": 3,
-      "accepted_correct": 3,
+      "accepted": 4,
+      "accepted_correct": 4,
       "false_acceptances": 0,
-      "rejected": 7
+      "rejected": 6
     },
     "details": [
       {
         "id": "graduation-2018-568eb22c6911",
         "actual": "lecture-hall-1",
         "predicted": "lecture-hall-1",
-        "confidence": 0.9991422891616821,
-        "margin": 0.998729944229126,
+        "confidence": 0.9999822378158569,
+        "margin": 0.999965488910675,
         "accepted": true,
         "correct": true,
         "source_group": "graduation-2018",
@@ -155,8 +157,8 @@
         "id": "graduation-2018-a2e9aa1d1886",
         "actual": "lecture-hall-1",
         "predicted": "lecture-hall-1",
-        "confidence": 0.9995507597923279,
-        "margin": 0.9993670582771301,
+        "confidence": 0.9999179840087891,
+        "margin": 0.9998611807823181,
         "accepted": true,
         "correct": true,
         "source_group": "graduation-2018",
@@ -167,8 +169,8 @@
         "id": "video-5kqDpBh0XNg-00060",
         "actual": "building-a",
         "predicted": "building-a",
-        "confidence": 0.9408288598060608,
-        "margin": 0.8997806310653687,
+        "confidence": 0.9318878054618835,
+        "margin": 0.9018815755844116,
         "accepted": false,
         "correct": true,
         "source_group": "video-5kqDpBh0XNg",
@@ -179,9 +181,9 @@
         "id": "video-5kqDpBh0XNg-00240",
         "actual": "building-a",
         "predicted": "building-a",
-        "confidence": 0.9944301247596741,
-        "margin": 0.9910750985145569,
-        "accepted": true,
+        "confidence": 0.9771851897239685,
+        "margin": 0.9650688171386719,
+        "accepted": false,
         "correct": true,
         "source_group": "video-5kqDpBh0XNg",
         "quality_reasons": [],
@@ -191,8 +193,8 @@
         "id": "video-5kqDpBh0XNg-00040",
         "actual": "building-b",
         "predicted": "building-b",
-        "confidence": 0.8116739988327026,
-        "margin": 0.6888202428817749,
+        "confidence": 0.7575811147689819,
+        "margin": 0.5195649862289429,
         "accepted": false,
         "correct": true,
         "source_group": "video-5kqDpBh0XNg",
@@ -203,9 +205,9 @@
         "id": "video-5kqDpBh0XNg-00250",
         "actual": "building-b",
         "predicted": "building-b",
-        "confidence": 0.893107533454895,
-        "margin": 0.8490242958068848,
-        "accepted": false,
+        "confidence": 0.9869374632835388,
+        "margin": 0.9815548062324524,
+        "accepted": true,
         "correct": true,
         "source_group": "video-5kqDpBh0XNg",
         "quality_reasons": [],
@@ -214,11 +216,11 @@
       {
         "id": "video-5kqDpBh0XNg-00260",
         "actual": "building-i",
-        "predicted": "building-b",
-        "confidence": 0.4117821156978607,
-        "margin": 0.10062867403030396,
+        "predicted": "building-i",
+        "confidence": 0.8830976486206055,
+        "margin": 0.827489972114563,
         "accepted": false,
-        "correct": false,
+        "correct": true,
         "source_group": "video-5kqDpBh0XNg",
         "quality_reasons": [],
         "evaluation_cohort": null
@@ -227,9 +229,9 @@
         "id": "video-5kqDpBh0XNg-00350",
         "actual": "building-i",
         "predicted": "building-i",
-        "confidence": 0.6598098874092102,
-        "margin": 0.3818012773990631,
-        "accepted": false,
+        "confidence": 0.9881507158279419,
+        "margin": 0.9786229729652405,
+        "accepted": true,
         "correct": true,
         "source_group": "video-5kqDpBh0XNg",
         "quality_reasons": [],
@@ -238,9 +240,9 @@
       {
         "id": "video-5kqDpBh0XNg-00230",
         "actual": "other",
-        "predicted": "building-a",
-        "confidence": 0.7555850744247437,
-        "margin": 0.5328041315078735,
+        "predicted": "building-b",
+        "confidence": 0.5218998789787292,
+        "margin": 0.20601996779441833,
         "accepted": false,
         "correct": false,
         "source_group": "video-5kqDpBh0XNg",
@@ -250,9 +252,9 @@
       {
         "id": "video-5kqDpBh0XNg-00340",
         "actual": "other",
-        "predicted": "building-b",
-        "confidence": 0.6640224456787109,
-        "margin": 0.45711827278137207,
+        "predicted": "building-i",
+        "confidence": 0.6318225264549255,
+        "margin": 0.2910193204879761,
         "accepted": false,
         "correct": false,
         "source_group": "video-5kqDpBh0XNg",
@@ -263,13 +265,13 @@
   },
   "test": {
     "total": 22,
-    "correct": 16,
-    "accuracy": 0.7272727272727273,
+    "correct": 19,
+    "accuracy": 0.8636363636363636,
     "source_groups": 6,
     "per_class": {
       "building-a": {
         "total": 4,
-        "correct": 3
+        "correct": 4
       },
       "building-b": {
         "total": 2,
@@ -277,7 +279,7 @@
       },
       "building-i": {
         "total": 5,
-        "correct": 5
+        "correct": 4
       },
       "lecture-hall-1": {
         "total": 2,
@@ -285,16 +287,16 @@
       },
       "other": {
         "total": 9,
-        "correct": 5
+        "correct": 8
       }
     },
     "confusion": {
       "building-a": {
-        "building-a": 3,
+        "building-a": 4,
         "building-b": 0,
         "building-i": 0,
         "lecture-hall-1": 0,
-        "other": 1
+        "other": 0
       },
       "building-b": {
         "building-a": 0,
@@ -306,9 +308,9 @@
       "building-i": {
         "building-a": 0,
         "building-b": 0,
-        "building-i": 5,
+        "building-i": 4,
         "lecture-hall-1": 0,
-        "other": 0
+        "other": 1
       },
       "lecture-hall-1": {
         "building-a": 0,
@@ -319,27 +321,27 @@
       },
       "other": {
         "building-a": 0,
-        "building-b": 4,
+        "building-b": 1,
         "building-i": 0,
         "lecture-hall-1": 0,
-        "other": 5
+        "other": 8
       }
     },
     "fixed_gate": {
       "min_probability": 0.98,
       "min_margin": 0.5,
-      "accepted": 5,
-      "accepted_correct": 5,
+      "accepted": 6,
+      "accepted_correct": 6,
       "false_acceptances": 0,
-      "rejected": 17
+      "rejected": 16
     },
     "details": [
       {
         "id": "nobel-2023-5af04017f3f1",
         "actual": "lecture-hall-1",
         "predicted": "lecture-hall-1",
-        "confidence": 0.9991464614868164,
-        "margin": 0.9986673593521118,
+        "confidence": 0.9909634590148926,
+        "margin": 0.9840385317802429,
         "accepted": true,
         "correct": true,
         "source_group": "nobel-2023",
@@ -350,8 +352,8 @@
         "id": "nobel-2023-fdadd5cb9874",
         "actual": "lecture-hall-1",
         "predicted": "lecture-hall-1",
-        "confidence": 0.9990473389625549,
-        "margin": 0.9981882572174072,
+        "confidence": 0.9864111542701721,
+        "margin": 0.9752289652824402,
         "accepted": true,
         "correct": true,
         "source_group": "nobel-2023",
@@ -362,8 +364,8 @@
         "id": "video-LRT97Flrcww-00170",
         "actual": "building-a",
         "predicted": "building-a",
-        "confidence": 0.9956875443458557,
-        "margin": 0.9941413998603821,
+        "confidence": 0.9881067276000977,
+        "margin": 0.9828292727470398,
         "accepted": true,
         "correct": true,
         "source_group": "video-LRT97Flrcww",
@@ -374,8 +376,8 @@
         "id": "video-LRT97Flrcww-00120",
         "actual": "building-b",
         "predicted": "other",
-        "confidence": 0.5835866928100586,
-        "margin": 0.41050270199775696,
+        "confidence": 0.913557767868042,
+        "margin": 0.8547565937042236,
         "accepted": false,
         "correct": false,
         "source_group": "video-LRT97Flrcww",
@@ -386,8 +388,8 @@
         "id": "video-LRT97Flrcww-00200",
         "actual": "building-b",
         "predicted": "building-b",
-        "confidence": 0.6978162527084351,
-        "margin": 0.576724112033844,
+        "confidence": 0.7348133325576782,
+        "margin": 0.5741791725158691,
         "accepted": false,
         "correct": true,
         "source_group": "video-LRT97Flrcww",
@@ -398,9 +400,9 @@
         "id": "video-LRT97Flrcww-00280",
         "actual": "building-i",
         "predicted": "building-i",
-        "confidence": 0.9948680400848389,
-        "margin": 0.9911510348320007,
-        "accepted": true,
+        "confidence": 0.9592505693435669,
+        "margin": 0.9212570190429688,
+        "accepted": false,
         "correct": true,
         "source_group": "video-LRT97Flrcww",
         "quality_reasons": [],
@@ -410,8 +412,8 @@
         "id": "video-LRT97Flrcww-00300",
         "actual": "building-i",
         "predicted": "building-i",
-        "confidence": 0.9622029066085815,
-        "margin": 0.9413836002349854,
+        "confidence": 0.9592767953872681,
+        "margin": 0.9219180941581726,
         "accepted": false,
         "correct": true,
         "source_group": "video-LRT97Flrcww",
@@ -422,8 +424,8 @@
         "id": "video-LRT97Flrcww-00310",
         "actual": "building-i",
         "predicted": "building-i",
-        "confidence": 0.9922990202903748,
-        "margin": 0.9875316619873047,
+        "confidence": 0.9926372766494751,
+        "margin": 0.9876129627227783,
         "accepted": true,
         "correct": true,
         "source_group": "video-LRT97Flrcww",
@@ -433,11 +435,11 @@
       {
         "id": "video-LRT97Flrcww-00180",
         "actual": "other",
-        "predicted": "building-b",
-        "confidence": 0.6165649890899658,
-        "margin": 0.4495709538459778,
+        "predicted": "other",
+        "confidence": 0.5203566551208496,
+        "margin": 0.1310563087463379,
         "accepted": false,
-        "correct": false,
+        "correct": true,
         "source_group": "video-LRT97Flrcww",
         "quality_reasons": [],
         "evaluation_cohort": "legacy-regression"
@@ -445,11 +447,11 @@
       {
         "id": "video-a5lRaVjg5WU-00030",
         "actual": "building-a",
-        "predicted": "other",
-        "confidence": 0.30985748767852783,
-        "margin": 0.0004603564739227295,
+        "predicted": "building-a",
+        "confidence": 0.8999735713005066,
+        "margin": 0.838665783405304,
         "accepted": false,
-        "correct": false,
+        "correct": true,
         "source_group": "video-a5lRaVjg5WU",
         "quality_reasons": [],
         "evaluation_cohort": "legacy-regression"
@@ -458,9 +460,9 @@
         "id": "video-a5lRaVjg5WU-00060",
         "actual": "building-a",
         "predicted": "building-a",
-        "confidence": 0.9780453443527222,
-        "margin": 0.961837649345398,
-        "accepted": false,
+        "confidence": 0.998224675655365,
+        "margin": 0.9971920847892761,
+        "accepted": true,
         "correct": true,
         "source_group": "video-a5lRaVjg5WU",
         "quality_reasons": [],
@@ -470,8 +472,8 @@
         "id": "video-Zrlmfq6aIhw-00000",
         "actual": "other",
         "predicted": "other",
-        "confidence": 0.9093180298805237,
-        "margin": 0.8244275450706482,
+        "confidence": 0.9349784255027771,
+        "margin": 0.9013910293579102,
         "accepted": false,
         "correct": true,
         "source_group": "video-Zrlmfq6aIhw",
@@ -482,8 +484,8 @@
         "id": "video-Zrlmfq6aIhw-00003",
         "actual": "other",
         "predicted": "other",
-        "confidence": 0.9496732354164124,
-        "margin": 0.9020328521728516,
+        "confidence": 0.9813662767410278,
+        "margin": 0.9720136523246765,
         "accepted": false,
         "correct": true,
         "source_group": "video-Zrlmfq6aIhw",
@@ -494,8 +496,8 @@
         "id": "video-Zrlmfq6aIhw-00015",
         "actual": "other",
         "predicted": "other",
-        "confidence": 0.8561338782310486,
-        "margin": 0.7161638736724854,
+        "confidence": 0.9761631488800049,
+        "margin": 0.9597287178039551,
         "accepted": false,
         "correct": true,
         "source_group": "video-Zrlmfq6aIhw",
@@ -505,11 +507,11 @@
       {
         "id": "video-Zrlmfq6aIhw-00030",
         "actual": "other",
-        "predicted": "building-b",
-        "confidence": 0.5505458116531372,
-        "margin": 0.17428156733512878,
+        "predicted": "other",
+        "confidence": 0.6900668740272522,
+        "margin": 0.5162928700447083,
         "accepted": false,
-        "correct": false,
+        "correct": true,
         "source_group": "video-Zrlmfq6aIhw",
         "quality_reasons": [],
         "evaluation_cohort": "legacy-regression"
@@ -518,8 +520,8 @@
         "id": "video-Zrlmfq6aIhw-00039",
         "actual": "other",
         "predicted": "other",
-        "confidence": 0.9455739259719849,
-        "margin": 0.893984854221344,
+        "confidence": 0.9898854494094849,
+        "margin": 0.9835034608840942,
         "accepted": false,
         "correct": true,
         "source_group": "video-Zrlmfq6aIhw",
@@ -530,8 +532,8 @@
         "id": "video-QbTPMSRYS_s-00015",
         "actual": "building-i",
         "predicted": "building-i",
-        "confidence": 0.9255211353302002,
-        "margin": 0.8840054273605347,
+        "confidence": 0.8671078085899353,
+        "margin": 0.7410717010498047,
         "accepted": false,
         "correct": true,
         "source_group": "video-QbTPMSRYS_s",
@@ -541,11 +543,11 @@
       {
         "id": "video-QbTPMSRYS_s-00030",
         "actual": "building-i",
-        "predicted": "building-i",
-        "confidence": 0.47279006242752075,
-        "margin": 0.062073081731796265,
+        "predicted": "other",
+        "confidence": 0.5569102168083191,
+        "margin": 0.2966235280036926,
         "accepted": false,
-        "correct": true,
+        "correct": false,
         "source_group": "video-QbTPMSRYS_s",
         "quality_reasons": [],
         "evaluation_cohort": "new-source-2026-11-26"
@@ -554,9 +556,9 @@
         "id": "video-QbTPMSRYS_s-00045",
         "actual": "building-a",
         "predicted": "building-a",
-        "confidence": 0.9716663956642151,
-        "margin": 0.9587147235870361,
-        "accepted": false,
+        "confidence": 0.9961459636688232,
+        "margin": 0.9935023784637451,
+        "accepted": true,
         "correct": true,
         "source_group": "video-QbTPMSRYS_s",
         "quality_reasons": [],
@@ -565,11 +567,11 @@
       {
         "id": "video-qrB8TLXTGMU-00000",
         "actual": "other",
-        "predicted": "building-b",
-        "confidence": 0.7008740901947021,
-        "margin": 0.575758695602417,
+        "predicted": "other",
+        "confidence": 0.7461318373680115,
+        "margin": 0.613606870174408,
         "accepted": false,
-        "correct": false,
+        "correct": true,
         "source_group": "video-qrB8TLXTGMU",
         "quality_reasons": [],
         "evaluation_cohort": "new-source-2026-11-26"
@@ -578,8 +580,8 @@
         "id": "video-qrB8TLXTGMU-00180",
         "actual": "other",
         "predicted": "building-b",
-        "confidence": 0.5108951330184937,
-        "margin": 0.12738129496574402,
+        "confidence": 0.6447354555130005,
+        "margin": 0.316952645778656,
         "accepted": false,
         "correct": false,
         "source_group": "video-qrB8TLXTGMU",
@@ -590,8 +592,8 @@
         "id": "video-qrB8TLXTGMU-00375",
         "actual": "other",
         "predicted": "other",
-        "confidence": 0.90761399269104,
-        "margin": 0.8558284044265747,
+        "confidence": 0.7744523286819458,
+        "margin": 0.5999868512153625,
         "accepted": false,
         "correct": true,
         "source_group": "video-qrB8TLXTGMU",
@@ -602,8 +604,8 @@
     "cohorts": {
       "legacy-regression": {
         "total": 16,
-        "correct": 12,
-        "accuracy": 0.75,
+        "correct": 15,
+        "accuracy": 0.9375,
         "classes": [
           "building-a",
           "building-b",
@@ -625,30 +627,21 @@
           "other"
         ],
         "source_groups": 2,
-        "accepted": 0,
+        "accepted": 1,
         "false_acceptances": 0
       }
     }
   },
   "model_selection": {
-    "basis": "Select by original-file validation top-1; break ties by checkpoint trainer validation loss. A later balanced-training experiment followed expanded-test error analysis. Treat all test scores as regression evidence, not a blind final accuracy estimate.",
-    "epoch_note": "Ultralytics overwrites best.pt on equal maximum fitness. First maximum epoch is not necessarily the epoch stored in best.pt.",
+    "basis": "Select by original-file validation top-1; break ties by checkpoint trainer validation loss. Data, augmentation and architecture experiments followed earlier regression error analysis. Treat all test scores as regression evidence, not a blind final accuracy estimate.",
+    "epoch_note": "Old runs overwrote best.pt on equal top-1. New runs use validation loss to break top-1 ties; saved_checkpoint records the actual selected epoch. First/last maximum CSV epochs alone do not identify the checkpoint.",
     "selected_checkpoint_validation_metrics": {
-      "metrics/accuracy_top1": 0.7,
+      "metrics/accuracy_top1": 0.8,
       "metrics/accuracy_top5": 1.0,
-      "val/loss": 0.98781,
-      "fitness": 0.7
+      "val/loss": 0.3987,
+      "fitness": 0.81787
     },
     "experiments": [
-      {
-        "run": "hcmus-v1",
-        "epochs_completed": 22,
-        "first_maximum_validation_epoch": 2,
-        "last_maximum_validation_epoch": 3,
-        "checkpoint_validation_loss": 1.11832,
-        "best_trainer_validation_accuracy": 0.6,
-        "selected": false
-      },
       {
         "run": "hcmus-v2",
         "epochs_completed": 41,
@@ -665,27 +658,85 @@
         "last_maximum_validation_epoch": 25,
         "checkpoint_validation_loss": 0.98781,
         "best_trainer_validation_accuracy": 0.7,
-        "selected": true
+        "selected": false
       },
       {
-        "run": "hcmus-v4-drive-warmstart",
+        "run": "hcmus-v6-geometric",
+        "epochs_completed": 39,
+        "first_maximum_validation_epoch": 19,
+        "last_maximum_validation_epoch": 39,
+        "checkpoint_validation_loss": 0.67159,
+        "best_trainer_validation_accuracy": 0.8,
+        "selected": false,
+        "saved_checkpoint": {
+          "epoch": 39,
+          "metrics": {
+            "metrics/accuracy_top1": 0.8,
+            "metrics/accuracy_top5": 1.0,
+            "val/loss": 0.67159
+          },
+          "augmentation": "geometric",
+          "image_size": 448,
+          "initialization": "yolo26s-cls.pt",
+          "learning_rate": 0.0003,
+          "class_weight_power": 1.0,
+          "freeze": 0
+        }
+      },
+      {
+        "run": "hcmus-v7-geometric-refine",
+        "epochs_completed": 28,
+        "first_maximum_validation_epoch": 1,
+        "last_maximum_validation_epoch": 28,
+        "checkpoint_validation_loss": 0.48059,
+        "best_trainer_validation_accuracy": 0.8,
+        "selected": false,
+        "saved_checkpoint": {
+          "epoch": 8,
+          "metrics": {
+            "metrics/accuracy_top1": 0.8,
+            "metrics/accuracy_top5": 1.0,
+            "val/loss": 0.48059
+          },
+          "augmentation": "geometric",
+          "image_size": 448,
+          "initialization": "output\\yolo\\hcmus-nguyen-van-cu\\hcmus-v6-geometric\\weights\\best.pt",
+          "learning_rate": 5e-05,
+          "class_weight_power": 1.0,
+          "freeze": 0
+        }
+      },
+      {
+        "run": "hcmus-v8-medium",
         "epochs_completed": 35,
-        "first_maximum_validation_epoch": 15,
+        "first_maximum_validation_epoch": 7,
         "last_maximum_validation_epoch": 35,
-        "checkpoint_validation_loss": 1.23986,
-        "best_trainer_validation_accuracy": 0.7,
-        "selected": false
-      },
-      {
-        "run": "hcmus-v5-drive-balanced",
-        "epochs_completed": 25,
-        "first_maximum_validation_epoch": 5,
-        "last_maximum_validation_epoch": 25,
-        "checkpoint_validation_loss": 1.08012,
-        "best_trainer_validation_accuracy": 0.7,
-        "selected": false
+        "checkpoint_validation_loss": 0.3987,
+        "best_trainer_validation_accuracy": 0.8,
+        "selected": true,
+        "saved_checkpoint": {
+          "epoch": 15,
+          "metrics": {
+            "metrics/accuracy_top1": 0.8,
+            "metrics/accuracy_top5": 1.0,
+            "val/loss": 0.3987
+          },
+          "augmentation": "geometric",
+          "image_size": 448,
+          "initialization": "yolo26m-cls.pt",
+          "learning_rate": 0.0003,
+          "class_weight_power": 1.0,
+          "freeze": 0
+        }
       }
     ]
   },
-  "input_encoding_note": "Trainer validates canonical JPEG copies; this report evaluates the original reviewed files. A borderline prediction can change after JPEG re-encoding. See trainer validation and original-file validation separately."
+  "input_encoding_note": "Trainer validates canonical JPEG copies; this report evaluates the original reviewed files. A borderline prediction can change after JPEG re-encoding. See trainer validation and original-file validation separately.",
+  "regression_target": {
+    "metric": "raw_top1_accuracy_on_unchanged_regression_images",
+    "minimum_exclusive": 0.8,
+    "actual": 0.8636363636363636,
+    "passed": true,
+    "field_accuracy_guaranteed": false
+  }
 }

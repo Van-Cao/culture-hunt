@@ -16,10 +16,11 @@ DATA = ROOT / "datasets/hcmus-nguyen-van-cu"
 
 def evaluate(model, rows, device):
     labels = sorted(model.names.values())
+    image_size = int(model.overrides.get("imgsz", 320))
     confusion = {actual: {predicted: 0 for predicted in labels} for actual in labels}
     details = []
     for row in rows:
-        result = model.predict(str(DATA / row["local_path"]), imgsz=320, device=device, verbose=False)[0]
+        result = model.predict(str(DATA / row["local_path"]), imgsz=image_size, device=device, verbose=False)[0]
         values, indices = torch.topk(result.probs.data.float().cpu(), 2)
         predicted = result.names[int(indices[0])]
         confidence, margin = float(values[0]), float(values[0]-values[1])
@@ -52,7 +53,11 @@ def main():
                         help="Use --splits val for model selection before inspecting test predictions")
     parser.add_argument("--post-regression-review", action="store_true",
                         help="Mark evaluation as regression evidence after earlier expanded-test results were inspected")
+    parser.add_argument("--minimum-regression-accuracy", type=float, default=0.8,
+                        help="Record whether raw test accuracy strictly exceeds this target; never excludes rejected images")
     args = parser.parse_args()
+    if not 0 <= args.minimum_regression_accuracy < 1:
+        parser.error("minimum regression accuracy must be within [0,1)")
     torch.set_num_threads(4)
     config = json.loads((ROOT / "content/hcmus/vision-training.json").read_text(encoding="utf-8"))
     manifest = json.loads(args.split_manifest.read_text(encoding="utf-8"))
@@ -72,6 +77,7 @@ def main():
                   training_run=args.weights.parent.parent.name,
                   weights=args.weights.resolve().relative_to(ROOT).as_posix(),
                   model_sha256=hashlib.sha256(args.weights.read_bytes()).hexdigest(),
+                  image_size=int(model.overrides.get("imgsz", 320)),
                   dataset_fingerprint=manifest["fingerprint"],
                   split_counts=manifest["counts"],
                   split_groups={split: sorted(value) for split, value in groups.items()},
@@ -92,6 +98,10 @@ def main():
         report[split] = evaluate(model, rows, device)
         print(split, report[split]["correct"], "/", report[split]["total"], report[split]["fixed_gate"], flush=True)
         if split == "test":
+            report["regression_target"] = dict(metric="raw_top1_accuracy_on_unchanged_regression_images",
+                minimum_exclusive=args.minimum_regression_accuracy, actual=report[split]["accuracy"],
+                passed=report[split]["accuracy"] > args.minimum_regression_accuracy,
+                field_accuracy_guaranteed=False)
             # Summarize existing predictions: never rerun or tune a threshold per cohort.
             cohorts = {}
             for name in sorted({r.get("evaluation_cohort") or "unspecified" for r in rows}):
@@ -118,12 +128,16 @@ def main():
             checkpoint_validation_loss=float(last_best["val/loss"]),
             best_trainer_validation_accuracy=float(best["metrics/accuracy_top1"]),
             selected=folder == args.weights.parent.parent))
+        selected_metadata = folder / "selected-checkpoint.json"
+        if selected_metadata.exists():
+            experiments[-1]["saved_checkpoint"] = json.loads(selected_metadata.read_text(encoding="utf-8"))
+            experiments[-1]["checkpoint_validation_loss"] = experiments[-1]["saved_checkpoint"]["metrics"]["val/loss"]
     report["model_selection"] = dict(
         basis=("Select by original-file validation top-1; break ties by checkpoint trainer validation loss. " +
-               ("A later balanced-training experiment followed expanded-test error analysis. Treat all test scores as regression evidence, not a blind final accuracy estimate."
+               ("Data, augmentation and architecture experiments followed earlier regression error analysis. Treat all test scores as regression evidence, not a blind final accuracy estimate."
                 if args.post_regression_review else
                 "Selection is frozen before expanded test predictions. Legacy v2 test history was already known.")),
-        epoch_note="Ultralytics overwrites best.pt on equal maximum fitness. First maximum epoch is not necessarily the epoch stored in best.pt.",
+        epoch_note="Old runs overwrote best.pt on equal top-1. New runs use validation loss to break top-1 ties; saved_checkpoint records the actual selected epoch. First/last maximum CSV epochs alone do not identify the checkpoint.",
         selected_checkpoint_validation_metrics=model.ckpt.get("train_metrics"), experiments=experiments)
     report["input_encoding_note"] = "Trainer validates canonical JPEG copies; this report evaluates the original reviewed files. A borderline prediction can change after JPEG re-encoding. See trainer validation and original-file validation separately."
     args.output.parent.mkdir(parents=True, exist_ok=True)
