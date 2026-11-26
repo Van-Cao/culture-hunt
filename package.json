@@ -8,17 +8,22 @@
     "start": "next start",
     "lint": "eslint",
     "test": "tsx --test tests/*.test.ts",
-    "check:vision": "tsx scripts/check-palace-vision.ts"
+    "check:vision": "tsx scripts/check-palace-vision.ts",
+    "db:migrate": "tsx scripts/migrate-database.ts",
+    "db:import-legacy": "tsx scripts/import-sqlite-progress.ts",
+    "test:database": "tsx --test tests/postgres.integration.ts"
   },
   "engines": {
     "node": ">=22.13.0"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
     "framer-motion": "^14.9.1",
     "lucide-react": "^1.69.0",
     "maplibre-gl": "^6.18.0",
     "next": "16.4.5",
-    "next-auth": "^5.0.0-beta.32",
+    "postgres": "^4.1.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "sharp": "^0.35.5"

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import CultureHunt from "@/components/UI/CultureHunt";
-import { auth, googleAuthConfigured } from "@/auth";
 
 export default function Home({ searchParams }: PageProps<"/">) {
   return (
@@ -31,11 +30,8 @@ async function AuthenticatedGame({
   const language = value("lang");
   const destination = value("place");
   const view = value("view");
-  const session = googleAuthConfigured ? await auth() : null;
   return (
     <CultureHunt
-      session={session}
-      googleEnabled={googleAuthConfigured}
       initialLocale={
         language === "vi" || language === "en" ? language : undefined
       }
@@ -51,7 +47,8 @@ async function AuthenticatedGame({
         view === "home" ||
         view === "journeys" ||
         view === "scan" ||
-        view === "collection"
+        view === "collection" ||
+        view === "profile"
           ? view
           : undefined
       }

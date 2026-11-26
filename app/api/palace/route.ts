@@ -15,7 +15,7 @@ import {
 
 export async function GET() {
   try {
-    return gameResponse(readState(await playerId()));
+    return gameResponse(await readState(await playerId()));
   } catch (error) {
     return gameError(error);
   }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       throw new GameError("Dữ liệu không hợp lệ. / Invalid request.");
     const owner = await playerId();
     if (body.action === "start")
-      return gameResponse({ state: startRun(owner, body.replay === true) });
+      return gameResponse({ state: await startRun(owner, body.replay === true) });
     if (
       body.action === "answer" &&
       typeof body.runId === "string" &&
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       && (body.questionId === undefined || (typeof body.questionId === "string" && body.questionId.length <= 100))
     ) {
       return gameResponse(
-        answerCheckpoint(owner, body.runId, body.checkpointId, body.answer, body.questionId),
+        await answerCheckpoint(owner, body.runId, body.checkpointId, body.answer, body.questionId),
       );
     }
     throw new GameError("Hành động không hợp lệ. / Invalid action.");

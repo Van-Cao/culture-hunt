@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       checkpointId = form.get("checkpointId");
     if (typeof runId !== "string" || !isCheckpointId(checkpointId))
       throw new GameError("Checkpoint không hợp lệ. / Invalid checkpoint.");
-    requireAvailable(owner, runId, checkpointId);
+    await requireAvailable(owner, runId, checkpointId);
     let recognition: RecognitionResult;
     const sampleId = form.get("sampleId");
     if (sampleId !== null) {
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
         reason:
           "Ảnh thuộc một checkpoint khác. Hãy kiểm tra gợi ý của điểm hiện tại. / This is another checkpoint. Check the current clue.",
       };
-    const state = recordRecognition(
+    const state = await recordRecognition(
       owner,
       runId,
       checkpointId,

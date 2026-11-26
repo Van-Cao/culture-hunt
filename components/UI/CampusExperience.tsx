@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowRight, BookOpen, Check, Flag, Gem, GraduationCap, Heart, LockKeyhole, MapPin, ScanLine, Share2, Trophy, Volume2, VolumeX, Zap } from "lucide-react";
+import { useAccount } from "./AccountProvider";
 import { useLanguage } from "./LanguageProvider";
 import type { Place } from "./game-data";
 import JourneyHeader from "./JourneyHeader";
@@ -24,6 +25,7 @@ export default function CampusExperience({
   onAchievement: () => void;
 }) {
   const { t } = useLanguage();
+  const { data: account } = useAccount();
   const [picked, setPicked] = useState<number | null>(null);
   const total = place.missions.length;
   const selected = picked ?? Math.min(completed, total - 1);
@@ -41,7 +43,7 @@ export default function CampusExperience({
       >
         <span><Flag size={16} /><strong>{completed}<small>/{total}</small></strong>{t("đã khai mở", "uncovered")}</span>
         <span><Zap size={16} /><strong>{completed * 150}</strong>XP</span>
-        <span className="palace-save-label"><span />{t("Tiến độ lưu trên trình duyệt này", "Progress saved in this browser")}</span>
+        <span className="palace-save-label"><span />{account ? t("Đồng bộ theo tài khoản", "Synced to your account") : t("Lưu trên máy chủ · Chế độ khách", "Saved on server · Guest mode")}</span>
         <div className="campus-actions">
           <button className="icon-button" onClick={onSave} aria-pressed={saved} aria-label={saved ? t("Bỏ lưu địa điểm", "Unsave destination") : t("Lưu địa điểm", "Save destination")}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button>
           <button className="icon-button" onClick={onSound} aria-pressed={sound} aria-label={sound ? t("Tắt âm thanh", "Mute sound") : t("Bật âm thanh", "Enable sound")}>{sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</button>

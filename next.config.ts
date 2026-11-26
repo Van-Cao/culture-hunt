@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  outputFileTracingIncludes: {
+    "/api/palace/recognize": ["./public/images/palace-exterior.webp", "./public/images/palace/*.webp"],
+    "/api/vision": ["./public/images/palace-exterior.webp", "./public/images/palace/*.webp"],
+  },
+  outputFileTracingExcludes: { "/*": ["./.culture-hunt/**/*"] },
   turbopack: {
     rules: {
       "*.css": {

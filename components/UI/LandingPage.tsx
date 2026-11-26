@@ -21,6 +21,7 @@ import {
 import { getPlaces } from "./game-data";
 import { useLanguage } from "./LanguageProvider";
 import { GameBrand, LanguageSwitch } from "./GameElements";
+import { useAccount } from "./AccountProvider";
 import "./landing.css";
 import "./landing-hero.css";
 
@@ -34,6 +35,7 @@ function StartAction({
   hero?: boolean;
 }) {
   const { locale, t } = useLanguage();
+  const { data: session } = useAccount();
   return (
     <form
       action="/"
@@ -47,8 +49,8 @@ function StartAction({
       <input type="hidden" name="start" value="1" />
       <input type="hidden" name="lang" value={locale} />
       <button type="submit" className={signIn ? "intro-signin" : "intro-start"}>
-        {signIn
-          ? t("Đăng nhập", "Sign in")
+          {signIn
+            ? session?.user ? t("Hành trình của tôi", "My journeys") : t("Đăng nhập", "Sign in")
           : hero
             ? t("Bắt đầu hành trình", "Get started")
             : t("Bắt đầu khám phá", "Start exploring")}
@@ -427,8 +429,8 @@ export default function LandingPage({
           <StartAction onStart={onStart} />
           <p>
             {t(
-              "Đăng nhập với Google hoặc bắt đầu với tư cách khách.",
-              "Sign in with Google or start exploring as a guest.",
+              "Đăng nhập bằng email hoặc bắt đầu với tư cách khách.",
+              "Sign in with email or start exploring as a guest.",
             )}
           </p>
         </section>

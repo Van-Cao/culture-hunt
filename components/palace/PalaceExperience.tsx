@@ -27,6 +27,7 @@ import {
   type CheckpointId,
 } from "@/lib/palace/checkpoints";
 import type { JourneyRun, RecognitionResult } from "@/lib/palace/types";
+import { useAccount } from "@/components/UI/AccountProvider";
 import { useLanguage } from "@/components/UI/LanguageProvider";
 import JourneyHeader from "@/components/UI/JourneyHeader";
 import GameDialog from "@/components/UI/GameDialog";
@@ -65,6 +66,7 @@ export default function PalaceExperience({
   sound?: boolean;
 }) {
   const { locale, t } = useLanguage();
+  const { data: accountSession } = useAccount();
   const [picked, setPicked] = useState<CheckpointId | null>(null);
   const [stage, setStage] = useState<Stage>(null);
   const [notice, setNotice] = useState("");
@@ -258,8 +260,8 @@ export default function PalaceExperience({
         <span className="palace-save-label">
           <span />
           {t(
-            "Lưu trên máy chủ · Hồ sơ trình duyệt này",
-            "Server saved · This browser profile",
+            accountSession ? "Đồng bộ theo tài khoản" : "Lưu trên máy chủ · Chế độ khách",
+            accountSession ? "Synced to your account" : "Server saved · Guest profile",
           )}
         </span>
       </JourneyHeader>

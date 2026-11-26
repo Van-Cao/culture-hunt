@@ -2,16 +2,22 @@ import { cookies } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { GameError } from "./store";
+import { currentAccount } from "../supabase/server";
 
 export async function playerId() {
+  const account = await currentAccount();
+  if (account) return `user:${account.id}`;
+  return guestId();
+}
+export async function guestId(rotate = false) {
   const jar = await cookies();
   const existing = jar.get("culture-hunt-player")?.value;
-  if (existing && /^[a-f0-9-]{36}$/.test(existing)) return existing;
+  if (!rotate && existing && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(existing)) return existing;
   const id = randomUUID();
   jar.set("culture-hunt-player", id, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: Boolean(process.env.VERCEL),
     maxAge: 60 * 60 * 24 * 365,
     path: "/",
   });

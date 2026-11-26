@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import { SessionProvider, useSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import { AccountProvider, useAccount } from "./AccountProvider";
 import {
   ArrowLeft,
   ArrowRight,
@@ -45,21 +44,19 @@ import GameDialog from "./GameDialog";
 import StoryCard from "./StoryCard";
 import QuizCard from "./QuizCard";
 import AccountPanel from "./AccountPanel";
+import ExplorerProfile from "./ExplorerProfile";
 import CampusExperience from "./CampusExperience";
 import PalaceExperience from "@/components/palace/PalaceExperience";
 import { usePalaceJourney } from "@/components/palace/usePalaceJourney";
 import CollectionAtlas from "@/components/atlas/CollectionAtlas";
-import { HCMUS_PROGRESS_STORAGE_KEY, readHcmusProgress } from "@/lib/hcmus/progress";
+import { useExplorerProgress } from "./useExplorerProgress";
 import "./game.css";
 
-type View = "home" | "journeys" | "scan" | "collection";
+type View = "home" | "journeys" | "scan" | "collection" | "profile";
 type Overlay = "story" | "quiz" | "help" | "account" | "achievement" | null;
 type PlaceId = Place["id"];
-type Progress = Record<PlaceId, number>;
 
 export default function CultureHunt({
-  session,
-  googleEnabled,
   initialLocale,
   initialPlay = false,
   initialStart = false,
@@ -67,8 +64,6 @@ export default function CultureHunt({
   initialDestination,
   initialView,
 }: {
-  session: Session | null;
-  googleEnabled: boolean;
   initialLocale?: Locale;
   initialPlay?: boolean;
   initialStart?: boolean;
@@ -77,11 +72,10 @@ export default function CultureHunt({
   initialView?: View;
 }) {
   return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
+    <AccountProvider>
       <LanguageProvider initialLocale={initialLocale}>
         <MotionConfig reducedMotion="user">
           <Experience
-            googleEnabled={googleEnabled}
             initialPlay={initialPlay}
             initialStart={initialStart}
             initialAuthFailed={initialAuthFailed}
@@ -90,19 +84,17 @@ export default function CultureHunt({
           />
         </MotionConfig>
       </LanguageProvider>
-    </SessionProvider>
+    </AccountProvider>
   );
 }
 
 function Experience({
-  googleEnabled,
   initialPlay,
   initialStart,
   initialAuthFailed,
   initialDestination,
   initialView,
 }: {
-  googleEnabled: boolean;
   initialPlay: boolean;
   initialStart: boolean;
   initialAuthFailed: boolean;
@@ -110,7 +102,7 @@ function Experience({
   initialView?: View;
 }) {
   const { t, locale } = useLanguage();
-  const { data: session } = useSession();
+  const { data: session, ready: accountReady } = useAccount();
   const [entered, setEntered] = useState(initialPlay);
   const [entryDialog, setEntryDialog] = useState(
     initialStart || initialAuthFailed,
@@ -150,9 +142,9 @@ function Experience({
   }
   return (
     <div className="culture-app" lang={locale}>
-      {entered ? (
+      {entered && !accountReady ? <div className="loading-screen" role="status">{t("Đang mở hồ sơ khám phá…", "Opening your explorer profile…")}</div> : entered ? (
         <Game
-          googleEnabled={googleEnabled}
+          key={session?.user.id || "guest"}
           onIntro={intro}
           initialDestination={entryDestination}
           initialView={initialView}
@@ -170,12 +162,12 @@ function Experience({
         {entryDialog && (
           <GameDialog
             animateEntry={!initialStart && !initialAuthFailed}
+            className="account-dialog"
             label={t("Bắt đầu hành trình", "Start your adventure")}
             onClose={() => setEntryDialog(false)}
           >
             <AccountPanel
-              googleEnabled={googleEnabled}
-              authFailed={authFailed}
+                authFailed={authFailed}
               onClose={() => setEntryDialog(false)}
               onGuest={() => enter()}
             />
@@ -259,18 +251,16 @@ function PlaceCard({
 }
 
 function Game({
-  googleEnabled,
   onIntro,
   initialDestination,
   initialView,
 }: {
-  googleEnabled: boolean;
   onIntro: () => void;
   initialDestination?: PlaceId;
   initialView?: View;
 }) {
   const { locale, t } = useLanguage();
-  const { data: session } = useSession();
+  const { data: session } = useAccount();
   const places = getPlaces(locale);
   const [placeId, setPlaceId] = useState<PlaceId>(
     initialDestination || "palace",
@@ -279,16 +269,13 @@ function Game({
     initialView || (initialDestination ? "journeys" : "home"),
   );
   const [overlay, setOverlay] = useState<Overlay>(null);
-  const [localProgress, setProgress] = useState<Progress>({
-    palace: 0,
-    hcmus: 0,
-  });
+  const explorer = useExplorerProgress();
   const palaceGame = usePalaceJourney();
-  const progress: Progress = {
+  const progress = {
     palace: palaceGame.state?.discovered.length || 0,
-    hcmus: localProgress.hcmus,
+    hcmus: explorer.hcmus,
   };
-  const [saved, setSaved] = useState<PlaceId[]>([]);
+  const saved = explorer.saved;
   const [filter, setFilter] = useState<"all" | PlaceId>("all");
   const [sound, setSound] = useState(true);
   const [activeMission, setActiveMission] = useState(0);
@@ -300,30 +287,7 @@ function Game({
   const xp = totalCompleted * 150;
   const mission = place.missions[activeMission];
 
-  useEffect(() => {
-    try {
-      const hcmus = readHcmusProgress(localStorage.getItem(HCMUS_PROGRESS_STORAGE_KEY));
-      queueMicrotask(() => setProgress({ palace: 0, hcmus }));
-      const favorites = JSON.parse(
-        localStorage.getItem("culture-hunt-saved-v1") || "[]",
-      );
-      if (Array.isArray(favorites))
-        queueMicrotask(() =>
-          setSaved([
-            ...new Set(
-              favorites.filter(
-                (id): id is PlaceId => id === "palace" || id === "hcmus",
-              ),
-            ),
-          ]),
-        );
-    } catch {
-      /* Browser-local storage is optional for guest play. */
-    }
-    return () => {
-      if (toastTimer.current) clearTimeout(toastTimer.current);
-    };
-  }, []);
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
 
   useEffect(() => {
     const restore = () => {
@@ -333,11 +297,13 @@ function Game({
       if (destination === "palace" || destination === "hcmus")
         setPlaceId(destination);
       setView(
-        target === "journeys" || target === "scan" || target === "collection"
+        target === "journeys" || target === "scan" || target === "collection" || target === "profile"
           ? target
           : "home",
       );
     };
+    // Account changes remount the game; retain the current navigation in that case.
+    queueMicrotask(() => { restore(); window.scrollTo({ top: 0, behavior: "instant" }); });
     window.addEventListener("popstate", restore);
     return () => window.removeEventListener("popstate", restore);
   }, []);
@@ -362,17 +328,14 @@ function Game({
     );
     navigate("journeys", id);
   }
-  function toggleSaved(id: PlaceId) {
-    const next = saved.includes(id)
-      ? saved.filter((item) => item !== id)
-      : [...saved, id];
-    setSaved(next);
-    try {
-      localStorage.setItem("culture-hunt-saved-v1", JSON.stringify(next));
-    } catch {
-      /* Keep session state. */
-    }
+  function openCollection(tab: "map" | "badges" | "journal" = "map") {
+    const url = new URL(window.location.href);
+    url.searchParams.set("atlasTab", tab);
+    url.searchParams.delete("atlas");
+    window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+    navigate("collection");
   }
+  function toggleSaved(id: PlaceId) { void explorer.toggleSaved(id); }
   function notify(message: string) {
     setToast(message);
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -391,20 +354,11 @@ function Game({
     if (index < completed) setOverlay("story");
     else navigate("scan");
   }
-  function completeMission() {
-    setProgress((current) => {
-      if (current[placeId] !== activeMission) return current;
-      const next = {
-        ...current,
-        [placeId]: Math.min(place.missions.length, activeMission + 1),
-      };
-      try {
-        localStorage.setItem(HCMUS_PROGRESS_STORAGE_KEY, JSON.stringify(next.hcmus));
-      } catch {
-        /* Keep session progress. */
-      }
-      return next;
-    });
+  async function completeMission(answer: number) {
+    if (placeId !== "hcmus" || !await explorer.completeCampus(activeMission, answer)) {
+      notify(t("Chưa lưu được tiến độ. Hãy thử lại.", "Progress could not be saved. Please retry."));
+      return false;
+    }
     if (sound) {
       try {
         const audio = new AudioContext();
@@ -428,6 +382,7 @@ function Game({
         /* Visual feedback still works without audio. */
       }
     }
+    return true;
   }
   async function share() {
     const text = t(
@@ -517,6 +472,7 @@ function Game({
     },
   ];
 
+  if (!explorer.ready && !explorer.error) return <div className="loading-screen" role="status"><Compass size={28} /><p>{t("Đang tải dấu ấn của bạn…", "Loading your discoveries…")}</p></div>;
 
   return (
     <div className="mobile-app">
@@ -536,14 +492,14 @@ function Game({
               <HelpCircle size={21} />
             </button>
             <button
-              className="account-avatar"
+              className={`account-avatar ${session?.user ? "is-member" : ""}`}
               aria-label={t(
-                "Tài khoản và đăng nhập Google",
-                "Account and Google sign-in",
+                session?.user ? "Mở hồ sơ của tôi" : "Tài khoản và đăng nhập",
+                session?.user ? "Open my profile" : "Account and sign-in",
               )}
-              onClick={() => setOverlay("account")}
+              onClick={() => session?.user ? navigate("profile") : setOverlay("account")}
             >
-              {session?.user?.name?.charAt(0) || <UserRound size={21} />}
+              {session?.user?.name?.charAt(0).toLocaleUpperCase(locale) || <UserRound size={21} />}
             </button>
           </div>
         </div>
@@ -576,7 +532,9 @@ function Game({
       </header>
 
       <main className={`app-main view-${view}`} id="app-main">
+        {explorer.error && <div className="progress-sync-error" role="alert"><p>{explorer.error.split(" / ")[locale === "en" ? 1 : 0] || explorer.error}</p><button onClick={() => void explorer.reload()}>{t("Thử kết nối lại", "Retry connection")}</button></div>}
         {view !== "home" &&
+          view !== "profile" &&
           view !== "journeys" &&
           !(placeId === "palace" && view === "scan") && (
             <div className="app-page-heading">
@@ -906,11 +864,24 @@ function Game({
             campusProgress={progress.hcmus}
             name={session?.user?.name || t("Nhà thám hiểm tự do", "The curious explorer")}
             savedDestinations={saved}
+            savedStories={explorer.bookmarks}
+            onToggleStory={key => { void explorer.toggleBookmark(key); }}
             onToggleSaved={toggleSaved}
             onPlay={selectPlace}
             sound={sound}
           />
         )}
+        {view === "profile" && <ExplorerProfile
+          game={palaceGame}
+          campusProgress={progress.hcmus}
+          savedCount={saved.length}
+          bookmarkCount={explorer.bookmarks.length}
+          progressError={Boolean(explorer.error)}
+          places={places}
+          onExplore={selectPlace}
+          onCollection={openCollection}
+          onAccount={() => setOverlay("account")}
+        />}
         <footer className="app-footer">
           <Compass size={14} />
           <span>
@@ -937,7 +908,7 @@ function Game({
             <small>{label}</small>
           </button>
         ))}
-        <button onClick={() => setOverlay("account")}>
+        <button className={view === "profile" ? "nav-active" : ""} aria-current={view === "profile" ? "page" : undefined} onClick={() => navigate("profile")}>
           <span>
             <UserRound size={21} strokeWidth={1.7} />
           </span>
@@ -949,6 +920,7 @@ function Game({
         {overlay && (
           <GameDialog
             key={overlay + locale}
+            className={overlay === "account" ? "account-dialog" : ""}
             wide={overlay === "story"}
             label={
               overlay === "quiz"
@@ -979,10 +951,10 @@ function Game({
             {overlay === "quiz" && (
               <QuizCard
                 mission={mission}
-                final={activeMission === 2}
+                final={activeMission === place.missions.length - 1}
                 onComplete={completeMission}
                 onContinue={() => {
-                  if (activeMission === 2) setOverlay("achievement");
+                  if (activeMission === place.missions.length - 1) setOverlay("achievement");
                   else {
                     setActiveMission(activeMission + 1);
                     setOverlay("story");
@@ -992,8 +964,7 @@ function Game({
             )}
             {overlay === "account" && (
               <AccountPanel
-                googleEnabled={googleEnabled}
-                onClose={() => setOverlay(null)}
+                    onClose={() => setOverlay(null)}
               />
             )}
             {overlay === "help" && (
@@ -1126,8 +1097,8 @@ function Game({
                 </button>
                 <small className="muted">
                   {t(
-                    "Tiến độ demo được lưu trên trình duyệt này.",
-                    "Demo progress is saved in this browser.",
+                    "Tiến độ được lưu theo hồ sơ đang chơi.",
+                    "Progress is saved to your current explorer profile.",
                   )}
                 </small>
               </div>

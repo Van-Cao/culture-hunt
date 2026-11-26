@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Check,
   Lightbulb,
+  LoaderCircle,
   RotateCcw,
   Sparkles,
   X,
@@ -21,7 +22,7 @@ export default function QuizCard({
   final,
 }: {
   mission: Mission;
-  onComplete: () => void;
+  onComplete: (answer: number) => Promise<boolean>;
   onContinue: () => void;
   final: boolean;
 }) {
@@ -29,11 +30,14 @@ export default function QuizCard({
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [hint, setHint] = useState(false);
+  const [busy, setBusy] = useState(false);
   const correct = selected === mission.correct;
-  function submit() {
-    if (selected === null || submitted) return;
-    setSubmitted(true);
-    if (correct) onComplete();
+  async function submit() {
+    if (selected === null || submitted || busy) return;
+    if (!correct) { setSubmitted(true); return; }
+    setBusy(true);
+    try { if (await onComplete(selected)) setSubmitted(true); }
+    finally { setBusy(false); }
   }
   return (
     <div className="quiz-content">
@@ -82,7 +86,7 @@ export default function QuizCard({
               }
               className={`quiz-answer ${state}`}
               aria-pressed={selected === index}
-              disabled={submitted}
+              disabled={submitted || busy}
               onClick={() => setSelected(index)}
             >
               <span className="answer-letter">{"ABCD"[index]}</span>
@@ -169,10 +173,10 @@ export default function QuizCard({
         ) : (
           <button
             className="primary-button"
-            disabled={selected === null}
-            onClick={submit}
+            disabled={selected === null || busy}
+            onClick={() => void submit()}
           >
-            {t("Chốt đáp án", "Lock in answer")}
+            {busy ? <LoaderCircle size={18} className="spin" /> : t("Chốt đáp án", "Lock in answer")}
             <ArrowRight size={18} />
           </button>
         )}

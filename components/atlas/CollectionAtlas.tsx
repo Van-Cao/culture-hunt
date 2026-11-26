@@ -18,15 +18,15 @@ const tabs = ["map", "badges", "journal", "saved"] as const;
 const tabIcons = { map: Map, badges: Award, journal: History, saved: Heart };
 const badgeIcons = { compass: Compass, palace: Landmark, science: GraduationCap, city: MapPin };
 
-export default function CollectionAtlas({ game, campusProgress, name, savedDestinations, onToggleSaved, onPlay, sound }: {
-  game: PalaceGame; campusProgress: number; name: string; savedDestinations: DestinationId[];
+export default function CollectionAtlas({ game, campusProgress, name, savedDestinations, savedStories, onToggleStory, onToggleSaved, onPlay, sound }: {
+  game: PalaceGame; campusProgress: number; name: string; savedDestinations: DestinationId[]; savedStories: string[]; onToggleStory: (key: string) => void;
   onToggleSaved: (id: DestinationId) => void; onPlay: (id: DestinationId) => void; sound: boolean;
 }) {
   const { locale, t } = useLanguage();
   const [tab, setTab] = useState<Tab>("map");
   const [place, setPlace] = useState<DestinationId | null>(null);
   const [filter, setFilter] = useState<Filter>("all");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const favorites = savedStories;
   const [share, setShare] = useState<ShareTarget | null>(null);
   const [badge, setBadge] = useState<AtlasBadge | null>(null);
   const [campusStop, setCampusStop] = useState<AtlasStop | null>(null);
@@ -51,13 +51,7 @@ export default function CollectionAtlas({ game, campusProgress, name, savedDesti
       setPlace(destination === "palace" || destination === "hcmus" ? destination : null);
       setTab(tabs.includes(pane as Tab) ? pane as Tab : "map");
     }
-    queueMicrotask(() => {
-      readUrl();
-      try {
-        const stored: unknown = JSON.parse(localStorage.getItem("culture-hunt-atlas-favorites-v1") || "[]");
-        if (Array.isArray(stored)) setFavorites(stored.filter((value): value is string => typeof value === "string" && /^(palace|hcmus):[a-z0-9-]+$/.test(value)));
-      } catch { /* Optional browser storage. */ }
-    });
+    queueMicrotask(readUrl);
     window.addEventListener("popstate", readUrl);
     return () => window.removeEventListener("popstate", readUrl);
   }, []);
@@ -68,14 +62,7 @@ export default function CollectionAtlas({ game, campusProgress, name, savedDesti
     window.history.pushState(null, "", `${url.pathname}${url.search}`);
     window.scrollTo({ top: 0, behavior: "instant" });
   }
-  function favorite(destination: DestinationId, stop: AtlasStop) {
-    const key = `${destination}:${stop.id}`;
-    setFavorites(current => {
-      const next = current.includes(key) ? current.filter(id => id !== key) : [...current, key];
-      try { localStorage.setItem("culture-hunt-atlas-favorites-v1", JSON.stringify(next)); } catch { /* Session state is retained. */ }
-      return next;
-    });
-  }
+  function favorite(destination: DestinationId, stop: AtlasStop) { onToggleStory(`${destination}:${stop.id}`); }
   function shareStop(d: AtlasDestination, stop: AtlasStop) {
     if (!stop.done) return;
     setShare({ kind: "checkpoint", title: stop.title, subtitle: d.shortTitle, completed: 1, total: 1, xp: 150, destinationId: d.id, at: stop.at });
