@@ -60,7 +60,7 @@ export default function PalaceExperience({
   sound = true,
 }: {
   game: PalaceGame;
-  mode?: "map" | "scan" | "journal";
+  mode?: "map" | "journal";
   onJournal: () => void;
   onMap?: () => void;
   sound?: boolean;
@@ -412,26 +412,6 @@ export default function PalaceExperience({
           )}
         </span>
       </div>
-      {mode === "scan" && (
-        <div className="palace-scan-prompt">
-          <ScanLine size={22} />
-          <div>
-            <strong>
-              {t(
-                "Bạn đã sẵn sàng nhận diện?",
-                "Ready to identify a discovery?",
-              )}
-            </strong>
-            <p>
-              {t(
-                "Chọn điểm đang mở trên sa bàn hoặc dùng nút Khám phá điểm này.",
-                "Choose an available map checkpoint or use Explore this checkpoint.",
-              )}
-            </p>
-          </div>
-        </div>
-      )}
-
       {mode !== "journal" ? (
         <>
           <div

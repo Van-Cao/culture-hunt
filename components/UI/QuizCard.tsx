@@ -57,8 +57,8 @@ export default function QuizCard({
       <h2>{mission.question}</h2>
       <p className="muted">
         {t(
-          "Mỗi đáp án là một bước gần hơn với câu chuyện.",
-          "Every answer brings you closer to the story.",
+          "Chọn một đáp án rồi bấm “Chốt đáp án”.",
+          "Choose an answer, then press “Lock in answer”.",
         )}
       </p>
       <div

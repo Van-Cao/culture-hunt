@@ -7,9 +7,7 @@ import { AccountProvider, useAccount } from "./AccountProvider";
 import {
   ArrowLeft,
   ArrowRight,
-  AudioLines,
   Check,
-  ChevronRight,
   Compass,
   Download,
   Flag,
@@ -19,9 +17,7 @@ import {
   Home,
   Landmark,
   MapPin,
-  ScanLine,
   Share2,
-  ShieldCheck,
   Sparkles,
   Target,
   Trophy,
@@ -38,6 +34,7 @@ import {
   LanguageSwitch,
   XPBar,
 } from "./GameElements";
+import JourneyTutorial from "./JourneyTutorial";
 import LandingPage from "./LandingPage";
 import ArtifactScanner from "./ArtifactScanner";
 import GameDialog from "./GameDialog";
@@ -52,8 +49,8 @@ import CollectionAtlas from "@/components/atlas/CollectionAtlas";
 import { useExplorerProgress } from "./useExplorerProgress";
 import "./game.css";
 
-type View = "home" | "journeys" | "scan" | "collection" | "profile";
-type Overlay = "story" | "quiz" | "help" | "account" | "achievement" | null;
+type View = "home" | "journeys" | "collection" | "profile";
+type Overlay = "capture" | "story" | "quiz" | "help" | "account" | "achievement" | null;
 type PlaceId = Place["id"];
 
 export default function CultureHunt({
@@ -269,6 +266,18 @@ function Game({
     initialView || (initialDestination ? "journeys" : "home"),
   );
   const [overlay, setOverlay] = useState<Overlay>(null);
+  const tutorialKey = `culture-hunt-tutorial-v1:${session?.user.id || "guest"}`;
+  useEffect(() => {
+    let seen = false;
+    try { seen = localStorage.getItem(tutorialKey) === "seen"; } catch { /* Storage is optional. */ }
+    if (!seen) queueMicrotask(() => setOverlay("help"));
+  }, [tutorialKey]);
+  function dismissOverlay() {
+    if (overlay === "help") {
+      try { localStorage.setItem(tutorialKey, "seen"); } catch { /* Storage is optional. */ }
+    }
+    setOverlay(null);
+  }
   const explorer = useExplorerProgress();
   const palaceGame = usePalaceJourney();
   const progress = {
@@ -293,19 +302,21 @@ function Game({
     const restore = () => {
       const query = new URLSearchParams(window.location.search);
       const destination = query.get("place");
-      const target = query.get("view");
+      const requestedView = query.get("view");
+      const target = requestedView === "scan" ? "journeys" : requestedView;
       if (destination === "palace" || destination === "hcmus")
         setPlaceId(destination);
       setView(
-        target === "journeys" || target === "scan" || target === "collection" || target === "profile"
+        target === "journeys" || target === "collection" || target === "profile"
           ? target
           : "home",
       );
     };
     // Account changes remount the game; retain the current navigation in that case.
     queueMicrotask(() => { restore(); window.scrollTo({ top: 0, behavior: "instant" }); });
-    window.addEventListener("popstate", restore);
-    return () => window.removeEventListener("popstate", restore);
+    const onPopState = () => { setOverlay(null); restore(); };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
   function navigate(next: View, destination = placeId) {
     setView(next);
@@ -342,17 +353,12 @@ function Game({
     toastTimer.current = setTimeout(() => setToast(""), 4500);
   }
   function capture() {
-    if (completed === place.missions.length) {
-      setOverlay("achievement");
-      return;
-    }
-    setActiveMission(completed);
-    setOverlay("story");
+    setOverlay(current => current === "capture" ? "story" : current);
   }
   function openMission(index: number) {
     setActiveMission(index);
     if (index < completed) setOverlay("story");
-    else navigate("scan");
+    else setOverlay("capture");
   }
   async function completeMission(answer: number) {
     if (placeId !== "hcmus" || !await explorer.completeCampus(activeMission, answer)) {
@@ -464,7 +470,6 @@ function Game({
       Icon: MapPin,
       label: t("Hành trình", "Journeys"),
     },
-    { id: "scan" as const, Icon: ScanLine, label: t("Quét", "Scan") },
     {
       id: "collection" as const,
       Icon: Trophy,
@@ -533,10 +538,7 @@ function Game({
 
       <main className={`app-main view-${view}`} id="app-main">
         {explorer.error && <div className="progress-sync-error" role="alert"><p>{explorer.error.split(" / ")[locale === "en" ? 1 : 0] || explorer.error}</p><button onClick={() => void explorer.reload()}>{t("Thử kết nối lại", "Retry connection")}</button></div>}
-        {view !== "home" &&
-          view !== "profile" &&
-          view !== "journeys" &&
-          !(placeId === "palace" && view === "scan") && (
+        {view === "collection" && (
             <div className="app-page-heading">
               <button
                 className="icon-button"
@@ -547,15 +549,9 @@ function Game({
               </button>
               <div>
                 <span className="eyebrow">
-                  {view === "scan"
-                    ? t("MỘT CHẠM, MỞ CÂU CHUYỆN", "ONE TAP. A NEW STORY.")
-                    : "YOUR EXPLORER PASSPORT"}
+                  YOUR EXPLORER PASSPORT
                 </span>
-                <h1>
-                  {view === "scan"
-                    ? t("Trạm quét", "Scan station")
-                    : t("Hộ chiếu khám phá", "Explorer passport")}
-                </h1>
+                <h1>{t("Hộ chiếu khám phá", "Explorer passport")}</h1>
               </div>
               <button
                 className="icon-button sound-toggle"
@@ -717,12 +713,12 @@ function Game({
                 onClick={() =>
                   completed === place.missions.length
                     ? navigate("collection")
-                    : navigate("scan")
+                    : navigate("journeys")
                 }
                 aria-label={
                   completed === place.missions.length
                     ? t("Xem bộ sưu tập", "View collection")
-                    : t("Đến trạm quét", "Go to scanner")
+                    : t("Mở nhiệm vụ hiện tại", "Open current mission")
                 }
               >
                 <ArrowRight size={21} />
@@ -733,43 +729,20 @@ function Game({
               </span>
             </section>
             <section className="mini-how">
-              <h2>
-                {t(
-                  "Chơi một chút. Biết thêm nhiều.",
-                  "A little play. A lot to discover.",
-                )}
-              </h2>
-              <div>
-                <span>
-                  <ScanLine size={21} />
-                  {t("Quét dấu vết", "Scan a clue")}
-                </span>
-                <ChevronRight size={14} />
-                <span>
-                  <AudioLines size={21} />
-                  {t("Nghe câu chuyện", "Hear a story")}
-                </span>
-                <ChevronRight size={14} />
-                <span>
-                  <Trophy size={21} />
-                  {t("Săn dấu ấn", "Earn a badge")}
-                </span>
-              </div>
               <button
                 className="text-button"
                 onClick={() => setOverlay("help")}
               >
-                {t("Mình chơi như thế nào?", "How do I play?")}
+                {t("Xem lại hướng dẫn chơi", "Replay the tutorial")}
                 <ArrowRight size={14} />
               </button>
             </section>
           </motion.div>
         )}
 
-        {placeId === "palace" && (view === "journeys" || view === "scan") && (
+        {placeId === "palace" && view === "journeys" && (
           <PalaceExperience
             game={palaceGame}
-            mode={view === "scan" ? "scan" : "map"}
             sound={sound}
             onJournal={() => navigate("collection")}
           />
@@ -790,72 +763,6 @@ function Game({
             onOpenMission={openMission}
             onAchievement={() => setOverlay("achievement")}
           />
-        )}
-
-        {view === "scan" && placeId !== "palace" && (
-          <motion.div
-            className="scan-layout"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <div>
-              <div className="scanner-mission-label">
-                <span>
-                  <span className="live-dot" />
-                  {place.shortName}
-                </span>
-                <span>
-                  {Math.min(completed + 1, place.missions.length)}/
-                  {place.missions.length}
-                </span>
-              </div>
-              <ArtifactScanner
-                key={`${placeId}-${locale}`}
-                place={place}
-                complete={completed === place.missions.length}
-                onCapture={capture}
-              />
-            </div>
-            <aside className="scan-side">
-              <div className="scan-quest-note">
-                <Target size={24} />
-                <div>
-                  <span className="eyebrow">
-                    {t("NHIỆM VỤ HIỆN TẠI", "CURRENT QUEST")}
-                  </span>
-                  <h2>
-                    {completed === place.missions.length
-                      ? t("Hành trình trọn vẹn!", "Journey complete!")
-                      : place.missions[completed].title}
-                  </h2>
-                  <p>
-                    {t(
-                      "Quét, nghe chuyện và giải mã để nhận",
-                      "Scan, listen, and decode to earn",
-                    )}{" "}
-                    <strong>150 XP.</strong>
-                  </p>
-                </div>
-              </div>
-              <button
-                className="scan-route-link"
-                onClick={() => navigate("journeys")}
-              >
-                <Flag size={17} />
-                {t("Xem toàn bộ hành trình", "View your discovery trail")}
-                <ArrowRight size={17} />
-              </button>
-              <div className="scan-tips">
-                <ShieldCheck size={18} />
-                <p>
-                  {t(
-                    "Ảnh ở trên thiết bị của bạn. Bản trải nghiệm mở câu chuyện và quiz mẫu tại địa điểm đã chọn.",
-                    "Photos stay on your device. This preview opens sample stories and quizzes for your selected destination.",
-                  )}
-                </p>
-              </div>
-            </aside>
-          </motion.div>
         )}
 
         {view === "collection" && (
@@ -898,12 +805,12 @@ function Game({
         {nav.map(({ id, Icon, label }) => (
           <button
             key={id}
-            className={`${view === id ? "nav-active" : ""} ${id === "scan" ? "nav-scan" : ""}`}
+            className={view === id ? "nav-active" : ""}
             onClick={() => navigate(id)}
             aria-current={view === id ? "page" : undefined}
           >
             <span>
-              <Icon size={id === "scan" ? 26 : 21} strokeWidth={1.7} />
+              <Icon size={21} strokeWidth={1.7} />
             </span>
             <small>{label}</small>
           </button>
@@ -920,10 +827,10 @@ function Game({
         {overlay && (
           <GameDialog
             key={overlay + locale}
-            className={overlay === "account" ? "account-dialog" : ""}
-            wide={overlay === "story"}
+            className={overlay === "account" ? "account-dialog" : overlay === "help" ? "tutorial-dialog" : ""}
+            wide={overlay === "story" || overlay === "capture" || overlay === "quiz"}
             label={
-              overlay === "quiz"
+              overlay === "capture" ? t("Nhận diện checkpoint", "Identify checkpoint") : overlay === "quiz"
                 ? t("Thử thách tri thức", "Knowledge challenge")
                 : overlay === "story"
                   ? t("Câu chuyện khám phá", "Discovery story")
@@ -933,8 +840,17 @@ function Game({
                       ? t("Hướng dẫn chơi", "How to play")
                       : t("Thành tích của bạn", "Your achievements")
             }
-            onClose={() => setOverlay(null)}
+            onClose={dismissOverlay}
           >
+            {overlay === "capture" && (
+              <>
+                <div className="checkpoint-scan-heading">
+                  <small>CHECKPOINT {activeMission + 1} / {place.missions.length}</small>
+                  <h2>{mission.title}</h2>
+                </div>
+                <ArtifactScanner place={place} checkpointNumber={activeMission + 1} onCapture={capture} />
+              </>
+            )}
             {overlay === "story" && (
               <StoryCard
                 place={place}
@@ -956,8 +872,7 @@ function Game({
                 onContinue={() => {
                   if (activeMission === place.missions.length - 1) setOverlay("achievement");
                   else {
-                    setActiveMission(activeMission + 1);
-                    setOverlay("story");
+                    openMission(activeMission + 1);
                   }
                 }}
               />
@@ -968,72 +883,7 @@ function Game({
               />
             )}
             {overlay === "help" && (
-              <div className="help-content">
-                <span className="dialog-emblem">
-                  <Compass size={29} />
-                </span>
-                <span className="eyebrow accent">LET THE HUNT BEGIN</span>
-                <h2>
-                  {t(
-                    "Thành phố là một sân chơi.",
-                    "The city is your playground.",
-                  )}
-                </h2>
-                <p className="muted">
-                  {t(
-                    "Bạn là nhà thám hiểm. Sự tò mò là hành trang.",
-                    "You are the explorer. Curiosity is all you need.",
-                  )}
-                </p>
-                {[
-                  {
-                    Icon: MapPin,
-                    title: t("Chọn điểm đến", "Pick your place"),
-                    text: t(
-                      "Khám phá Dinh Độc Lập hoặc ĐH Khoa học Tự nhiên. Tiến độ mỗi nơi được lưu riêng.",
-                      "Explore Independence Palace or the University of Science. Each destination has its own progress.",
-                    ),
-                  },
-                  {
-                    Icon: ScanLine,
-                    title: t("Quét & nghe chuyện", "Scan & listen"),
-                    text: t(
-                      "Bật camera, tải ảnh hoặc thử ảnh mẫu để mở thẻ chuyện và audio.",
-                      "Open your camera, upload a photo, or try a sample to unlock a story and audio.",
-                    ),
-                  },
-                  {
-                    Icon: Trophy,
-                    title: t("Giải mã & nhận thưởng", "Decode & earn"),
-                    text: t(
-                      "Mỗi thử thách hoàn thành nhận 150 XP. Hoàn thành đủ các checkpoint của địa điểm để mở huy hiệu và chia sẻ thành tích.",
-                      "Each completed challenge earns 150 XP. Complete every checkpoint at a destination to unlock its badge and share your achievements.",
-                    ),
-                  },
-                ].map(({ Icon, title, text }, index) => (
-                  <div className="help-step" key={title}>
-                    <span>
-                      <Icon size={23} />
-                    </span>
-                    <div>
-                      <h3>
-                        0{index + 1} · {title}
-                      </h3>
-                      <p>{text}</p>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="primary-button"
-                  onClick={() => {
-                    setOverlay(null);
-                    navigate("home");
-                  }}
-                >
-                  {t("Mình sẵn sàng rồi!", "Ready for the adventure!")}
-                  <ArrowRight size={18} />
-                </button>
-              </div>
+              <JourneyTutorial onDone={dismissOverlay} />
             )}
             {overlay === "achievement" && (
               <div className="achievement-content">

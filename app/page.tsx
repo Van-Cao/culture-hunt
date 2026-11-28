@@ -29,7 +29,8 @@ async function AuthenticatedGame({
   };
   const language = value("lang");
   const destination = value("place");
-  const view = value("view");
+  const requestedView = value("view");
+  const view = requestedView === "scan" ? "journeys" : requestedView;
   return (
     <CultureHunt
       initialLocale={
@@ -46,7 +47,6 @@ async function AuthenticatedGame({
       initialView={
         view === "home" ||
         view === "journeys" ||
-        view === "scan" ||
         view === "collection" ||
         view === "profile"
           ? view

@@ -6,7 +6,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Aperture,
   Camera,
-  Check,
   Crosshair,
   ImagePlus,
   LoaderCircle,
@@ -21,11 +20,11 @@ import { useLanguage } from "./LanguageProvider";
 
 export default function ArtifactScanner({
   onCapture,
-  complete,
+  checkpointNumber,
   place,
 }: {
   onCapture: () => void;
-  complete: boolean;
+  checkpointNumber: number;
   place: Place;
 }) {
   const { t } = useLanguage();
@@ -158,10 +157,6 @@ export default function ArtifactScanner({
 
   function capture() {
     if (scanning) return;
-    if (complete) {
-      onCapture();
-      return;
-    }
     if (camera && video.current) {
       if (!video.current.videoWidth) {
         setNotice(
@@ -304,7 +299,7 @@ export default function ArtifactScanner({
           <>
             <span className="specimen-tag">
               <span />
-              {t("ĐIỂM KHÁM PHÁ", "DISCOVERY POINT")} #001
+              {t("ĐIỂM KHÁM PHÁ", "DISCOVERY POINT")} #{String(checkpointNumber).padStart(2, "0")}
             </span>
             <span className="specimen-coordinate">
               {place.id === "palace" ? "DINH ĐỘC LẬP" : "HCMUS"}
@@ -348,11 +343,7 @@ export default function ArtifactScanner({
         <div className="capture-wrap">
           <motion.button
             className="capture-button"
-            aria-label={
-              complete
-                ? t("Xem thành tựu", "View achievements")
-                : t("Quét hiện vật", "Scan discovery")
-            }
+            aria-label={t("Quét hiện vật", "Scan discovery")}
             onClick={capture}
             disabled={scanning}
             whileHover={{ scale: 1.06 }}
@@ -361,8 +352,6 @@ export default function ArtifactScanner({
             <span>
               {scanning ? (
                 <LoaderCircle size={30} className="spin" />
-              ) : complete ? (
-                <Check size={31} />
               ) : (
                 <Aperture size={33} strokeWidth={1.6} />
               )}
@@ -371,9 +360,7 @@ export default function ArtifactScanner({
           <strong>
             {scanning
               ? t("ĐANG QUÉT…", "SCANNING…")
-              : complete
-                ? t("ĐÃ CHINH PHỤC", "QUEST COMPLETE")
-                : t("QUÉT & KHÁM PHÁ", "SCAN & DISCOVER")}
+              : t("QUÉT & KHÁM PHÁ", "SCAN & DISCOVER")}
           </strong>
         </div>
         <button

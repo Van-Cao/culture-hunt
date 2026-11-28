@@ -1,0 +1,42 @@
+.landing-tutorial { padding-block: clamp(40px, 8vw, 100px); }
+.culture-app .game-dialog.tutorial-dialog { width: min(880px, 100%); max-width: 880px; background: #f7f6ef; }
+.tutorial-dialog .journey-tutorial { padding: clamp(20px, 4vw, 40px); }
+.journey-tutorial { color: #183e3c; }
+.tutorial-kicker, .tutorial-copy small { font: 600 12px/1.5 var(--font-geist-mono), monospace; }
+.tutorial-kicker { display: flex; align-items: center; gap: 9px; letter-spacing: .09em; min-height: 35px; }
+.tutorial-progress { display: flex; gap: 6px; margin: 15px 0 24px; }
+.tutorial-progress i { height: 4px; flex: 1; border-radius: 4px; background: #d7ded3; }
+.tutorial-progress i.is-filled { background: #497964; }
+.tutorial-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 58px); align-items: center; }
+.tutorial-copy small { color: #526b55; }
+.journey-tutorial .tutorial-copy h2 { font: 400 clamp(28px, 3.3vw, 48px)/1.17 var(--font-editorial), Georgia, serif; margin: 8px 0 14px; letter-spacing: -.035em; }
+.tutorial-copy p { font-size: 16px; line-height: 1.65; }
+.tutorial-example { overflow: hidden; border-radius: 12px; border: 1px solid #c8d0c1; background: #fffdf6; }
+.tutorial-image { position: relative; aspect-ratio: 1.9; overflow: hidden; }
+.tutorial-image img { object-fit: cover; }
+.tutorial-frame { position: absolute; inset: 15% 21%; box-shadow: 0 0 0 500px #0a282e55; }
+.tutorial-frame i { position: absolute; width: 20px; height: 20px; border: solid #d0fa93; border-width: 3px 0 0 3px; }
+.tutorial-frame i:nth-child(2) { right: 0; transform: rotate(90deg); }
+.tutorial-frame i:nth-child(3) { bottom: 0; right: 0; transform: rotate(180deg); }
+.tutorial-frame i:nth-child(4) { bottom: 0; transform: rotate(270deg); }
+.tutorial-route, .tutorial-caption, .tutorial-practice { padding: 14px 16px; }
+.tutorial-route { display: grid; gap: 10px; }
+.tutorial-route strong, .tutorial-route span, .tutorial-caption { display: flex; align-items: center; gap: 9px; font-size: 14px; }
+.tutorial-route span { color: #53625c; }
+.tutorial-practice strong { font-size: 16px; }
+.tutorial-practice > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.journey-tutorial .tutorial-practice button { padding: 7px 12px; min-height: 44px; border-radius: 6px; border: 1px solid #9cab9e; font-size: 14px; }
+.journey-tutorial .tutorial-practice button[aria-pressed=true] { background: #e5efdc; border-color: #45654d; }
+.tutorial-practice p:not(:empty) { margin-top: 10px; font-size: 14px; line-height: 1.5; }
+.tutorial-stamp { display: grid; place-content: center; justify-items: center; gap: 5px; position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%) rotate(-8deg); border-radius: 50%; width: 104px; height: 104px; background: #e2f4ba; color: #244937; border: 5px double #486546; font: 650 15px var(--font-geist-mono), monospace; }
+.tutorial-controls { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; border-top: 1px solid #d3dbce; padding-top: 16px; }
+.journey-tutorial .tutorial-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 9px 15px; font-size: 15px; border-radius: 6px; }
+.tutorial-controls button:disabled { opacity: .45; }
+.journey-tutorial .tutorial-next { background: #183e3c; color: white; }
+@media (max-width: 670px) {
+  .tutorial-layout { grid-template-columns: 1fr; gap: 16px; }
+  .tutorial-image { max-height: 190px; }
+  .tutorial-progress { margin: 12px 0 14px; }
+  .tutorial-copy p { line-height: 1.55; }
+  .tutorial-controls { margin-top: 14px; padding-top: 12px; }
+}
