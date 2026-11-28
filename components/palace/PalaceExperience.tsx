@@ -39,6 +39,7 @@ import PalaceRoomStudy from "./PalaceRoomStudy";
 import PalaceCapture from "./PalaceCapture";
 import type { PalaceGame } from "./usePalaceJourney";
 import "./palace.css";
+import "./checkpoint-sheet.css";
 
 type Stage =
   | "brief"
@@ -612,7 +613,7 @@ export default function PalaceExperience({
               : checkpoint.name
           }
           wide={stage === "capture" || stage === "story" || stage === "brief" || stage === "visit" || stage === "quiz"}
-          className={stage === "quiz" ? "palace-dialog-quiz" : stage === "story" ? "palace-dialog-story" : ""}
+          className={`palace-dialog-${stage}`}
         >
           <div className="palace-modal">
             {game.error && (
@@ -620,43 +621,102 @@ export default function PalaceExperience({
                 {localMessage(game.error)}
               </p>
             )}
-            {stage === "brief" && (
-              <div className="palace-brief">
-                <PalaceRoomStudy checkpoint={checkpoint} />
-                <span className="palace-overline">
-                  CHECKPOINT {index + 1} / 05
-                </span>
-                <h2>{checkpoint.name}</h2>
-                <p>{checkpoint.clue}</p>
-                <ul className="palace-room-features">{checkpoint.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
-                <div className="palace-brief-steps">
-                  <span>
-                    <ScanLine size={17} />
-                    {t("Nhận diện", "Identify")}
-                  </span>
-                  <ArrowRight size={13} />
-                  <span>
-                    <Trophy size={17} />
-                    {t("Giải bộ câu hỏi", "Solve the quiz")}
-                  </span>
-                  <ArrowRight size={13} />
-                  <span>
-                    <BookOpen size={17} />
-                    {t("Mở câu chuyện", "Unlock story")}
-                  </span>
+            {(stage === "brief" || stage === "visit") && (
+              <div className="checkpoint-sheet">
+                <div className="checkpoint-sheet-label">
+                  <MapPin size={19} aria-hidden="true" />
+                  CHECKPOINT {String(index + 1).padStart(2, "0")} / {String(checkpointIds.length).padStart(2, "0")}
                 </div>
-                <button
-                  className="palace-button"
-                  onClick={begin}
-                  disabled={game.busy}
-                >
-                  {game.busy ? (
-                    <LoaderCircle className="spin" size={17} />
+                <div className="checkpoint-reading">
+                  <header className="checkpoint-intro">
+                    <h2>{checkpoint.name}</h2>
+                    <p>{stage === "brief" ? checkpoint.clue : checkpoint.detail}</p>
+                  </header>
+                  <div className="checkpoint-columns">
+                    <PalaceRoomStudy key={selectedId} checkpoint={checkpoint} />
+                    {stage === "brief" ? (
+                      <div className="checkpoint-notes">
+                        <section>
+                          <h3>{t("Dấu hiệu nhận biết", "What to look for")}</h3>
+                          <ul className="checkpoint-features">
+                            {checkpoint.features.map(feature => <li key={feature}>{feature}</li>)}
+                          </ul>
+                        </section>
+                        <section>
+                          <h3>{t("Các bước nhiệm vụ", "Mission steps")}</h3>
+                          <ol className="checkpoint-steps">
+                            <li><ScanLine size={20} />{t("Nhận diện checkpoint", "Identify the checkpoint")}</li>
+                            <li><Trophy size={20} />{t("Giải bộ câu hỏi", "Solve the quiz")}</li>
+                            <li><BookOpen size={20} />{t("Mở câu chuyện", "Unlock the story")}</li>
+                          </ol>
+                        </section>
+                      </div>
+                    ) : (
+                      <section className="checkpoint-notes">
+                        <h3>{t("Lịch sử ghé thăm", "Visit history")}</h3>
+                        {records.length ? (
+                          <div className="palace-visit-records">
+                            {records.map(({ run, entry }) => (
+                              <article key={run.id}>
+                                <span>
+                                  <Check size={16} />
+                                  {entry.completedAt
+                                    ? t("Đã khai mở", "Completed")
+                                    : t(
+                                        "Đã nhận diện · Chưa hoàn thành",
+                                        "Identified · Not completed",
+                                      )}
+                                </span>
+                                <strong>
+                                  {formatDate(entry.completedAt || entry.recognizedAt)}
+                                </strong>
+                                <small>
+                                  {t("Nhận diện: ", "Identified: ")}
+                                  {formatDate(entry.recognizedAt)} ·{" "}
+                                  {entry.legacyGameMoves !== undefined ? `${entry.legacyGameMoves} ${t("thao tác ở lượt cũ", "legacy moves")} · ` : ""}{entry.attempts.length} {t("lần trả lời", "answers")}
+                                </small>
+                                <small>{entry.quiz.length ? `${new Set(entry.attempts.filter(a => a.correct && entry.quiz.some(q => q.id === a.questionId)).map(a => a.questionId)).size}/${entry.quiz.length} ${t("câu đã giải", "questions solved")}` : t("Lịch sử lượt chơi cũ", "Earlier visit history")}</small>
+                                <small>
+                                  {entry.mode === "openai"
+                                    ? t("Nhận diện bằng AI", "AI recognition")
+                                    : entry.mode === "sample"
+                                      ? t(
+                                          "Chơi bằng ảnh mẫu",
+                                          "Played with a sample photo",
+                                        )
+                                      : t(
+                                          "Ảnh tải lên khớp tham chiếu",
+                                          "Uploaded photo matched a reference",
+                                        )}
+                                </small>
+                              </article>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="palace-empty">
+                            {t(
+                              "Điểm này chưa có lượt ghé. Bắt đầu hành trình để ghi dấu ấn đầu tiên.",
+                              "No visits here yet. Begin a journey to record your first discovery.",
+                            )}
+                          </p>
+                        )}
+                      </section>
+                    )}
+                  </div>
+                </div>
+                <footer className="checkpoint-action">
+                  {stage === "brief" ? (
+                    <button className="palace-button" onClick={begin} disabled={game.busy}>
+                      {game.busy ? <LoaderCircle className="spin" size={20} /> : <Compass size={20} />}
+                      {t("Bắt đầu nhiệm vụ", "Start this mission")}
+                    </button>
                   ) : (
-                    <Compass size={17} />
+                    <button className="palace-button" onClick={() => setStage("story")}>
+                      <BookOpen size={20} />
+                      {t("Đọc câu chuyện của điểm này", "Read this checkpoint’s story")}
+                    </button>
                   )}
-                  {t("Bắt đầu nhiệm vụ", "Start this mission")}
-                </button>
+                </footer>
               </div>
             )}
             {stage === "capture" && (
@@ -714,72 +774,6 @@ export default function PalaceExperience({
               quiz={quiz} visit={visit} busy={game.busy} onAnswer={submit}
               onStory={() => setStage("story")}
             />}
-            {stage === "visit" && (
-              <div className="palace-visit">
-                <PalaceRoomStudy checkpoint={checkpoint} />
-                <span className="palace-overline">
-                  MY HERITAGE ATLAS / CHECKPOINT {index + 1}
-                </span>
-                <h2>{checkpoint.name}</h2>
-                <p>{checkpoint.detail}</p>
-                {records.length ? (
-                  <div className="palace-visit-records">
-                    {records.map(({ run, entry }) => (
-                      <article key={run.id}>
-                        <span>
-                          <Check size={16} />
-                          {entry.completedAt
-                            ? t("Đã khai mở", "Completed")
-                            : t(
-                                "Đã nhận diện · Chưa hoàn thành",
-                                "Identified · Not completed",
-                              )}
-                        </span>
-                        <strong>
-                          {formatDate(entry.completedAt || entry.recognizedAt)}
-                        </strong>
-                        <small>
-                          {t("Nhận diện: ", "Identified: ")}
-                          {formatDate(entry.recognizedAt)} ·{" "}
-                          {entry.legacyGameMoves !== undefined ? `${entry.legacyGameMoves} ${t("thao tác ở lượt cũ", "legacy moves")} · ` : ""}{entry.attempts.length} {t("lần trả lời", "answers")}
-                        </small>
-                        <small>{entry.quiz.length ? `${new Set(entry.attempts.filter(a => a.correct && entry.quiz.some(q => q.id === a.questionId)).map(a => a.questionId)).size}/${entry.quiz.length} ${t("câu đã giải", "questions solved")}` : t("Lịch sử lượt chơi cũ", "Earlier visit history")}</small>
-                        <small>
-                          {entry.mode === "openai"
-                            ? t("Nhận diện bằng AI", "AI recognition")
-                            : entry.mode === "sample"
-                              ? t(
-                                  "Chơi bằng ảnh mẫu",
-                                  "Played with a sample photo",
-                                )
-                              : t(
-                                  "Ảnh tải lên khớp tham chiếu",
-                                  "Uploaded photo matched a reference",
-                                )}
-                        </small>
-                      </article>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="palace-empty">
-                    {t(
-                      "Điểm này chưa có lượt ghé. Bắt đầu hành trình để ghi dấu ấn đầu tiên.",
-                      "No visits here yet. Begin a journey to record your first discovery.",
-                    )}
-                  </p>
-                )}
-                <button
-                  className="palace-button"
-                  onClick={() => setStage("story")}
-                >
-                  <BookOpen size={17} />
-                  {t(
-                    "Đọc câu chuyện của điểm này",
-                    "Read this checkpoint’s story",
-                  )}
-                </button>
-              </div>
-            )}
             {stage === "restart" && (
               <div className="palace-restart">
                 <RotateCcw size={34} />

@@ -1,0 +1,133 @@
+.culture-app :is(.palace-dialog-brief, .palace-dialog-visit, .palace-dialog-capture) {
+  width: 100%;
+  max-width: 1180px;
+  background: #fcfbf5;
+}
+.culture-app :is(.palace-dialog-brief, .palace-dialog-visit) {
+  overflow: hidden;
+  --sheet-gutter: clamp(20px, 3.2vw, 48px);
+}
+:is(.palace-dialog-brief, .palace-dialog-visit) .palace-modal,
+.checkpoint-sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: inherit;
+  padding: 0;
+}
+.checkpoint-sheet-label {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 70px;
+  padding: 12px 76px 12px var(--sheet-gutter);
+  border-bottom: 1px solid #d8dfd1;
+  color: #42614e;
+  font: 600 14px/1.5 var(--font-geist-mono), monospace;
+  letter-spacing: .06em;
+}
+.checkpoint-reading {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(20px, 2.2vw, 32px) var(--sheet-gutter);
+}
+.checkpoint-intro { margin-bottom: 24px; }
+.culture-app .checkpoint-intro h2 {
+  font: 400 clamp(34px, 3.6vw, 52px)/1.16 var(--palace-serif);
+  letter-spacing: -.035em;
+}
+.culture-app .checkpoint-intro p {
+  max-width: 65ch;
+  margin-top: 10px;
+  color: #40584a;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.55;
+}
+.checkpoint-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 60px);
+  align-items: start;
+}
+.room-view-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #c9d2c2;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: #eeefe6;
+}
+.room-view-options button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 13px;
+  min-height: 44px;
+  font-size: 16px;
+  font-weight: 550;
+  border-radius: 7px;
+}
+.room-view-options button[aria-pressed="true"] { color: #fff; background: #234b3b; }
+.palace-room-study figure { margin: 0; }
+.room-view-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.6;
+  background: #e3e7d7;
+  border-radius: 10px;
+}
+.room-view-image img { object-fit: contain; }
+.room-view-image svg { width: 100%; height: 100%; display: block; padding: 8px; }
+.palace-room-study figcaption { padding-top: 8px; color: #536255; font-size: 15px; }
+.checkpoint-notes section + section { margin-top: 24px; border-top: 1px solid #d8dfd1; padding-top: 20px; }
+.culture-app .checkpoint-notes h3 { font-size: clamp(21px, 1.7vw, 25px); letter-spacing: -.025em; }
+.checkpoint-features, .checkpoint-steps {
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.55;
+}
+.checkpoint-features li, .checkpoint-steps li { display: flex; align-items: baseline; gap: 12px; }
+.checkpoint-features li::before { content: ""; flex: none; align-self: start; margin-top: .65em; width: 7px; height: 7px; border-radius: 50%; background: #688663; }
+.checkpoint-steps svg { align-self: center; color: #4a6b52; }
+.checkpoint-action {
+  display: flex;
+  justify-content: flex-end;
+  flex: none;
+  padding: 16px var(--sheet-gutter);
+  border-top: 1px solid #d8dfd1;
+  background: #f1f2e9;
+}
+.culture-app .checkpoint-action .palace-button { width: auto; max-width: 100%; min-height: 54px; font-size: 18px; padding-inline: 26px; border-radius: 8px; }
+.checkpoint-notes .palace-visit-records article :is(span, small) { font-size: 16px; line-height: 1.6; }
+.checkpoint-notes .palace-visit-records strong { font-size: 20px; }
+.palace-dialog-capture .palace-modal { padding: 58px clamp(18px, 3.2vw, 44px) 28px; }
+.palace-dialog-capture .palace-capture-copy h2 { font-size: clamp(32px, 3vw, 44px); }
+.palace-dialog-capture .palace-capture-copy > p:first-of-type { font-size: 19px; line-height: 1.6; }
+.palace-dialog-capture :is(.palace-mode, .palace-inline-notice, .palace-overline) { font-size: 15px; }
+.palace-dialog-capture .palace-capture-copy :is(.palace-button, .palace-capture-actions button) { font-size: 17px; min-height: 50px; }
+@media (max-width: 760px) {
+  .checkpoint-columns { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .checkpoint-sheet-label { min-height: 60px; }
+  .checkpoint-intro { margin-bottom: 18px; }
+  .checkpoint-action { padding-block: 12px max(12px, env(safe-area-inset-bottom)); }
+  .culture-app .checkpoint-action .palace-button { width: 100%; }
+}
+@media (max-width: 600px) {
+  .dialog-backdrop:has(> :is(.palace-dialog-brief, .palace-dialog-visit)) { padding: 0; }
+  .culture-app :is(.game-dialog.palace-dialog-brief, .game-dialog.palace-dialog-visit) {
+    height: 100dvh;
+    max-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+  :is(.palace-dialog-brief, .palace-dialog-visit) .palace-modal, .checkpoint-sheet { height: 100%; }
+  .checkpoint-reading { flex: 1; }
+}

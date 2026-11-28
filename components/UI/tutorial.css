@@ -1,42 +1,77 @@
-.landing-tutorial { padding-block: clamp(40px, 8vw, 100px); }
-.culture-app .game-dialog.tutorial-dialog { width: min(880px, 100%); max-width: 880px; background: #f7f6ef; }
-.tutorial-dialog .journey-tutorial { padding: clamp(20px, 4vw, 40px); }
-.journey-tutorial { color: #183e3c; }
-.tutorial-kicker, .tutorial-copy small { font: 600 12px/1.5 var(--font-geist-mono), monospace; }
-.tutorial-kicker { display: flex; align-items: center; gap: 9px; letter-spacing: .09em; min-height: 35px; }
-.tutorial-progress { display: flex; gap: 6px; margin: 15px 0 24px; }
-.tutorial-progress i { height: 4px; flex: 1; border-radius: 4px; background: #d7ded3; }
+.landing-tutorial { padding-block: clamp(48px, 8vw, 110px); }
+.culture-app .game-dialog.tutorial-dialog {
+  width: 100%;
+  max-width: 1180px;
+  background: #fbfaf4;
+  overflow: hidden;
+}
+.journey-tutorial {
+  --tutorial-gutter: clamp(20px, 3.2vw, 48px);
+  color: #183e3c;
+}
+.tutorial-dialog .journey-tutorial {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+.tutorial-kicker, .tutorial-copy small { font: 600 14px/1.5 var(--font-geist-mono), monospace; }
+.tutorial-kicker { display: flex; align-items: center; gap: 12px; letter-spacing: .08em; min-height: 54px; }
+.tutorial-dialog .tutorial-kicker { flex: none; min-height: 70px; padding: 12px 76px 12px var(--tutorial-gutter); }
+.tutorial-progress { display: flex; flex: none; gap: 6px; }
+.tutorial-dialog .tutorial-progress { margin-inline: var(--tutorial-gutter); }
+.tutorial-progress i { height: 5px; flex: 1; border-radius: 4px; background: #d7ded3; }
 .tutorial-progress i.is-filled { background: #497964; }
-.tutorial-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 58px); align-items: center; }
-.tutorial-copy small { color: #526b55; }
-.journey-tutorial .tutorial-copy h2 { font: 400 clamp(28px, 3.3vw, 48px)/1.17 var(--font-editorial), Georgia, serif; margin: 8px 0 14px; letter-spacing: -.035em; }
-.tutorial-copy p { font-size: 16px; line-height: 1.65; }
+.tutorial-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  padding-block: clamp(24px, 3vw, 44px);
+}
+.tutorial-dialog .tutorial-layout { min-height: 0; padding-inline: var(--tutorial-gutter); overflow-y: auto; overscroll-behavior: contain; }
+.tutorial-copy small { color: #496547; }
+.journey-tutorial .tutorial-copy h2 {
+  font: 400 clamp(36px, 3.8vw, 56px)/1.16 var(--font-editorial), Georgia, serif;
+  margin: 10px 0 20px;
+  letter-spacing: -.035em;
+  outline: none;
+}
+.tutorial-copy ul { display: grid; gap: 12px; padding-left: 1.12em; margin: 0; list-style: disc; font-size: clamp(18px, 1.55vw, 22px); line-height: 1.55; }
+.tutorial-copy li { padding-left: 3px; }
+.tutorial-copy li::marker { color: #688663; }
 .tutorial-example { overflow: hidden; border-radius: 12px; border: 1px solid #c8d0c1; background: #fffdf6; }
-.tutorial-image { position: relative; aspect-ratio: 1.9; overflow: hidden; }
+.tutorial-image { position: relative; aspect-ratio: 1.6; overflow: hidden; }
 .tutorial-image img { object-fit: cover; }
 .tutorial-frame { position: absolute; inset: 15% 21%; box-shadow: 0 0 0 500px #0a282e55; }
 .tutorial-frame i { position: absolute; width: 20px; height: 20px; border: solid #d0fa93; border-width: 3px 0 0 3px; }
 .tutorial-frame i:nth-child(2) { right: 0; transform: rotate(90deg); }
 .tutorial-frame i:nth-child(3) { bottom: 0; right: 0; transform: rotate(180deg); }
 .tutorial-frame i:nth-child(4) { bottom: 0; transform: rotate(270deg); }
-.tutorial-route, .tutorial-caption, .tutorial-practice { padding: 14px 16px; }
+.tutorial-route, .tutorial-caption, .tutorial-practice { padding: 16px 20px; }
 .tutorial-route { display: grid; gap: 10px; }
-.tutorial-route strong, .tutorial-route span, .tutorial-caption { display: flex; align-items: center; gap: 9px; font-size: 14px; }
+.tutorial-route strong, .tutorial-route span, .tutorial-caption { display: flex; align-items: center; gap: 9px; font-size: 17px; }
 .tutorial-route span { color: #53625c; }
-.tutorial-practice strong { font-size: 16px; }
+.tutorial-practice strong { font-size: 20px; }
 .tutorial-practice > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.journey-tutorial .tutorial-practice button { padding: 7px 12px; min-height: 44px; border-radius: 6px; border: 1px solid #9cab9e; font-size: 14px; }
+.journey-tutorial .tutorial-practice button { padding: 9px 16px; min-height: 50px; border-radius: 6px; border: 1px solid #9cab9e; font-size: 17px; }
 .journey-tutorial .tutorial-practice button[aria-pressed=true] { background: #e5efdc; border-color: #45654d; }
-.tutorial-practice p:not(:empty) { margin-top: 10px; font-size: 14px; line-height: 1.5; }
+.tutorial-practice p:not(:empty) { margin-top: 10px; font-size: 17px; line-height: 1.5; }
 .tutorial-stamp { display: grid; place-content: center; justify-items: center; gap: 5px; position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%) rotate(-8deg); border-radius: 50%; width: 104px; height: 104px; background: #e2f4ba; color: #244937; border: 5px double #486546; font: 650 15px var(--font-geist-mono), monospace; }
-.tutorial-controls { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; border-top: 1px solid #d3dbce; padding-top: 16px; }
-.journey-tutorial .tutorial-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 9px 15px; font-size: 15px; border-radius: 6px; }
+.tutorial-controls { display: flex; justify-content: space-between; gap: 12px; flex: none; border-top: 1px solid #d3dbce; padding-block: 16px; }
+.journey-tutorial .tutorial-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 52px; padding: 10px 20px; font-size: 18px; border-radius: 6px; }
 .tutorial-controls button:disabled { opacity: .45; }
 .journey-tutorial .tutorial-next { background: #183e3c; color: white; }
-@media (max-width: 670px) {
-  .tutorial-layout { grid-template-columns: 1fr; gap: 16px; }
-  .tutorial-image { max-height: 190px; }
-  .tutorial-progress { margin: 12px 0 14px; }
-  .tutorial-copy p { line-height: 1.55; }
-  .tutorial-controls { margin-top: 14px; padding-top: 12px; }
+.tutorial-dialog .tutorial-controls { padding-inline: var(--tutorial-gutter); background: #f1f2e9; }
+@media (max-width: 800px) {
+  .tutorial-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: start; }
+  .tutorial-image { aspect-ratio: 1.6; max-height: 330px; }
+}
+@media (max-width: 600px) {
+  .dialog-backdrop:has(> .tutorial-dialog) { padding: 0; }
+  .culture-app .game-dialog.tutorial-dialog { height: 100dvh; max-height: 100dvh; border: 0; border-radius: 0; }
+  .tutorial-dialog .journey-tutorial { height: 100%; }
+  .tutorial-dialog .tutorial-layout { flex: 1; }
+  .tutorial-dialog .tutorial-kicker { min-height: 60px; }
+  .journey-tutorial .tutorial-controls button { padding-inline: 12px; font-size: 17px; }
+  .tutorial-dialog .tutorial-controls { padding-block: 12px max(12px, env(safe-area-inset-bottom)); }
 }
